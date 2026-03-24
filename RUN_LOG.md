@@ -22,6 +22,6 @@ Append one section per run.
 - Files changed: `index.html`, `assets/css/styles.css`, `assets/js/main.js`, `content/story/seed.json`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
 - Validation: static preview + browser interaction check pending final review; file-level implementation completed
 - Review result: Accepted
-- Commit: _pending_
-- Push: _pending_
+- Commit: `e39b09d` — `feat: add first playable puzzle loop`
+- Push: `origin/main` updated
 - Notes: `gh` 未登入，今輪無法確認 ShawTim open issues；先按 backlog 交付最小可玩 loop。
