@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "world": "false-exit",
+  "chapters": [
+    {
+      "id": "chapter-01",
+      "title": "Chapter 1 — The Hall That Remembers",
+      "story": [
+        "你喺一條每次轉身都會重置嘅走廊醒返。",
+        "牆上得一句提示：『真正出口唔識逃，佢只會回答。』"
+      ],
+      "puzzle": {
+        "prompt": "輸入牆上唯一可見、亦最明顯唔係出口嘅兩個字。",
+        "answer": "回答",
+        "success": "牆面裂開一道窄門。你冇離開大樓，但你至少離開咗呢個謊言。",
+        "retry": "唔啱。呢度唔獎勵亂猜。再望清楚條提示。"
+      }
+    }
+  ]
+}
