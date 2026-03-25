@@ -70,6 +70,17 @@ Append one section per run.
 - Push: pending
 - Notes: scope kept minimal; no backend/storage/router/framework added.
 
+## 2026-03-25 16:09 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-25 16:09 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-006 — 接第二條 puzzle（最小可驗收增量）
+- Files changed: `assets/js/main.js`, `content/story/seed.json`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`; browser smoke on `http://127.0.0.1:8095/` — chapter 1 wrong answer shows retry, corrected answer now flips to success and reveals `Next`; `Next` enters chapter 2; chapter 2 wrong answer stays on chapter 2; chapter 2 correct answer shows success and keeps `Next` hidden on final chapter; `Restart` resets to chapter 1 initial state; console shows `[false-exit] playable loop ready`
+- Review result: Accepted after lead bugfix on answer-state sync
+- Commit: pending
+- Push: pending
+- Notes: `gh auth status` failed with `You are not logged into any GitHub hosts. To log in, run: gh auth login`, so ShawTim open issues could not be verified by CLI this run.
+
 ## 2026-03-25 16:05 HKT — 無限任砌兄弟（弟）
 - Time: 2026-03-25 16:05 HKT
 - Run owner: 無限任砌兄弟（弟）

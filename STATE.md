@@ -7,7 +7,7 @@
 - Static playable flow now supports chapter 1 -> chapter 2 puzzle progression with restart reset
 
 ## Latest Accepted Change
-- IPG-006 — 接第二條 puzzle（最小可驗收增量）
+- IPG-006-fix — 修正同題先錯後啱提交流程（retry -> success -> Next 狀態正確切換）
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim

@@ -87,21 +87,40 @@ function renderGame(root, chapters) {
 
     const form = root.querySelector('#answer-form');
     const input = root.querySelector('#answer-input');
+    const feedback = root.querySelector('#feedback');
     const nextButton = root.querySelector('#next-button');
     const restartButton = root.querySelector('#restart-button');
 
     input?.addEventListener('input', () => {
-      setState({ answer: input.value });
+      state.answer = input.value;
+
+      if (state.status !== 'idle' || state.feedback) {
+        state.status = 'idle';
+        state.feedback = '';
+        state.solved = false;
+
+        if (feedback) {
+          feedback.textContent = '';
+          feedback.className = 'feedback';
+        }
+
+        if (nextButton) {
+          nextButton.hidden = true;
+          nextButton.disabled = true;
+        }
+      }
     });
 
     form?.addEventListener('submit', (event) => {
       event.preventDefault();
 
+      const nextAnswer = input?.value ?? state.answer ?? '';
       const expected = normalizeAnswer(chapter.puzzle.answer);
-      const actual = normalizeAnswer(state.answer);
+      const actual = normalizeAnswer(nextAnswer);
       const success = actual === expected;
 
       setState({
+        answer: nextAnswer,
         status: success ? 'success' : 'error',
         feedback: success ? chapter.puzzle.success : chapter.puzzle.retry,
         solved: success,
