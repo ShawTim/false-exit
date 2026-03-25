@@ -143,6 +143,6 @@ Append one section per run.
 - Files changed: `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
 - Validation: checklist review completed；新增 focused case 覆蓋 ch1 `回答` -> `Next` -> ch2 錯答 `出口`（仍未解）-> `Restart` -> chapter 1 initial title/text/prompt / input empty / feedback empty / `Next` hidden/disabled；並確認本輪無改 app logic/seed/html/css/js
 - Review result: Accepted
-- Commit: pending
-- Push: pending
+- Commit: `6706c21` — `docs: add restart smoke for unsolved chapter 2`
+- Push: `origin/main` updated
 - Notes: `gh auth status` 失敗，stderr：`You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）；按 AGENTS contract 記錄實際失敗輸出後，今輪改做最細文檔增量。
