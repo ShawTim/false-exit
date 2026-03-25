@@ -7,12 +7,12 @@
 - Static playable flow now supports chapter 1 -> chapter 2 puzzle progression with restart reset
 
 ## Latest Accepted Change
-- IPG-014 — solved disabled state 視覺提示（微型 locked hint + muted controls + focused smoke）
+- IPG-015 — unsolved state input helper + submit copy polish（helper hint + clearer submit label + focused smoke）
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
 - GitHub CLI 真查：`gh auth status` 成功（account: `vildanden-ai`，token scope 缺 `read:org` 但不阻塞本 repo issue 查詢）；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`
-- 目前按 STATE backlog 做最小可驗收增量（solved disabled state 視覺提示）
+- 目前按 STATE backlog 做最小可驗收增量（IPG-015：unsolved helper + `提交答案` 文案）
 
 ## Constraints
 - Small steps only
@@ -20,4 +20,4 @@
 - Keep product direction stable unless explicitly changed upstream
 
 ## Next Suggested Step
-- 保持 tiny increment；優先做低風險 polish 或 focused regression（例如 chapter 切換時微文案一致性、可讀性微調），繼續唔改 schema/backend
+- 保持 tiny increment；沿住現有兩章 flow 做低風險 polish / focused regression（例如 helper 微文案可讀性、狀態切換一致性），繼續唔改 schema/backend

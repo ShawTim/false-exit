@@ -222,3 +222,25 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: GitHub CLI 真查：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-26 06:03 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-26 06:03 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-015 — unsolved state input helper + submit copy polish
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`; browser smoke on `http://127.0.0.1:8140/` — chapter 1 初始狀態顯示 helper `提示：答案係兩個字。` 同按鈕 `提交答案`；chapter 1 `回答` 後 helper 轉為 solved lock hint；`Next` 進 chapter 2 後 helper 重新出現；chapter 2 `問題` 後 submit disabled、lock hint 與 final-state copy 可共存；`Restart` 後回到 chapter 1 初始狀態並重新顯示 helper
+- Review result: Accepted after one rework round（弟先漏同步 STATE/RUN_LOG，我接手完成 final review / docs sync）
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-26 06:03 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 06:03 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-015 — unsolved state input helper + submit copy polish
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`；檢查 `main.js` 渲染條件已更新為 unsolved 顯示 helper `提示：答案係兩個字。`、solved 顯示既有 lock hint，submit copy 改為 `提交答案` 並保留 solved disabled；`tests/smoke.md` 主 checklist 已反映 helper + submit copy，並新增 IPG-015 focused smoke。
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（0 open issues from ShawTim）。

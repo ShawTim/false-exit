@@ -1,19 +1,20 @@
-# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010 / IPG-011 / IPG-012 / IPG-013 / IPG-014
+# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010 / IPG-011 / IPG-012 / IPG-013 / IPG-014 / IPG-015
 
 - [ ] Run `python3 -m http.server 8080` from repo root.
 - [ ] Open `http://localhost:8080/`.
 - [ ] Page shows `False Exit` and chapter title `Chapter 1 — The Hall That Remembers`.
 - [ ] Chapter card shows progress indicator `Chapter 1 / 2` (or equivalent chapter count wording).
-- [ ] Chapter 1 shows story text, puzzle prompt, answer input, submit button, and `Restart` button.
+- [ ] Chapter 1 shows story text, puzzle prompt, answer input, submit button (`提交答案`), and `Restart` button.
 - [ ] Before solving chapter 1, `Next` is hidden.
+- [ ] Chapter 1 unsolved: helper hint appears near answer controls: `提示：答案係兩個字。`.
 - [ ] Enter a wrong chapter 1 answer (example: `出口`) and submit; chapter 1 retry message appears.
 - [ ] After wrong chapter 1 answer, player stays on chapter 1 and `Next` remains hidden.
 - [ ] Enter chapter 1 correct answer (`回答`) and submit; chapter 1 success message appears and `Next` becomes visible.
 - [ ] After chapter 1 is solved, answer input and submit button are disabled while success feedback stays visible.
 - [ ] After chapter 1 is solved, a subtle solved/locked hint appears near answer controls.
 - [ ] Click `Next`; screen switches to chapter title `Chapter 2 — The Room That Asks Back` with chapter 2 prompt.
-- [ ] On chapter 2 initial state (unsolved), answer input and submit button are enabled again.
-- [ ] On chapter 2 initial state (unsolved), solved/locked hint is not shown.
+- [ ] On chapter 2 initial state (unsolved), answer input and submit button (`提交答案`) are enabled again.
+- [ ] On chapter 2 initial state (unsolved), solved/locked hint is not shown, and helper hint appears: `提示：答案係兩個字。`.
 - [ ] On chapter 2, enter a wrong answer (example: `出口`) and submit; chapter 2 retry message appears and player stays on chapter 2.
 - [ ] On chapter 2, enter correct answer (`問題`) and submit; chapter 2 success message appears.
 - [ ] After chapter 2 is solved (no third chapter), answer input and submit button are disabled.
@@ -84,17 +85,19 @@
 
 ## IPG-014 focused smoke（solved disabled state visual hint）
 
-- [ ] Chapter 1 unsolved: no solved/locked hint is visible near the answer controls.
-- [ ] Chapter 1: submit correct answer `回答`; success feedback appears, answer controls look muted/locked, and hint appears: `已完成本章，答案欄已鎖定。`.
-- [ ] Click `Next` to chapter 2; solved/locked hint disappears and answer controls return to normal unsolved state.
-- [ ] Chapter 2: submit correct answer `問題`; solved/locked hint appears again while final-state copy also remains visible.
-- [ ] Click `Restart`; app returns to chapter 1 initial state with no solved/locked hint visible.
-
-## IPG-014 focused smoke（solved disabled state visual hint）
-
 - [ ] Chapter 1 unsolved: answer input and submit button are enabled, and no solved/locked hint is shown.
 - [ ] Chapter 1: submit correct answer `回答`; input/submit become disabled and solved/locked hint appears.
 - [ ] Click `Next` to chapter 2 unsolved; solved/locked hint disappears and controls are enabled.
 - [ ] Chapter 2: submit correct answer `問題`; input/submit disabled + solved/locked hint appears, and final-state copy still appears without conflict.
 - [ ] Click `Restart`; app returns to chapter 1 initial state, no solved/locked hint shown, controls enabled.
+
+## IPG-015 focused smoke（unsolved helper + submit copy）
+
+- [ ] Chapter 1 initial unsolved: submit button copy is `提交答案`.
+- [ ] Chapter 1 initial unsolved: helper hint appears near answer controls: `提示：答案係兩個字。`.
+- [ ] Chapter 1: submit wrong answer `出口`; retry feedback appears and helper hint remains visible.
+- [ ] Chapter 1: submit correct answer `回答`; helper hint disappears and solved lock hint appears: `已完成本章，答案欄已鎖定。`.
+- [ ] Click `Next` to chapter 2 unsolved; helper hint appears again and submit button copy remains `提交答案`.
+- [ ] Chapter 2: submit correct answer `問題`; helper hint disappears, solved lock hint appears, input/submit stay disabled, and final-state copy still appears.
+- [ ] Click `Restart`; app returns to chapter 1 unsolved with helper hint visible and no solved lock hint.
 

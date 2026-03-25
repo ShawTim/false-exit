@@ -93,7 +93,8 @@ h1 {
   border-color: rgba(138, 180, 255, 0.35);
 }
 
-.lock-hint {
+.lock-hint,
+.input-helper {
   margin: 12px 0 0;
   color: var(--muted);
   font-size: 0.9rem;
@@ -146,7 +147,8 @@ button:disabled {
   font-weight: 600;
 }
 
-.lock-hint {
+.lock-hint,
+.input-helper {
   margin: 8px 0 0;
   color: var(--muted);
   font-size: 0.85rem;
