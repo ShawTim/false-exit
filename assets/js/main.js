@@ -39,12 +39,14 @@ function renderChapter(root, chapter) {
         </div>
       </form>
       <p id="feedback" class="feedback" role="status"></p>
+      <section id="next-beat" class="story" hidden></section>
     </section>
   `;
 
   const form = root.querySelector('#answer-form');
   const input = root.querySelector('#answer-input');
   const feedback = root.querySelector('#feedback');
+  const nextBeat = root.querySelector('#next-beat');
   const expected = normalizeAnswer(chapter.puzzle.answer);
 
   form?.addEventListener('submit', (event) => {
@@ -55,6 +57,21 @@ function renderChapter(root, chapter) {
 
     feedback.textContent = success ? chapter.puzzle.success : chapter.puzzle.retry;
     feedback.className = `feedback ${success ? 'success' : 'error'}`;
+
+    if (!nextBeat) return;
+
+    if (!success || !chapter.nextBeat) {
+      nextBeat.hidden = true;
+      nextBeat.innerHTML = '';
+      return;
+    }
+
+    const lines = Array.isArray(chapter.nextBeat.story) ? chapter.nextBeat.story : [];
+    nextBeat.innerHTML = `
+      <h3>${escapeHtml(chapter.nextBeat.title || 'Next Beat')}</h3>
+      ${lines.map((line) => `<p>${escapeHtml(line)}</p>`).join('')}
+    `;
+    nextBeat.hidden = false;
   });
 }
 
