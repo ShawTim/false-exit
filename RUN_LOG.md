@@ -124,3 +124,25 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: 今輪 GitHub CLI 真查結果係 `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`
+
+## 2026-03-25 22:03 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-25 22:03 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-010 — 補 chapter 2 未解時 Restart reset focused smoke
+- Files changed: `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: checklist review completed；新增 focused case 覆蓋 ch1 solved -> Next -> ch2 wrong/unsolved -> Restart -> chapter 1 initial content / input empty / feedback empty / `Next` hidden/disabled；並確認今輪無改 `assets/js/main.js` / `index.html` / `content/story/seed.json`
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: 依任務背景同步狀態為 `gh auth status` 失敗（未登入），本輪未做 GitHub issue 查詢
+
+## 2026-03-25 22:01 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-25 22:01 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-010 — 補 chapter 2 未解時 Restart reset focused smoke
+- Files changed: `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: checklist review completed；新增 focused case 覆蓋 ch1 `回答` -> `Next` -> ch2 錯答 `出口`（仍未解）-> `Restart` -> chapter 1 initial title/text/prompt / input empty / feedback empty / `Next` hidden/disabled；並確認本輪無改 app logic/seed/html/css/js
+- Review result: Accepted
+- Commit: pending
+- Push: pending
+- Notes: `gh auth status` 失敗，stderr：`You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）；按 AGENTS contract 記錄實際失敗輸出後，今輪改做最細文檔增量。

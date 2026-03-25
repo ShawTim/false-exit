@@ -1,4 +1,4 @@
-# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009
+# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010
 
 - [ ] Run `python3 -m http.server 8080` from repo root.
 - [ ] Open `http://localhost:8080/`.
@@ -32,6 +32,17 @@
 - [ ] Chapter 2: submit correct answer `問題`; chapter 2 success feedback appears.
 - [ ] After final chapter is solved, `Next` is hidden/disabled.
 - [ ] Click `Restart`; app returns to chapter 1 initial state.
+- [ ] After reset, chapter title/text/prompt are chapter 1 initial content (`Chapter 1 — The Hall That Remembers`).
+- [ ] After reset, answer input is empty.
+- [ ] After reset, feedback area is empty.
+- [ ] After reset, `Next` is hidden/disabled.
+
+## IPG-010 regression case（focused：restart while chapter 2 unsolved）
+
+- [ ] Chapter 1: submit correct answer `回答`; chapter 1 success feedback appears and `Next` becomes visible.
+- [ ] Click `Next` to enter chapter 2.
+- [ ] Chapter 2: submit a wrong answer (example: `出口`); retry feedback appears and chapter 2 remains unsolved.
+- [ ] Without solving chapter 2, click `Restart`; app returns to chapter 1 initial state.
 - [ ] After reset, chapter title/text/prompt are chapter 1 initial content (`Chapter 1 — The Hall That Remembers`).
 - [ ] After reset, answer input is empty.
 - [ ] After reset, feedback area is empty.
