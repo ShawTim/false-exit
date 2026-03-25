@@ -69,3 +69,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: scope kept minimal; no backend/storage/router/framework added.
+
+## 2026-03-25 16:05 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-25 16:05 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-006 — 接第二條 puzzle（最小可驗收增量）
+- Files changed: `assets/js/main.js`, `content/story/seed.json`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: static code-path validation complete (`seed.json` now has 2 playable chapters with full puzzle fields; `main.js` state includes `chapterIndex` and chapter progression via `Next`; chapter 2 wrong-answer stays in chapter 2; solved-final-chapter hides/disables `Next`; restart always resets to chapter 1 initial state)
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: scope kept minimal; no framework/router/backend/localStorage; no third puzzle.
