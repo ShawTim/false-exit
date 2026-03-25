@@ -15,3 +15,12 @@
 - [ ] Click `Restart` while on unsolved chapter 2; app returns to chapter 1 initial state with empty input, no feedback, unsolved state, and hidden `Next`.
 - [ ] Solve chapter 1 and chapter 2 again, then click `Restart`; app still resets to chapter 1 initial state and clears progress.
 - [ ] Browser console shows `[false-exit] playable loop ready` and no errors.
+
+## IPG-008 regression case（focused）
+
+- [ ] Chapter 1: first submit wrong answer `出口`; retry feedback appears, still on chapter 1, `Next` hidden.
+- [ ] Chapter 1: same puzzle, change answer to `回答` and submit again; feedback flips to success and `Next` becomes visible.
+- [ ] Click `Next` to enter chapter 2.
+- [ ] Chapter 2: first submit wrong answer `出口`; retry feedback appears and still on chapter 2.
+- [ ] Chapter 2: same puzzle, change answer to `問題` and submit again; feedback flips to success.
+- [ ] After final chapter is solved, `Next` is hidden/disabled.

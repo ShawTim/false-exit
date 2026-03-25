@@ -102,3 +102,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: 最小修補，無改 schema / seed / UI copy。
+
+## 2026-03-25 18:08 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-25 18:08 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-008 — 最小 focused regression smoke（同題先錯後啱，再過 chapter 2）
+- Files changed: `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: checklist review completed — 新增 focused case 明確覆蓋 ch1 `出口` -> `回答`（success + Next visible）-> 進入 ch2 -> `出口` -> `問題`（success）-> final chapter solved 後 `Next` hidden/disabled；並確認本輪未改 app logic/seed/js/css/html
+- Review result: Accepted
+- Commit: pending
+- Push: pending
+- Notes: scope 嚴格限制於文檔與狀態同步，無擴 scope。

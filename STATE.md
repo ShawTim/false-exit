@@ -7,7 +7,7 @@
 - Static playable flow now supports chapter 1 -> chapter 2 puzzle progression with restart reset
 
 ## Latest Accepted Change
-- IPG-006-fix — 修正同題先錯後啱提交流程（retry -> success -> Next 狀態正確切換）
+- IPG-008 — 加一條聚焦 regression smoke（同題先錯後啱，再過 chapter 2）
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
@@ -20,4 +20,4 @@
 - Keep product direction stable unless explicitly changed upstream
 
 ## Next Suggested Step
-- IPG-008 — 加一條最小 regression smoke（專驗同題先錯後啱，再過 chapter 2）
+- IPG-009 — 補一條最小 smoke：驗證 chapter 2 解完後按 `Restart` 仍回到 chapter 1 初始且 `Next` 隱藏
