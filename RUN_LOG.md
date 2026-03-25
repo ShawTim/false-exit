@@ -189,3 +189,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: 最小 UI 增量，無改 seed/backend/router/framework；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-26 02:03 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 02:03 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-013 — solved 後鎖住答案輸入與提交
+- Files changed: `assets/js/main.js`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`；grep 檢查 `main.js` 已在 solved 狀態下將 input/submit 設為 disabled，且 `input`/`submit` handler 早退防止再次改寫狀態
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: `gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 失敗（未登入）：`To get started with GitHub CLI, please run: gh auth login`（exit 4）。

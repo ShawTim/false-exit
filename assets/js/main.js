@@ -72,8 +72,8 @@ function renderGame(root, chapters) {
           <form id="answer-form">
             <label class="label" for="answer-input">你的答案</label>
             <div class="answer-row">
-              <input id="answer-input" name="answer" type="text" autocomplete="off" required value="${escapeHtml(state.answer)}" />
-              <button type="submit">提交</button>
+              <input id="answer-input" name="answer" type="text" autocomplete="off" required value="${escapeHtml(state.answer)}" ${state.solved ? 'disabled' : ''} />
+              <button type="submit" ${state.solved ? 'disabled' : ''}>提交</button>
             </div>
           </form>
           <p id="feedback" class="feedback${state.status === 'idle' ? '' : ` ${state.status}`}" role="status">${escapeHtml(state.feedback)}</p>
@@ -94,6 +94,8 @@ function renderGame(root, chapters) {
     const restartButton = root.querySelector('#restart-button');
 
     input?.addEventListener('input', () => {
+      if (state.solved) return;
+
       state.answer = input.value;
 
       if (state.status !== 'idle' || state.feedback) {
@@ -115,6 +117,7 @@ function renderGame(root, chapters) {
 
     form?.addEventListener('submit', (event) => {
       event.preventDefault();
+      if (state.solved) return;
 
       const nextAnswer = input?.value ?? state.answer ?? '';
       const expected = normalizeAnswer(chapter.puzzle.answer);

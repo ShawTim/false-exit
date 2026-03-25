@@ -1,4 +1,4 @@
-# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010 / IPG-011
+# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010 / IPG-011 / IPG-012 / IPG-013
 
 - [ ] Run `python3 -m http.server 8080` from repo root.
 - [ ] Open `http://localhost:8080/`.
@@ -9,9 +9,12 @@
 - [ ] Enter a wrong chapter 1 answer (example: `出口`) and submit; chapter 1 retry message appears.
 - [ ] After wrong chapter 1 answer, player stays on chapter 1 and `Next` remains hidden.
 - [ ] Enter chapter 1 correct answer (`回答`) and submit; chapter 1 success message appears and `Next` becomes visible.
+- [ ] After chapter 1 is solved, answer input and submit button are disabled while success feedback stays visible.
 - [ ] Click `Next`; screen switches to chapter title `Chapter 2 — The Room That Asks Back` with chapter 2 prompt.
+- [ ] On chapter 2 initial state (unsolved), answer input and submit button are enabled again.
 - [ ] On chapter 2, enter a wrong answer (example: `出口`) and submit; chapter 2 retry message appears and player stays on chapter 2.
 - [ ] On chapter 2, enter correct answer (`問題`) and submit; chapter 2 success message appears.
+- [ ] After chapter 2 is solved (no third chapter), answer input and submit button are disabled.
 - [ ] After chapter 2 is solved (no third chapter), `Next` is hidden/disabled and state does not break.
 - [ ] After clicking `Next` into chapter 2, chapter progress updates to `Chapter 2 / 2` (or equivalent).
 - [ ] Click `Restart` while on unsolved chapter 2; app returns to chapter 1 initial state with empty input, no feedback, unsolved state, hidden `Next`, and progress reset to `Chapter 1 / 2`.
@@ -66,3 +69,13 @@
 - [ ] Chapter 1: submit correct answer `回答`; chapter 1 success feedback appears and `Next` becomes visible while progress stays on chapter 1.
 - [ ] Click `Next`; screen switches to chapter 2 and progress updates to `Chapter 2 / 2`.
 - [ ] Click `Restart`; app returns to chapter 1 initial state and progress resets to `Chapter 1 / 2`.
+
+## IPG-013 focused smoke（lock solved answer controls）
+
+- [ ] Chapter 1 unsolved: answer input and submit button are enabled.
+- [ ] Chapter 1: submit correct answer `回答`; success feedback appears, answer input and submit button become disabled, and `Next` remains visible.
+- [ ] Click `Next` to chapter 2; answer input and submit button are enabled again.
+- [ ] Chapter 2: submit correct answer `問題`; success feedback appears, answer input and submit button become disabled.
+- [ ] After final chapter solved, final-state copy still appears and `Next` stays hidden/disabled.
+- [ ] Click `Restart`; app returns to chapter 1 initial state with answer input and submit button enabled.
+
