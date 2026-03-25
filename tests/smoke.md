@@ -3,6 +3,7 @@
 - [ ] Run `python3 -m http.server 8080` from repo root.
 - [ ] Open `http://localhost:8080/`.
 - [ ] Page shows `False Exit` and chapter title `Chapter 1 — The Hall That Remembers`.
+- [ ] Chapter card shows progress indicator `Chapter 1 / 2` (or equivalent chapter count wording).
 - [ ] Chapter 1 shows story text, puzzle prompt, answer input, submit button, and `Restart` button.
 - [ ] Before solving chapter 1, `Next` is hidden.
 - [ ] Enter a wrong chapter 1 answer (example: `出口`) and submit; chapter 1 retry message appears.
@@ -12,7 +13,8 @@
 - [ ] On chapter 2, enter a wrong answer (example: `出口`) and submit; chapter 2 retry message appears and player stays on chapter 2.
 - [ ] On chapter 2, enter correct answer (`問題`) and submit; chapter 2 success message appears.
 - [ ] After chapter 2 is solved (no third chapter), `Next` is hidden/disabled and state does not break.
-- [ ] Click `Restart` while on unsolved chapter 2; app returns to chapter 1 initial state with empty input, no feedback, unsolved state, and hidden `Next`.
+- [ ] After clicking `Next` into chapter 2, chapter progress updates to `Chapter 2 / 2` (or equivalent).
+- [ ] Click `Restart` while on unsolved chapter 2; app returns to chapter 1 initial state with empty input, no feedback, unsolved state, hidden `Next`, and progress reset to `Chapter 1 / 2`.
 - [ ] Solve chapter 1 and chapter 2 again, then click `Restart`; app still resets to chapter 1 initial state and clears progress.
 - [ ] Browser console shows `[false-exit] playable loop ready` and no errors.
 
@@ -57,3 +59,10 @@
 - [ ] After final chapter is solved, final-state copy appears: `你已完成目前全部章節。暫時到此。`.
 - [ ] After final chapter is solved, `Next` remains hidden/disabled.
 - [ ] Click `Restart`; app returns to chapter 1 initial state and final-state copy disappears.
+
+## IPG-012 focused smoke（chapter progress indicator）
+
+- [ ] Initial load shows chapter progress `Chapter 1 / 2` (or equivalent chapter count wording).
+- [ ] Chapter 1: submit correct answer `回答`; chapter 1 success feedback appears and `Next` becomes visible while progress stays on chapter 1.
+- [ ] Click `Next`; screen switches to chapter 2 and progress updates to `Chapter 2 / 2`.
+- [ ] Click `Restart`; app returns to chapter 1 initial state and progress resets to `Chapter 1 / 2`.

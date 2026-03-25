@@ -7,12 +7,12 @@
 - Static playable flow now supports chapter 1 -> chapter 2 puzzle progression with restart reset
 
 ## Latest Accepted Change
-- IPG-011 — 最終章完成態文案 + focused smoke（final-state 提示 + 文檔/狀態同步）
+- IPG-012 — 顯示 chapter progress indicator（chapter count 提示 + focused smoke）
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
-- 已知限制：`gh auth status` 失敗（未登入 GitHub CLI），本輪不查 issue list
-- 目前按 STATE backlog 做最小可驗收增量（final-state copy + focused smoke）
+- 已知限制：`gh auth status` 失敗（未登入 GitHub CLI），stderr：`You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）
+- 目前按 STATE backlog 做最小可驗收增量（chapter progress indicator + focused smoke）
 
 ## Constraints
 - Small steps only
@@ -20,4 +20,4 @@
 - Keep product direction stable unless explicitly changed upstream
 
 ## Next Suggested Step
-- 揀下一個最細但有體感嘅 playable 增量；優先考慮 final-state 之後嘅新 chapter / end-card 方向，但仍保持 tiny increment
+- 揀下一個最細但有體感嘅 playable 增量；可考慮補 chapter title/progress 以外嘅微型 UX 提示，例如 solved badge / keyboard submit microcopy，但仍保持 tiny increment

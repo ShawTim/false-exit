@@ -62,6 +62,7 @@ function renderGame(root, chapters) {
     root.innerHTML = `
       <section class="card">
         <h2>${escapeHtml(chapter.title)}</h2>
+        <p class="chapter-progress" aria-live="polite">Chapter ${state.chapterIndex + 1} / ${chapters.length}</p>
 
         <section id="puzzle-view">
           <div class="story">

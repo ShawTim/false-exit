@@ -179,3 +179,13 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: scope 嚴格限制於最小增量；無改 `content/story/seed.json`、無加 chapter 3、無引入 storage/backend/router/framework。
+## 2026-03-26 01:10 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-26 01:10 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-012 — 顯示 chapter progress indicator
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`; browser smoke on `http://127.0.0.1:8126/` — 初始為 `Chapter 1 / 2`；chapter 1 解題後 Next 進 chapter 2 變為 `Chapter 2 / 2`；chapter 2 未解前無 final-state；chapter 2 解題後顯示 final-state 文案且 `Next` hidden；Restart 後回 `Chapter 1 / 2` 並隱藏 final-state
+- Review result: Accepted
+- Commit: pending
+- Push: pending
+- Notes: 最小 UI 增量，無改 seed/backend/router/framework；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
