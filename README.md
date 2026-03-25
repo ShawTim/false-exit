@@ -9,6 +9,11 @@
 - `assets/js/main.js`：前端入口（暫時只做 boot log）
 - `content/story/seed.json`：劇情/關卡資料種子（之後由兄落 spec 再擴）
 - `tests/smoke.md`：手動 smoke checklist
+- `docs/chapter-schema.md`：chapter 資料結構（schema）說明
+
+## Chapter Schema
+
+- 請先讀：[`docs/chapter-schema.md`](docs/chapter-schema.md)
 
 ## 本地預覽
 

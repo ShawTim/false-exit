@@ -36,3 +36,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: `gh` 未登入，GitHub open issues 無法用 CLI 確認；公開 web fetch 到 repo issues URL 亦失敗，所以今輪按 backlog 做最細可驗收增量。
+
+## 2026-03-25 10:11 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-25 10:11 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-003 — 將 chapter schema 文件化
+- Files changed: `README.md`, `docs/chapter-schema.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: 文件檢查完成：schema 已列明 required/optional（`nextBeat` optional），包含與 `content/story/seed.json` 對齊的最小 JSON 範例；README 已加入 schema 入口；smoke checklist 已補文件驗收項
+- Review result: Accepted pending final commit/push
+- Commit: pending
+- Push: pending
+- Notes: 純文件化更新；無改 gameplay、無改 seed 結構、無引入 backend。

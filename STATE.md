@@ -7,7 +7,7 @@
 - First playable single-puzzle loop is now implemented as a static page
 
 ## Latest Accepted Change
-- IPG-002 — 答題後推進下一個 story beat
+- IPG-003 — 將 chapter schema 文件化
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
@@ -19,4 +19,4 @@
 - Keep product direction stable unless explicitly changed upstream
 
 ## Next Suggested Step
-- IPG-003 — 將 chapter schema 文件化
+- IPG-004 — 加入 restart / next puzzle flow
