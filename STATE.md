@@ -20,4 +20,4 @@
 - Keep product direction stable unless explicitly changed upstream
 
 ## Next Suggested Step
-- IPG-007 — 補最細單元測試或互動測試骨架（維持 static 架構）
+- IPG-008 — 加一條最小 regression smoke（專驗同題先錯後啱，再過 chapter 2）

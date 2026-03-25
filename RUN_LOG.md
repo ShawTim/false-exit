@@ -91,3 +91,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: scope kept minimal; no framework/router/backend/localStorage; no third puzzle.
+
+## 2026-03-25 16:13 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-25 16:13 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-006 bugfix — 修正同題先錯後啱未切換 success/Next
+- Files changed: `assets/js/main.js`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`; browser smoke on `http://127.0.0.1:8096/` — chapter 1 先答錯 `出口` 顯示 retry，再改 `回答` 提交即轉 success 並顯示 `Next`; 進入 chapter 2 後同樣先錯 `出口` 再答 `問題` 可正常轉 success；final chapter 的 `Next` 保持 hidden/disabled；console only `[false-exit] playable loop ready`
+- Review result: Accepted (local smoke passed)
+- Commit: pending
+- Push: pending
+- Notes: 最小修補，無改 schema / seed / UI copy。
