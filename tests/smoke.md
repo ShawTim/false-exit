@@ -1,4 +1,4 @@
-# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010
+# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010 / IPG-011
 
 - [ ] Run `python3 -m http.server 8080` from repo root.
 - [ ] Open `http://localhost:8080/`.
@@ -47,3 +47,13 @@
 - [ ] After reset, answer input is empty.
 - [ ] After reset, feedback area is empty.
 - [ ] After reset, `Next` is hidden/disabled.
+
+## IPG-011 focused smoke（final-state copy on final chapter solved）
+
+- [ ] Chapter 1: submit correct answer `回答`; chapter 1 success feedback appears and `Next` becomes visible.
+- [ ] Click `Next` to enter chapter 2.
+- [ ] Before solving chapter 2, final-state copy is not visible.
+- [ ] Chapter 2: submit correct answer `問題`; chapter 2 success feedback appears.
+- [ ] After final chapter is solved, final-state copy appears: `你已完成目前全部章節。暫時到此。`.
+- [ ] After final chapter is solved, `Next` remains hidden/disabled.
+- [ ] Click `Restart`; app returns to chapter 1 initial state and final-state copy disappears.

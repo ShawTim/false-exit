@@ -146,3 +146,36 @@ Append one section per run.
 - Commit: `6706c21` — `docs: add restart smoke for unsolved chapter 2`
 - Push: `origin/main` updated
 - Notes: `gh auth status` 失敗，stderr：`You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）；按 AGENTS contract 記錄實際失敗輸出後，今輪改做最細文檔增量。
+
+## 2026-03-26 00:33 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 00:33 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-011 — 最終章完成態文案 + focused smoke
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: 未查 GitHub issue；依兄指示只做最小 final-state copy + 文檔同步。
+
+## 2026-03-26 00:33 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-26 00:33 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-011 — 最終章完成態文案 + focused smoke
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`; browser smoke on `http://127.0.0.1:8097/` — chapter 1 `回答` reveals `Next`; chapter 2 未解前無 final-state 文案；chapter 2 `問題` 後顯示 success + `你已完成目前全部章節。暫時到此。`; final chapter `Next` hidden；`Restart` 後回到 chapter 1 初始狀態且 final-state 文案消失
+- Review result: Accepted after lead took over final review / docs-state sync
+- Commit: pending
+- Push: pending
+- Notes: `gh auth status` 失敗，stderr：`You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）；按 contract 記錄實際失敗後，仍完成一輪完整可驗收增量。
+
+## 2026-03-26 00:34 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 00:34 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-011 — 最終章完成態文案 + focused smoke
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`；grep 檢查確認 final-state 文案只在 final chapter solved 條件渲染（`state.solved && !hasNextChapter`），smoke checklist 已新增 IPG-011 focused 驗收步驟（含未解不顯示 / 解完顯示 / Restart 消失）
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: scope 嚴格限制於最小增量；無改 `content/story/seed.json`、無加 chapter 3、無引入 storage/backend/router/framework。

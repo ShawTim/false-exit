@@ -121,3 +121,9 @@ button {
 .feedback.success {
   color: var(--success);
 }
+
+.final-state {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-weight: 700;
+}

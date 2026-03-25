@@ -7,12 +7,12 @@
 - Static playable flow now supports chapter 1 -> chapter 2 puzzle progression with restart reset
 
 ## Latest Accepted Change
-- IPG-010 — 補 chapter 2 未解時 Restart reset focused smoke（文檔/狀態同步）
+- IPG-011 — 最終章完成態文案 + focused smoke（final-state 提示 + 文檔/狀態同步）
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
 - 已知限制：`gh auth status` 失敗（未登入 GitHub CLI），本輪不查 issue list
-- 目前按 STATE backlog 做文檔/狀態同步型最小可驗收增量
+- 目前按 STATE backlog 做最小可驗收增量（final-state copy + focused smoke）
 
 ## Constraints
 - Small steps only
@@ -20,4 +20,4 @@
 - Keep product direction stable unless explicitly changed upstream
 
 ## Next Suggested Step
-- 等兄本地 smoke 驗收 IPG-010 focused case；通過後再決定是否 commit / push
+- 揀下一個最細但有體感嘅 playable 增量；優先考慮 final-state 之後嘅新 chapter / end-card 方向，但仍保持 tiny increment

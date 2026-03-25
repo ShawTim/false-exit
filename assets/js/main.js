@@ -76,6 +76,7 @@ function renderGame(root, chapters) {
             </div>
           </form>
           <p id="feedback" class="feedback${state.status === 'idle' ? '' : ` ${state.status}`}" role="status">${escapeHtml(state.feedback)}</p>
+          ${state.solved && !hasNextChapter ? '<p id="final-state" class="final-state" role="status">你已完成目前全部章節。暫時到此。</p>' : ''}
         </section>
 
         <div class="controls">
