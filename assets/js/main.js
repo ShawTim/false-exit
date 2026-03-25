@@ -69,12 +69,13 @@ function renderGame(root, chapters) {
             ${chapter.story.map((line) => `<p>${escapeHtml(line)}</p>`).join('')}
           </div>
           <p class="question"><span class="question-label">Puzzle</span>${escapeHtml(chapter.puzzle.prompt)}</p>
-          <form id="answer-form">
+          <form id="answer-form" class="answer-form${state.solved ? ' solved-locked' : ''}">
             <label class="label" for="answer-input">你的答案</label>
-            <div class="answer-row">
+            <div class="answer-row${state.solved ? ' solved-locked' : ''}">
               <input id="answer-input" name="answer" type="text" autocomplete="off" required value="${escapeHtml(state.answer)}" ${state.solved ? 'disabled' : ''} />
               <button type="submit" ${state.solved ? 'disabled' : ''}>提交</button>
             </div>
+            ${state.solved ? '<p class="lock-hint" role="status">已完成本章，答案欄已鎖定。</p>' : ''}
           </form>
           <p id="feedback" class="feedback${state.status === 'idle' ? '' : ` ${state.status}`}" role="status">${escapeHtml(state.feedback)}</p>
           ${state.solved && !hasNextChapter ? '<p id="final-state" class="final-state" role="status">你已完成目前全部章節。暫時到此。</p>' : ''}

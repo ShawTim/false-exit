@@ -200,3 +200,25 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: `gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 失敗（未登入）：`To get started with GitHub CLI, please run: gh auth login`（exit 4）。
+
+## 2026-03-26 04:03 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 04:03 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-014 — solved disabled state 視覺提示
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查完成：`gh auth status` 成功（`vildanden-ai`，scope 缺 `read:org` 提示）；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 回傳 `[]`（0 open issues）。
+
+## 2026-03-26 04:00 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-26 04:00 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-014 — solved disabled state 視覺提示
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`; browser smoke on `http://127.0.0.1:8130/` — chapter 1 `回答` 後顯示 success、controls muted/disabled，同步出現 `已完成本章，答案欄已鎖定。`; `Next` 進 chapter 2 後 lock hint 消失且 controls 回復 enabled；chapter 2 `問題` 後 lock hint 與 final-state copy 可共存；`Restart` 後 lock hint/final-state 全部清走並回到 chapter 1 初始狀態
+- Review result: Accepted
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
