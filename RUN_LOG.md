@@ -113,3 +113,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: scope 嚴格限制於文檔與狀態同步，無擴 scope。
+
+## 2026-03-25 20:13 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-25 20:13 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-009 — 補 chapter 2 完成後 Restart reset focused smoke
+- Files changed: `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: checklist review completed；新增 focused case 覆蓋 ch1 solved -> Next -> ch2 solved -> final `Next` hidden/disabled -> Restart -> chapter 1 initial content / input empty / feedback empty / `Next` hidden/disabled；並註明無改 app logic/seed/html/css/js
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: 今輪 GitHub CLI 真查結果係 `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`

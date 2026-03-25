@@ -7,12 +7,13 @@
 - Static playable flow now supports chapter 1 -> chapter 2 puzzle progression with restart reset
 
 ## Latest Accepted Change
-- IPG-008 — 加一條聚焦 regression smoke（同題先錯後啱，再過 chapter 2）
+- IPG-009 — 補 chapter 2 完成後 Restart reset focused smoke（文檔/狀態同步）
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
-- `gh` auth currently unavailable, so GitHub issue priority cannot be verified from this environment
-- If none can be verified, keep shipping one small, testable increment at a time
+- 已用 CLI 驗證：`gh auth status` 成功
+- 已用 CLI 驗證：`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`
+- 結論：`0 open issues from ShawTim`，按 STATE backlog 持續交付最小可驗收增量
 
 ## Constraints
 - Small steps only
@@ -20,4 +21,4 @@
 - Keep product direction stable unless explicitly changed upstream
 
 ## Next Suggested Step
-- IPG-009 — 補一條最小 smoke：驗證 chapter 2 解完後按 `Restart` 仍回到 chapter 1 初始且 `Next` 隱藏
+- IPG-010 — 補一條 focused smoke：chapter 2 未解時按 `Restart`，確認同樣回 chapter 1 初始且 `Next` hidden/disabled
