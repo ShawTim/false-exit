@@ -11,6 +11,9 @@
 - [ ] After correct answer, `Next` button becomes visible while next beat content is still not shown yet.
 - [ ] Click `Next`; puzzle view hides and page switches to `Next Beat — The Narrow Door` with story line `門後唔係自由，而係一間冇窗嘅控制室。`.
 - [ ] Click `Restart` from next beat state; page returns to the initial puzzle state, clears input/feedback, hides `Next`, and hides next beat content again.
+- [ ] State-oriented UI check: typing in input updates what submit evaluates (answer text is state-driven), and restart always clears back to empty input.
+- [ ] State-oriented UI check: feedback class/text reflects state (`success` after correct, `error` after wrong, empty on restart).
+- [ ] State-oriented UI check: view switching is state-driven (`puzzle` before next, `next` only after click Next when solved).
 - [ ] Browser console shows `[false-exit] playable loop ready` and no errors.
 - [ ] `README.md` includes a link to `docs/chapter-schema.md`.
 - [ ] `docs/chapter-schema.md` clearly marks required vs optional fields (`nextBeat` optional).

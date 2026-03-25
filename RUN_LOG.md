@@ -58,3 +58,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: `gh` 未登入，今輪仍無法確認 ShawTim open issues；按 backlog 完成最小可驗收 gameplay increment。
+
+## 2026-03-25 14:03 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-25 14:03 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-005 — Serialize current playable state
+- Files changed: `assets/js/main.js`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: code-level check complete — playable loop now driven by serializable plain-object state `{ answer, status, feedback, view, solved }` via single `setState(partial) -> renderState()` flow; submit/next/restart mutate only state; restart resets to initial state; next visibility requires solved
+- Review result: Implemented (awaiting lead smoke + commit)
+- Commit: pending
+- Push: pending
+- Notes: scope kept minimal; no backend/storage/router/framework added.

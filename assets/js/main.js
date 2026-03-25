@@ -64,60 +64,85 @@ function renderChapter(root, chapter) {
   const nextView = root.querySelector('#next-view');
   const nextButton = root.querySelector('#next-button');
   const restartButton = root.querySelector('#restart-button');
+
   const expected = normalizeAnswer(chapter.puzzle.answer);
   const hasNextBeat = Boolean(chapter.nextBeat);
 
-  function setPuzzleState() {
-    if (puzzleView) puzzleView.hidden = false;
-    if (nextView) nextView.hidden = true;
+  function createInitialState() {
+    return {
+      answer: '',
+      status: 'idle',
+      feedback: '',
+      view: 'puzzle',
+      solved: false,
+    };
   }
 
-  function resetState() {
-    setPuzzleState();
+  let state = createInitialState(chapter);
 
-    if (input) {
-      input.value = '';
-      input.focus();
+  function renderState() {
+    if (input && input.value !== state.answer) {
+      input.value = state.answer;
     }
 
     if (feedback) {
-      feedback.textContent = '';
-      feedback.className = 'feedback';
+      feedback.textContent = state.feedback;
+      feedback.className = `feedback${state.status === 'idle' ? '' : ` ${state.status}`}`;
+    }
+
+    if (puzzleView) {
+      puzzleView.hidden = state.view !== 'puzzle';
+    }
+
+    if (nextView) {
+      nextView.hidden = state.view !== 'next';
     }
 
     if (nextButton) {
-      nextButton.hidden = true;
-      nextButton.disabled = !hasNextBeat;
+      nextButton.hidden = !state.solved || !hasNextBeat;
+      nextButton.disabled = !state.solved || !hasNextBeat;
     }
   }
+
+  function setState(partial) {
+    state = {
+      ...state,
+      ...partial,
+    };
+    renderState();
+  }
+
+  input?.addEventListener('input', () => {
+    setState({ answer: input.value });
+  });
 
   form?.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    const actual = normalizeAnswer(input?.value || '');
+    const actual = normalizeAnswer(state.answer);
     const success = actual === expected;
 
-    if (feedback) {
-      feedback.textContent = success ? chapter.puzzle.success : chapter.puzzle.retry;
-      feedback.className = `feedback ${success ? 'success' : 'error'}`;
-    }
-
-    if (nextButton) {
-      nextButton.hidden = !success || !hasNextBeat;
-    }
+    setState({
+      status: success ? 'success' : 'error',
+      feedback: success ? chapter.puzzle.success : chapter.puzzle.retry,
+      solved: success,
+      view: 'puzzle',
+    });
   });
 
   nextButton?.addEventListener('click', () => {
-    if (!hasNextBeat) return;
-    if (puzzleView) puzzleView.hidden = true;
-    if (nextView) nextView.hidden = false;
+    if (!hasNextBeat || !state.solved) return;
+    setState({ view: 'next' });
   });
 
   restartButton?.addEventListener('click', () => {
-    resetState();
+    state = createInitialState(chapter);
+    renderState();
+    input?.focus();
   });
 
-  resetState();
+  renderState();
+  input?.focus();
 }
 
 function normalizeAnswer(value) {

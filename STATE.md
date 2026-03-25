@@ -7,7 +7,7 @@
 - First playable single-puzzle loop is now implemented as a static page
 
 ## Latest Accepted Change
-- IPG-004 — 加入 restart / next puzzle flow
+- IPG-005 — Serialize current playable state
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
@@ -20,4 +20,4 @@
 - Keep product direction stable unless explicitly changed upstream
 
 ## Next Suggested Step
-- IPG-005 — 將 next beat 抽成可序列化 state，為第二條 puzzle 做準備
+- IPG-006 — 以現有 serializable playable state 為基礎，接第二條 puzzle（保持最小增量）
