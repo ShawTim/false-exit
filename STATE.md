@@ -7,11 +7,12 @@
 - First playable single-puzzle loop is now implemented as a static page
 
 ## Latest Accepted Change
-- IPG-003 — 將 chapter schema 文件化
+- IPG-004 — 加入 restart / next puzzle flow
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
-- If none exist, keep shipping one small, testable increment at a time
+- `gh` auth currently unavailable, so GitHub issue priority cannot be verified from this environment
+- If none can be verified, keep shipping one small, testable increment at a time
 
 ## Constraints
 - Small steps only
@@ -19,4 +20,4 @@
 - Keep product direction stable unless explicitly changed upstream
 
 ## Next Suggested Step
-- IPG-004 — 加入 restart / next puzzle flow
+- IPG-005 — 將 next beat 抽成可序列化 state，為第二條 puzzle 做準備

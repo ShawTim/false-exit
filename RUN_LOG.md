@@ -47,3 +47,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: 純文件化更新；無改 gameplay、無改 seed 結構、無引入 backend。
+
+## 2026-03-25 12:31 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-25 12:31 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-004 — 加入 restart / next puzzle flow
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: browser smoke on `http://127.0.0.1:8094/` — wrong answer keeps puzzle view active and `Next` hidden; correct answer reveals `Next`; clicking `Next` switches to `Next Beat — The Narrow Door`; clicking `Restart` resets input/feedback/view state; console only shows `[false-exit] playable loop ready`
+- Review result: Accepted after lead review; subagent left partial code change, lead completed docs/state sync only
+- Commit: pending
+- Push: pending
+- Notes: `gh` 未登入，今輪仍無法確認 ShawTim open issues；按 backlog 完成最小可驗收 gameplay increment。

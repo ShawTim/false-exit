@@ -97,6 +97,18 @@ button {
   cursor: pointer;
 }
 
+.controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.button-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+}
+
 .feedback {
   min-height: 1.5em;
   font-weight: 600;
