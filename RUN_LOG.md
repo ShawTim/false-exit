@@ -374,3 +374,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: 本輪只做文檔/狀態同步，無改 app logic / seed / css / html / js；GitHub CLI 真查結果見下輪更新。
+
+## 2026-03-26 16:22 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 16:22 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-021 — expand playable flow to at least 10 chapters
+- Files changed: `content/story/seed.json`, `tests/smoke.md`, `docs/chapter-schema.md`, `STATE.md`, `RUN_LOG.md`, `README.md`
+- Validation: `node --check assets/js/main.js`; `python3 -m json.tool content/story/seed.json`; node one-liner 檢查 chapter count=10 且每章具 required fields（`id/title/story/puzzle.prompt/answer/success/retry`）
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查成功：`gh issue view 1 --repo ShawTim/false-exit --json number,title,state,author,url` 返回 issue #1 `將關卡增加到至少十個`（OPEN, author ShawTim）。

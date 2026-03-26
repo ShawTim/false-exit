@@ -1,4 +1,4 @@
-# Chapter Schema（IPG-003 / IPG-020）
+# Chapter Schema（IPG-021）
 
 呢份文件固定 **False Exit** 目前 chapter data 最小結構，對齊現有 `content/story/seed.json` 同現時前端實作（`assets/js/main.js`）。
 
@@ -36,10 +36,26 @@
         "success": "鏡面同時暗咗落去。房門未開，但警報停咗。",
         "retry": "錯。你仲係答緊人哋設定好嘅路。"
       }
+    },
+    {
+      "id": "chapter-03",
+      "title": "Chapter 3 — The Corridor of Copies",
+      "story": [
+        "你踏入一條全由你腳步聲組成嘅走廊。",
+        "喇叭重播你剛先每句自辯，直到你聽到自己都想關機。"
+      ],
+      "puzzle": {
+        "prompt": "輸入走廊真正放大緊嘅核心（兩個字）。",
+        "answer": "鏡像",
+        "success": "喇叭忽然靜咗，天花跌下一張通行卡。",
+        "retry": "未中。你聽到嘅唔係真相，係回音。"
+      }
     }
   ]
 }
 ```
+
+> 註：完整 seed 現況為 10 chapters（chapter-01 至 chapter-10）；上面只截取前 3 章示意 shape。
 
 ## 2) 欄位說明（Required / Optional）
 
@@ -71,7 +87,7 @@
 
 ## 3) 與現時實作對齊備註
 
-- 前端按 `chapters` 順序播放 chapter flow（chapter 1 -> chapter 2）。
+- 前端按 `chapters` 順序播放 chapter flow（chapter 1 -> ... -> chapter 10）。
 - 解完非最終章會顯示 `Next` 進入下一章。
-- 最終章（目前 chapter 2）解完後無 next chapter 行為：`Next` hidden/disabled，並顯示 final-state copy。
-- 本文件只固定現時最小 shape，**唔涉及 gameplay 改動、backend、或新增 chapter**。
+- 最終章（目前 chapter 10）解完後無 next chapter 行為：`Next` hidden/disabled，並顯示 final-state copy。
+- 本文件只固定現時最小 shape，**唔涉及 gameplay 改動、backend、或新增 framework/router/storage**。

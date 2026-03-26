@@ -6,7 +6,7 @@
 
 - `index.html`：入口頁
 - `assets/css/styles.css`：樣式
-- `assets/js/main.js`：前端入口（暫時只做 boot log）
+- `assets/js/main.js`：前端入口（現時支援 chapter 1 -> chapter 10 順序 playable flow）
 - `content/story/seed.json`：劇情/關卡資料種子（之後由兄落 spec 再擴）
 - `tests/smoke.md`：手動 smoke checklist
 - `docs/chapter-schema.md`：chapter 資料結構（schema）說明

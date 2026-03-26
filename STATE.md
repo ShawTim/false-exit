@@ -4,15 +4,16 @@
 - Project initialized
 - Root path: `/home/openclaw/.openclaw/workspaces/gpt-bro/false-exit/`
 - GitHub repo: `https://github.com/ShawTim/false-exit/`
-- Static playable flow supports chapter 1 -> chapter 2 puzzle progression with restart reset
+- Static playable flow supports chapter 1 -> chapter 10 sequential puzzle progression with restart reset
 
 ## Latest Accepted Change
-- IPG-020 — sync `docs/chapter-schema.md` with current 2-chapter playable flow（移除「前端只讀第一章」過時描述），並同步 `tests/smoke.md` / `STATE.md` / `RUN_LOG.md`
+- IPG-021 — expand playable flow to 10 chapters by seed-first update, keep existing static app logic; sync smoke/schema/state/run-log to 10-chapter flow
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
-- GitHub CLI 真查：`gh auth status` 失敗，輸出 `You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 失敗，輸出 `To get started with GitHub CLI, please run:  gh auth login`（exit 4）
-- 目前按 STATE backlog 做最小可驗收增量（文檔/驗收同步優先，唔改 app logic / seed）
+- GitHub CLI 真查（本輪）：
+  - `gh issue view 1 --repo ShawTim/false-exit --json number,title,state,author,url` 成功
+  - 摘要：issue #1 `將關卡增加到至少十個`，state=`OPEN`，author=`ShawTim`
 
 ## Constraints
 - Small steps only
@@ -20,4 +21,4 @@
 - Keep product direction stable unless explicitly changed upstream
 
 ## Next Suggested Step
-- 繼續保持 tiny increment；若再做文檔同步，先對齊現有兩章 flow 與 focused smoke，避免引入 gameplay scope
+- 跟進 issue #1 後續（如要補 copy polish 或額外驗收），保持 seed-first、最小增量策略

@@ -29,6 +29,118 @@
         "success": "鏡面同時暗咗落去。房門未開，但警報停咗。",
         "retry": "錯。你仲係答緊人哋設定好嘅路。"
       }
+    },
+    {
+      "id": "chapter-03",
+      "title": "Chapter 3 — The Corridor of Copies",
+      "story": [
+        "你踏入一條全由你腳步聲組成嘅走廊。",
+        "喇叭重播你剛先每句自辯，直到你聽到自己都想關機。"
+      ],
+      "puzzle": {
+        "prompt": "輸入走廊真正放大緊嘅核心（兩個字）。",
+        "answer": "鏡像",
+        "success": "喇叭忽然靜咗，天花跌下一張通行卡。",
+        "retry": "未中。你聽到嘅唔係真相，係回音。"
+      }
+    },
+    {
+      "id": "chapter-04",
+      "title": "Chapter 4 — The Floor of Static",
+      "story": [
+        "地下每塊磚都播緊唔同版本嘅指示。",
+        "你愈跟指示行，愈行返原點。"
+      ],
+      "puzzle": {
+        "prompt": "輸入你要先忽略嘅嘢（兩個字）。",
+        "answer": "噪音",
+        "success": "雜訊熄火，真正路線喺塵入面浮出嚟。",
+        "retry": "唔啱。你仲俾假指令帶節奏。"
+      }
+    },
+    {
+      "id": "chapter-05",
+      "title": "Chapter 5 — The Chamber of Missing Angles",
+      "story": [
+        "房入面有一張完美地圖，唯一問題係每次你睇都少一角。",
+        "牆上塗鴉：『你睇唔到嗰部分，先係你真正困住嘅位。』"
+      ],
+      "puzzle": {
+        "prompt": "輸入塗鴉指向嗰個缺口（兩個字）。",
+        "answer": "盲點",
+        "success": "地圖補返最後一角，門鎖自己鬆開。",
+        "retry": "錯。你仲用完整幻想掩住缺口。"
+      }
+    },
+    {
+      "id": "chapter-06",
+      "title": "Chapter 6 — The Ledger Room",
+      "story": [
+        "你見到一本帳簿，記低每次你選擇最容易條路嘅後果。",
+        "最後一頁只留空格：『請填上你避咗好耐嘅兩個字。』"
+      ],
+      "puzzle": {
+        "prompt": "輸入帳簿最後一頁要求嘅詞（兩個字）。",
+        "answer": "代價",
+        "success": "印章蓋落空格，門口紅燈轉綠。",
+        "retry": "未到位。逃避唔會自動清帳。"
+      }
+    },
+    {
+      "id": "chapter-07",
+      "title": "Chapter 7 — The Theater Without Audience",
+      "story": [
+        "舞台上重演你所有『差啲就得』嘅版本。",
+        "空椅背後刻住：『要離場，先承認有人睇住。』"
+      ],
+      "puzzle": {
+        "prompt": "輸入空椅提示入面關鍵角色（兩個字）。",
+        "answer": "見證",
+        "success": "帷幕落下，側門無聲打開。",
+        "retry": "錯。你仲當呢場戲冇觀眾。"
+      }
+    },
+    {
+      "id": "chapter-08",
+      "title": "Chapter 8 — The Staircase of Decoys",
+      "story": [
+        "樓梯每層都有一塊牌寫住『出口』，每塊都通向上一層。",
+        "你終於喺扶手底發現細字：『識別假門先有真門。』"
+      ],
+      "puzzle": {
+        "prompt": "輸入細字要求你先識別嘅對象（兩個字）。",
+        "answer": "假門",
+        "success": "其中一塊『出口』牌掉咗色，露出真正樓層號碼。",
+        "retry": "未中。你仲信緊第一眼嗰塊牌。"
+      }
+    },
+    {
+      "id": "chapter-09",
+      "title": "Chapter 9 — The Exit Interview",
+      "story": [
+        "你坐喺一張空白表格前，題目只有一行：『你要離開咩？』",
+        "天花投影你過往所有答案，全部都係地點。"
+      ],
+      "puzzle": {
+        "prompt": "輸入你其實追緊、但一直答錯方向嘅兩個字。",
+        "answer": "自由",
+        "success": "表格自動簽名，電梯門終於停喺你呢層。",
+        "retry": "錯。你又將目的寫成路線。"
+      }
+    },
+    {
+      "id": "chapter-10",
+      "title": "Chapter 10 — The False Exit",
+      "story": [
+        "最後一扇門前，顯示屏問：『確認離開？』",
+        "你見到門後其實係第一章走廊；真正選擇係你仲玩唔玩循環。"
+      ],
+      "puzzle": {
+        "prompt": "輸入你決定對循環做嘅事（兩個字）。",
+        "answer": "留下",
+        "success": "顯示屏熄滅，走廊冇再重置。你未必離開咗大樓，但你停咗自動逃跑。",
+        "retry": "未啱。你仲想用離開掩飾未完成。"
+      }
     }
   ]
 }
