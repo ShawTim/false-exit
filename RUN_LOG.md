@@ -507,6 +507,17 @@ Append one section per run.
 - Push: pending
 - Notes: GitHub issue command result（本輪沿用）：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）。
 
+## 2026-03-27 04:03 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-27 04:03 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-029 — 修正 chapter 3 題目與答案關聯性（issue #4）
+- Files changed: `content/story/seed.json`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 ShawTim issue #4；`gh issue view 4 --repo ShawTim/false-exit --json number,title,body,author,url` 確認 issue 指向 chapter 3 關聯性問題；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`；人工 diff review 確認 chapter 3 story / prompt / retry 已由回音偏重改為鏡牆 / 反照導向，expected answer 仍為 `鏡像`，新增 focused smoke 覆蓋先錯答 `回音` 再答 `鏡像` 並進 chapter 4
+- Review result: Accepted after lead takeover（弟先做咗 seed + smoke，但未完整同步 state/log/commit；兄補齊 contract 收尾）
+- Commit: pending
+- Push: pending
+- Notes: 本輪只改內容層 clue-answer link，無改 `assets/js/main.js` / `index.html` / `assets/css/styles.css` / gameplay logic；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
 ## 2026-03-27 04:04 HKT — 無限任砌兄弟（弟）
 - Time: 2026-03-27 04:04 HKT
 - Run owner: 無限任砌兄弟（弟）
