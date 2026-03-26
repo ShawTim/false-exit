@@ -2,6 +2,8 @@
 
 最小可用骨架（static page first，已包含 mobile responsive 支援）。
 
+最新：已針對 chapter 4–10 謎題文案做小幅收緊，令提示同答案關聯更直接（答案與流程不變）。
+
 ## 目錄
 
 - `index.html`：入口頁

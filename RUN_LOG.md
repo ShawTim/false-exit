@@ -418,3 +418,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: implementation 僅限 responsive CSS + smoke/readme/state/log，同步保持 10-chapter gameplay logic 不變；worktree 尚有 unrelated `BACKLOG.md` 修改同 untracked `package-lock.json`，未納入本輪。
+
+## 2026-03-26 20:08 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 20:08 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-023 — review and tighten riddles after chapter 3
+- Files changed: `content/story/seed.json`, `tests/smoke.md`, `README.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `python3 -m json.tool content/story/seed.json`; `node --check assets/js/main.js`; python one-liner check confirms chapter 4->10 answers unchanged (`噪音/盲點/代價/見證/假門/自由/留下`) and chapter count remains 10
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查成功：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 ShawTim issue #3；`gh issue view 3 --repo ShawTim/false-exit --json number,title,state,author,url` 顯示 OPEN。

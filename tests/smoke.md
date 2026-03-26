@@ -18,6 +18,18 @@
 - [ ] Mobile viewport smoke (320px–430px): answer input + `提交答案` are full-width and tappable (>=44px target height), no overlap/clip.
 - [ ] Mobile viewport smoke (320px–430px): controls stack vertically (`Next`, `Restart`) and remain easy to tap without squeeze.
 
+## IPG-023 focused smoke（chapter 4+ 題意更清晰，但流程不變）
+
+- [ ] 先解 chapter 1 `回答`、chapter 2 `問題`、chapter 3 `鏡像`，確保可正常進入 chapter 4。
+- [ ] Chapter 4：先答錯（例如 `回音`）應顯示 retry；改答 `噪音` 後 success + `Next` 出現。
+- [ ] Chapter 5：先答錯（例如 `缺口`）應顯示 retry；改答 `盲點` 後 success + `Next` 出現。
+- [ ] Chapter 6：先答錯（例如 `後果`）應顯示 retry；改答 `代價` 後 success + `Next` 出現。
+- [ ] Chapter 7：先答錯（例如 `觀眾`）應顯示 retry；改答 `見證` 後 success + `Next` 出現。
+- [ ] Chapter 8：先答錯（例如 `出口`）應顯示 retry；改答 `假門` 後 success + `Next` 出現。
+- [ ] Chapter 9：先答錯（例如 `離開`）應顯示 retry；改答 `自由` 後 success + `Next` 出現。
+- [ ] Chapter 10：先答錯（例如 `離開`）應顯示 retry；改答 `留下` 後進入 final-state，`Next` 保持 hidden/disabled。
+- [ ] 確認 chapter 4 -> 10 答案仍分別為：`噪音 / 盲點 / 代價 / 見證 / 假門 / 自由 / 留下`。
+
 ## IPG-021 focused smoke（1 -> 10 順序推進 + final chapter 完成態）
 
 - [ ] Chapter 1: submit correct answer `回答`; chapter 1 success appears and `Next` becomes visible.

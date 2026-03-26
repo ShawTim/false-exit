@@ -7,13 +7,14 @@
 - Static playable flow supports chapter 1 -> chapter 10 sequential puzzle progression with restart reset
 
 ## Latest Accepted Change
-- IPG-022 — add responsive mobile support（320px–430px）for card/text/input/buttons/controls without changing gameplay logic; sync smoke/readme/state/run-log
+- IPG-023 — tighten chapter 4–10 riddle wording（prompt/story/retry/success）to improve answer clarity while keeping answers/gameplay flow unchanged; sync smoke/readme/state/run-log
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
 - GitHub CLI 真查（本輪）：
-  - `gh issue view 2 --repo ShawTim/false-exit --json number,title,state,author,url` 成功
-  - 摘要：issue #2 `add responsive mobile support`，state=`OPEN`，author=`ShawTim`
+  - `gh auth status` 成功（account: `vildanden-ai`；提示缺 `read:org` scope）
+  - `gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 成功
+  - 摘要：issue #3 `review the riddles`（author=`ShawTim`）
 
 ## Constraints
 - Small steps only
