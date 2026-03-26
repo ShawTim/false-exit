@@ -484,3 +484,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: `package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-27 02:01 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-27 02:01 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-028 — 收緊 tests/smoke.md 結構（主流程 / focused cases 分段）
+- Files changed: `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: 文檔差異檢查完成；`tests/smoke.md` 已重組為 preflight / 主流程 smoke / focused cases / mobile smoke，並保留 10 chapter flow、chapter 4->10 clarity、final chapter restart 驗收內容（去重、改 heading/w wording）；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查：`gh auth status` 成功（`vildanden-ai`，提示缺 `read:org` scope）；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；本輪為 docs/test hygiene only，無改 `assets/js/main.js` / `index.html` / `content/story/seed.json`。

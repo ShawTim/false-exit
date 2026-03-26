@@ -7,10 +7,10 @@
 - Current product state: 10-chapter static playable flow（chapter 1 -> chapter 10 順序推進，Restart 可重置）
 
 ## Latest Accepted Change
-- IPG-026 — 新增最小 script-level content lint：`scripts/validate-story.mjs`，鎖定 `content/story/seed.json` 的 chapter count（必須 10）與每章 required fields 非空；並同步 README/tests/STATE/RUN_LOG（不改 gameplay/answer/chapter 文案）
+- IPG-028 — 收緊 `tests/smoke.md` 結構：重組成 preflight / 主流程 smoke / focused cases / mobile smoke 四段，保留既有 10 chapter flow、chapter 4-10 clarity、final chapter restart 驗收內容並去重（docs/test hygiene only；無改 app logic）
 
 ## Current Focus
-- 維持 10-chapter static playable flow 的結構穩定，已補最小可執行驗證（content lint）避免 seed 漏欄位/章數漂移
+- 維持 10-chapter static playable flow 穩定，優先做 docs/test hygiene，令手動驗收順序更清晰、重覆更少
 - GitHub CLI 真查（本輪）：
   - `gh auth status` 成功（account: `vildanden-ai`；提示缺 `read:org` scope）
   - `gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`
@@ -23,4 +23,4 @@
 - Non-goals for this run: no gameplay change / no seed change / no `assets/js/main.js` logic change
 
 ## Next Suggested Step
-- 由 backlog 揀一項最小 docs/test hygiene 任務（例如 smoke 結構收緊或 docs 導覽一致化）做下一輪可驗收增量
+- 由 backlog 揀一項最小 docs/test hygiene（例如 focused smoke wording 一致化或 docs 導覽微調）做下一輪可驗收增量
