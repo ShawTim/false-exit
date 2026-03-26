@@ -244,3 +244,25 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: GitHub CLI 真查：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（0 open issues from ShawTim）。
+
+## 2026-03-26 08:02 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 08:02 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-016 — wrong-answer 後自動選取 input 方便即刻重答
+- Files changed: `assets/js/main.js`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`；code-path 檢查：wrong-answer re-render 後 `input.focus()` + `input.select()`（僅 `!state.solved && state.status === 'error'`）會喺 chapter 1/2 令輸入框保持 enabled 並自動選取舊錯答案；success 路徑仍維持 solved disabled/lock hint/Next/final-state 既有規則
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查：`gh auth status` 成功（`vildanden-ai`，scope 缺 `read:org` 提示）；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（0 open issues from ShawTim）。
+
+## 2026-03-26 08:00 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-26 08:00 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-016 — wrong-answer 後自動選取 input 方便即刻重答
+- Files changed: `assets/js/main.js`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`; browser smoke on `http://127.0.0.1:8150/` — chapter 1 `出口` 錯答後 input 保持 enabled、focus 留喺答案欄且選取全文，直接覆寫 `回答` 可轉 success 並顯示 `Next`; chapter 2 `出口` 錯答後同樣 auto focus/select，直接覆寫 `問題` 可轉 success；final chapter solved 後 input/submit disabled、`Next` hidden、lock hint 與 final-state copy 仍正常
+- Review result: Accepted
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`；`package-lock.json` 仍為 untracked 雜項，未納入本輪。

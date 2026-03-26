@@ -8,14 +8,14 @@
 - [ ] Before solving chapter 1, `Next` is hidden.
 - [ ] Chapter 1 unsolved: helper hint appears near answer controls: `提示：答案係兩個字。`.
 - [ ] Enter a wrong chapter 1 answer (example: `出口`) and submit; chapter 1 retry message appears.
-- [ ] After wrong chapter 1 answer, player stays on chapter 1 and `Next` remains hidden.
+- [ ] After wrong chapter 1 answer, player stays on chapter 1, `Next` remains hidden, answer input stays enabled, and wrong answer text is auto-focused + selected for quick overwrite.
 - [ ] Enter chapter 1 correct answer (`回答`) and submit; chapter 1 success message appears and `Next` becomes visible.
 - [ ] After chapter 1 is solved, answer input and submit button are disabled while success feedback stays visible.
 - [ ] After chapter 1 is solved, a subtle solved/locked hint appears near answer controls.
 - [ ] Click `Next`; screen switches to chapter title `Chapter 2 — The Room That Asks Back` with chapter 2 prompt.
 - [ ] On chapter 2 initial state (unsolved), answer input and submit button (`提交答案`) are enabled again.
 - [ ] On chapter 2 initial state (unsolved), solved/locked hint is not shown, and helper hint appears: `提示：答案係兩個字。`.
-- [ ] On chapter 2, enter a wrong answer (example: `出口`) and submit; chapter 2 retry message appears and player stays on chapter 2.
+- [ ] On chapter 2, enter a wrong answer (example: `出口`) and submit; chapter 2 retry message appears, player stays on chapter 2, answer input stays enabled, and wrong answer text is auto-focused + selected for quick overwrite.
 - [ ] On chapter 2, enter correct answer (`問題`) and submit; chapter 2 success message appears.
 - [ ] After chapter 2 is solved (no third chapter), answer input and submit button are disabled.
 - [ ] After chapter 2 is solved (no third chapter), solved/locked hint appears and can coexist with final-state copy.
@@ -100,4 +100,15 @@
 - [ ] Click `Next` to chapter 2 unsolved; helper hint appears again and submit button copy remains `提交答案`.
 - [ ] Chapter 2: submit correct answer `問題`; helper hint disappears, solved lock hint appears, input/submit stay disabled, and final-state copy still appears.
 - [ ] Click `Restart`; app returns to chapter 1 unsolved with helper hint visible and no solved lock hint.
+
+## IPG-016 focused smoke（wrong-answer 後 auto focus/select）
+
+- [ ] Chapter 1: input `出口` and submit wrong answer; retry feedback appears while staying on chapter 1.
+- [ ] Right after chapter 1 wrong submit, answer input is still enabled, auto-focused, and current wrong text is selected (typing should directly overwrite).
+- [ ] Chapter 1: type `回答` directly (without manual clear) and submit; success feedback appears, solved lock still works, and `Next` becomes visible.
+- [ ] Click `Next` to chapter 2.
+- [ ] Chapter 2: input `出口` and submit wrong answer; retry feedback appears while staying on chapter 2.
+- [ ] Right after chapter 2 wrong submit, answer input is still enabled, auto-focused, and current wrong text is selected.
+- [ ] Chapter 2: type `問題` directly and submit; success feedback appears.
+- [ ] After chapter 2 solved, input/submit remain disabled, `Next` hidden/disabled, final-state copy + solved lock hint still render as before.
 

@@ -143,7 +143,13 @@ function renderGame(root, chapters) {
       renderState();
     });
 
-    input?.focus();
+    if (input && !state.solved) {
+      input.focus();
+
+      if (state.status === 'error') {
+        input.select();
+      }
+    }
   }
 
   renderState();
