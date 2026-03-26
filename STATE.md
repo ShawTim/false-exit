@@ -7,7 +7,7 @@
 - Current product state: 10-chapter static playable flow（chapter 1 -> chapter 10 順序推進，Restart 可重置）
 
 ## Latest Accepted Change
-- IPG-028 — 收緊 `tests/smoke.md` 結構：重組成 preflight / 主流程 smoke / focused cases / mobile smoke 四段，保留既有 10 chapter flow、chapter 4-10 clarity、final chapter restart 驗收內容並去重（docs/test hygiene only；無改 app logic）
+- IPG-028 — 收緊 `tests/smoke.md` 結構：明確分段為 Main flow smoke / Focused regression cases / Mobile viewport smoke，focused case 統一命名為 `FC-xx`，保留 10 chapter flow + chapter 4-10 clarity + final chapter restart 驗收（docs/test hygiene only；無改 app logic）
 
 ## Current Focus
 - 維持 10-chapter static playable flow 穩定，優先做 docs/test hygiene，令手動驗收順序更清晰、重覆更少

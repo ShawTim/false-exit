@@ -495,3 +495,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: GitHub CLI 真查：`gh auth status` 成功（`vildanden-ai`，提示缺 `read:org` scope）；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；本輪為 docs/test hygiene only，無改 `assets/js/main.js` / `index.html` / `content/story/seed.json`。
+
+## 2026-03-27 02:04 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-27 02:04 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-028 rework — tighten smoke checklist structure +實際 commit/push
+- Files changed: `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `tests/smoke.md` 分段固定為 Main flow smoke / Focused regression cases / Mobile viewport smoke；focused cases 改為一致命名 `FC-01` / `FC-02`；確認本輪無改 gameplay 檔案
+- Review result: Accepted
+- Commit: pending
+- Push: pending
+- Notes: GitHub issue command result（本輪沿用）：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）。

@@ -6,7 +6,7 @@
 - [ ] In another shell, run `node scripts/validate-story.mjs` and confirm output contains `[content-lint] OK: 10 chapters validated`.
 - [ ] Open `http://localhost:8080/`.
 
-## 1) 主流程 smoke（Chapter 1 -> 10）
+## 1) Main flow smoke（Chapter 1 -> 10）
 
 - [ ] Page shows `False Exit` and chapter title `Chapter 1 — The Hall That Remembers`.
 - [ ] Chapter card shows progress indicator `Chapter 1 / 10` (or equivalent chapter count wording).
@@ -20,9 +20,9 @@
 - [ ] After chapter 10 solved, `Next` remains hidden/disabled; answer input + submit remain disabled; solved lock hint remains visible.
 - [ ] Browser console shows `[false-exit] playable loop ready` and no errors.
 
-## 2) Focused cases
+## 2) Focused regression cases
 
-### 2.1 Chapter 4 -> 10 題意清晰度（流程不變）
+### FC-01 — Chapter 4 -> 10 題意清晰度（流程不變）
 
 - [ ] 先解 chapter 1 `回答`、chapter 2 `問題`、chapter 3 `鏡像`，確保可正常進入 chapter 4。
 - [ ] Chapter 4：先答錯（例如 `回音`）應顯示 retry；改答 `噪音` 後 success + `Next` 出現。
@@ -34,7 +34,7 @@
 - [ ] Chapter 10：先答錯（例如 `離開`）應顯示 retry；改答 `留下` 後進入 final-state，`Next` 保持 hidden/disabled。
 - [ ] 確認 chapter 4 -> 10 答案仍分別為：`噪音 / 盲點 / 代價 / 見證 / 假門 / 自由 / 留下`。
 
-### 2.2 Final chapter 完成態 + Restart 重置
+### FC-02 — Final chapter 完成態 + Restart 重置
 
 - [ ] Sequentially solve chapter 1 -> chapter 9 with correct answers (`回答 / 問題 / 鏡像 / 噪音 / 盲點 / 代價 / 見證 / 假門 / 自由`) and press `Next` each time.
 - [ ] Confirm chapter progress reaches `Chapter 10 / 10`.
