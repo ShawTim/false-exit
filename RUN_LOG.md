@@ -396,3 +396,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: implementation 走 seed-first，無改 app logic / backend / framework / router / storage；worktree 尚有 unrelated `BACKLOG.md` 修改同 untracked `package-lock.json`，未納入本輪。
+
+## 2026-03-26 18:05 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 18:05 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-022 — responsive mobile support for False Exit
+- Files changed: `assets/css/styles.css`, `tests/smoke.md`, `README.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`; browser smoke on `http://127.0.0.1:8188/` with mobile viewport resize 390x844 + 320x700 — `documentElement.scrollWidth === clientWidth`（no horizontal overflow）、answer input + submit 在 mobile 為 full-width 且 min-height `44px`、controls `flex-direction: column` 不擠壓
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查成功：`gh issue view 2 --repo ShawTim/false-exit --json number,title,state,author,url` 返回 issue #2 `add responsive mobile support`（OPEN, author ShawTim）；保留 unrelated `BACKLOG.md` modified / `package-lock.json` untracked 不納入本輪。

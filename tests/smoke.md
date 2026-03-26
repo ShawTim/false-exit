@@ -1,4 +1,4 @@
-# Smoke Checklist — IPG-021
+# Smoke Checklist — IPG-022
 
 - [ ] Run `python3 -m http.server 8080` from repo root.
 - [ ] Open `http://localhost:8080/`.
@@ -14,6 +14,9 @@
 - [ ] After chapter 10 solved, `Next` remains hidden/disabled; answer input + submit remain disabled; solved lock hint remains visible.
 - [ ] Click `Restart`; app returns to chapter 1 initial state with empty input, no feedback, hidden `Next`, progress reset to `Chapter 1 / 10`, and final-state copy disappears.
 - [ ] Browser console shows `[false-exit] playable loop ready` and no errors.
+- [ ] Mobile viewport smoke (320px–430px, e.g. DevTools iPhone SE / Pixel): page has no horizontal scrollbar; chapter card/title/story/question wrap normally.
+- [ ] Mobile viewport smoke (320px–430px): answer input + `提交答案` are full-width and tappable (>=44px target height), no overlap/clip.
+- [ ] Mobile viewport smoke (320px–430px): controls stack vertically (`Next`, `Restart`) and remain easy to tap without squeeze.
 
 ## IPG-021 focused smoke（1 -> 10 順序推進 + final chapter 完成態）
 

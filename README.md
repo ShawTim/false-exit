@@ -1,6 +1,6 @@
 # False Exit (Scaffold)
 
-最小可用骨架（static page first）。
+最小可用骨架（static page first，已包含 mobile responsive 支援）。
 
 ## 目錄
 

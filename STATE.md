@@ -7,13 +7,13 @@
 - Static playable flow supports chapter 1 -> chapter 10 sequential puzzle progression with restart reset
 
 ## Latest Accepted Change
-- IPG-021 — expand playable flow to 10 chapters by seed-first update, keep existing static app logic; sync smoke/schema/state/run-log to 10-chapter flow
+- IPG-022 — add responsive mobile support（320px–430px）for card/text/input/buttons/controls without changing gameplay logic; sync smoke/readme/state/run-log
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
 - GitHub CLI 真查（本輪）：
-  - `gh issue view 1 --repo ShawTim/false-exit --json number,title,state,author,url` 成功
-  - 摘要：issue #1 `將關卡增加到至少十個`，state=`OPEN`，author=`ShawTim`
+  - `gh issue view 2 --repo ShawTim/false-exit --json number,title,state,author,url` 成功
+  - 摘要：issue #2 `add responsive mobile support`，state=`OPEN`，author=`ShawTim`
 
 ## Constraints
 - Small steps only
@@ -21,4 +21,4 @@
 - Keep product direction stable unless explicitly changed upstream
 
 ## Next Suggested Step
-- 跟進 issue #1 後續（如要補 copy polish 或額外驗收），保持 seed-first、最小增量策略
+- 跟進 issue #2 merge/驗收後，再按 ShawTim 最新 open issue 做最小增量
