@@ -506,3 +506,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: GitHub issue command result（本輪沿用）：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）。
+
+## 2026-03-27 04:04 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-27 04:04 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-029 — 修正 chapter 3 題目與答案關聯性（issue #4）
+- Files changed: `content/story/seed.json`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`；人工 diff 檢查確認 chapter 3 expected answer 仍為 `鏡像`、chapter 總數仍為 10、無 `assets/js/main.js` / gameplay logic 變更
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: GitHub issue command 真查：`gh issue view 4 --repo ShawTim/false-exit --json number,title,state,author,url` 返回 issue #4 OPEN（`第三關問題同答案好似無咩關係`，author: ShawTim）。

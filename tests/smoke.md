@@ -1,4 +1,4 @@
-# Smoke Checklist — IPG-028
+# Smoke Checklist — IPG-029
 
 ## 0) Preflight
 
@@ -22,7 +22,14 @@
 
 ## 2) Focused regression cases
 
-### FC-01 — Chapter 4 -> 10 題意清晰度（流程不變）
+### FC-01 — Chapter 3 clue-answer link（先錯後啱再進 chapter 4）
+
+- [ ] 先解 chapter 1 `回答`、chapter 2 `問題`，進入 chapter 3。
+- [ ] Chapter 3：先答一個相關但錯嘅詞（例如 `回音`）應顯示 retry，章節保持 unsolved。
+- [ ] Chapter 3：改答 `鏡像` 後應顯示 success、輸入鎖定、`Next` 出現。
+- [ ] 撳 `Next` 後可正常進入 chapter 4，progress 變為 `Chapter 4 / 10`。
+
+### FC-02 — Chapter 4 -> 10 題意清晰度（流程不變）
 
 - [ ] 先解 chapter 1 `回答`、chapter 2 `問題`、chapter 3 `鏡像`，確保可正常進入 chapter 4。
 - [ ] Chapter 4：先答錯（例如 `回音`）應顯示 retry；改答 `噪音` 後 success + `Next` 出現。
@@ -34,7 +41,7 @@
 - [ ] Chapter 10：先答錯（例如 `離開`）應顯示 retry；改答 `留下` 後進入 final-state，`Next` 保持 hidden/disabled。
 - [ ] 確認 chapter 4 -> 10 答案仍分別為：`噪音 / 盲點 / 代價 / 見證 / 假門 / 自由 / 留下`。
 
-### FC-02 — Final chapter 完成態 + Restart 重置
+### FC-03 — Final chapter 完成態 + Restart 重置
 
 - [ ] Sequentially solve chapter 1 -> chapter 9 with correct answers (`回答 / 問題 / 鏡像 / 噪音 / 盲點 / 代價 / 見證 / 假門 / 自由`) and press `Next` each time.
 - [ ] Confirm chapter progress reaches `Chapter 10 / 10`.
