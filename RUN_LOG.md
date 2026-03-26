@@ -339,8 +339,8 @@ Append one section per run.
 - Files changed: `assets/js/main.js`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
 - Validation: `node --check assets/js/main.js`; browser smoke on `http://127.0.0.1:8160/` — 初始 unsolved input 具 `aria-describedby="answer-feedback"` 且無 `aria-invalid`; chapter 1 `出口` 錯答後 input 變 `aria-invalid="true"`、feedback linkage 成立且 wrong-answer auto focus/select 保持正常；同題改答 `回答` 後 `aria-invalid` 清走；`Next` 進 chapter 2 後 fresh unsolved state 無殘留 invalid；chapter 2 `出口` 錯答後再次出現 `aria-invalid="true"`; `Restart` 後回 chapter 1 初始狀態、保留 feedback linkage 並清走 invalid
 - Review result: Accepted after lead fix on feedback id wiring + docs/state sync
-- Commit: pending
-- Push: pending
+- Commit: `343cf68` — `feat: add accessible invalid state for wrong answers`
+- Push: `origin/main` updated
 - Notes: GitHub CLI 真查失敗：`gh auth status` -> `You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` -> `To get started with GitHub CLI, please run:  gh auth login`（exit 4）；按 contract 記錄實際錯誤後，仍完成一輪完整可驗收增量；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
 ## 2026-03-26 13:47 HKT — 無限任砌兄弟（弟）
 - Time: 2026-03-26 13:47 HKT
