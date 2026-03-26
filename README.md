@@ -1,28 +1,26 @@
-# False Exit (Scaffold)
+# False Exit
 
-最小可用骨架（static page first，已包含 mobile responsive 支援）。
-
-最新：已針對 chapter 4–10 謎題文案做小幅收緊，令提示同答案關聯更直接（答案與流程不變）。
+目前狀態：呢個 repo 係 **10 chapter static playable flow**（chapter 1 -> chapter 10 順序推進），用純前端（HTML/CSS/JS + seed JSON）運作。
 
 ## 目錄
 
 - `index.html`：入口頁
-- `assets/css/styles.css`：樣式
-- `assets/js/main.js`：前端入口（現時支援 chapter 1 -> chapter 10 順序 playable flow）
-- `content/story/seed.json`：劇情/關卡資料種子（之後由兄落 spec 再擴）
+- `assets/css/styles.css`：樣式（含 mobile responsive）
+- `assets/js/main.js`：前端流程控制（chapter 1 -> 10 playable flow）
+- `content/story/seed.json`：章節內容與答案資料
 - `tests/smoke.md`：手動 smoke checklist
-- `docs/chapter-schema.md`：chapter 資料結構（schema）說明
+- `docs/chapter-schema.md`：chapter schema 說明
+- `docs/chapter-answer-reference.md`：chapter 1 -> 10 答案對照表（維護用 reference）
 
-## Chapter Schema
+## Docs
 
-- 請先讀：[`docs/chapter-schema.md`](docs/chapter-schema.md)
+- Chapter schema：[`docs/chapter-schema.md`](docs/chapter-schema.md)
+- Chapter answer reference：[`docs/chapter-answer-reference.md`](docs/chapter-answer-reference.md)
 
 ## 本地預覽
-
-直接用任何 static server 開：
 
 ```bash
 python3 -m http.server 8080
 ```
 
-然後打開 `http://localhost:8080/false-exit/`。
+打開 `http://localhost:8080/`。
