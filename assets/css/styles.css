@@ -78,6 +78,11 @@ h1 {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  border-radius: 12px;
+}
+
+.answer-row.answer-error {
+  animation: answer-row-shake 180ms ease-in-out 1;
 }
 
 .answer-row.solved-locked {
@@ -112,6 +117,12 @@ input {
   border: 1px solid var(--panel-border);
   background: #0d1015;
   color: var(--text);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+input.answer-input.answer-error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 2px rgba(255, 143, 143, 0.2);
 }
 
 button {
@@ -166,4 +177,12 @@ button:disabled {
   margin: 0 0 16px;
   color: var(--accent);
   font-weight: 700;
+}
+
+@keyframes answer-row-shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
 }

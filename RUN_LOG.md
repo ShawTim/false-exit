@@ -287,3 +287,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: GitHub issue 查詢摘要（依兄提供）：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`。
+
+## 2026-03-26 13:10 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 13:10 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-018 — wrong-answer 視覺提示 polish（rework）
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`；code-path 檢查：wrong answer 時加上 `.answer-error`（answer row subtle shake + input danger border），correct submit 後因 `status=success` 清走 error class；`Next`/`Restart` 走 `idle` 初始狀態，無殘留 error visual state
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查失敗：`gh auth status` 輸出 `You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）。

@@ -7,12 +7,12 @@
 - Static playable flow now supports chapter 1 -> chapter 2 puzzle progression with restart reset
 
 ## Latest Accepted Change
-- IPG-017 — 答案欄 label 會跟 current chapter title 動態更新（chapter 1 / 2 切換與 Restart reset 一致）
+- IPG-018 — wrong-answer 時加入輕量 error visual state（answer row subtle shake + input danger border），並在 correct submit / Next chapter / Restart 後清走
 
 ## Current Focus
 - Prioritize open GitHub issues created by ShawTim
-- GitHub CLI 真查：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`
-- 目前按 STATE backlog 做最小可驗收增量（IPG-017：用 current chapter data 渲染 contextual answer label，提升章節切換時答題上下文清晰度）
+- GitHub CLI 真查：`gh auth status` 失敗，輸出 `You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）
+- 目前按 STATE backlog 做最小可驗收增量（IPG-018：補 wrong-answer 即時視覺提示 polish，同步 focused smoke 驗收）
 
 ## Constraints
 - Small steps only

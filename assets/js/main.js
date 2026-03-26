@@ -59,6 +59,7 @@ function renderGame(root, chapters) {
     const chapter = chapters[state.chapterIndex];
     const hasNextChapter = state.chapterIndex < chapters.length - 1;
     const answerLabel = `你的答案（${chapter.title}）`;
+    const answerErrorClass = state.status === 'error' && !state.solved ? ' answer-error' : '';
 
     root.innerHTML = `
       <section class="card">
@@ -72,8 +73,8 @@ function renderGame(root, chapters) {
           <p class="question"><span class="question-label">Puzzle</span>${escapeHtml(chapter.puzzle.prompt)}</p>
           <form id="answer-form" class="answer-form${state.solved ? ' solved-locked' : ''}">
             <label class="label" for="answer-input">${escapeHtml(answerLabel)}</label>
-            <div class="answer-row${state.solved ? ' solved-locked' : ''}">
-              <input id="answer-input" name="answer" type="text" autocomplete="off" required value="${escapeHtml(state.answer)}" ${state.solved ? 'disabled' : ''} />
+            <div class="answer-row${state.solved ? ' solved-locked' : ''}${answerErrorClass}">
+              <input id="answer-input" class="answer-input${answerErrorClass}" name="answer" type="text" autocomplete="off" required value="${escapeHtml(state.answer)}" ${state.solved ? 'disabled' : ''} />
               <button type="submit" ${state.solved ? 'disabled' : ''}>提交答案</button>
             </div>
             ${state.solved ? '<p class="lock-hint" role="status">已完成本章，答案欄已鎖定。</p>' : '<p class="input-helper">提示：答案係兩個字。</p>'}
