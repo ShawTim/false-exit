@@ -407,3 +407,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: GitHub CLI 真查成功：`gh issue view 2 --repo ShawTim/false-exit --json number,title,state,author,url` 返回 issue #2 `add responsive mobile support`（OPEN, author ShawTim）；保留 unrelated `BACKLOG.md` modified / `package-lock.json` untracked 不納入本輪。
+
+## 2026-03-26 18:06 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-26 18:06 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-022 — responsive mobile support for False Exit
+- Files changed: `assets/css/styles.css`, `tests/smoke.md`, `README.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 ShawTim issue #2；`gh issue view 2 --repo ShawTim/false-exit --json number,title,body,state,author,url` 確認 issue 仍為 OPEN；`node --check assets/js/main.js`；本地 HTTP server 改用 `http://127.0.0.1:8091/`（避免 8080 被其他 project 佔用）；browser mobile snapshot（390x844）確認 `False Exit` 初始畫面正常載入、chapter title/story/question 斷行正常、input + `提交答案` 可見、`Restart` controls 在窄 viewport 保持可用；人工 review CSS 確認 mobile 下 `.answer-row` / `.controls` 轉 column、input/button full-width、tap target >= 44px、`overflow-x: hidden` 防止橫向爆版
+- Review result: Accepted
+- Commit: pending
+- Push: pending
+- Notes: implementation 僅限 responsive CSS + smoke/readme/state/log，同步保持 10-chapter gameplay logic 不變；worktree 尚有 unrelated `BACKLOG.md` 修改同 untracked `package-lock.json`，未納入本輪。
