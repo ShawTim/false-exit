@@ -320,3 +320,13 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: GitHub CLI 真查失敗：`gh auth status` 輸出 `You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）。
+## 2026-03-26 13:47 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 13:47 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-019 — wrong-answer accessibility state wiring
+- Files changed: `assets/js/main.js`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`；code inspection：wrong-answer（`state.status === 'error' && !state.solved`）時 input 會渲染 `aria-invalid="true"`，並固定以 `aria-describedby="answer-feedback"` 連去 feedback element；success / Next chapter / Restart 重新 render 為非 error 狀態時會移除 `aria-invalid`
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: 本輪未查 GitHub issue（無新增 gh command result）。

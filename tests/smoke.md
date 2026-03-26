@@ -1,4 +1,4 @@
-# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010 / IPG-011 / IPG-012 / IPG-013 / IPG-014 / IPG-015 / IPG-016 / IPG-017 / IPG-018
+# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010 / IPG-011 / IPG-012 / IPG-013 / IPG-014 / IPG-015 / IPG-016 / IPG-017 / IPG-018 / IPG-019
 
 - [ ] Run `python3 -m http.server 8080` from repo root.
 - [ ] Open `http://localhost:8080/`.
@@ -9,11 +9,14 @@
 - [ ] Chapter 1 unsolved: helper hint appears near answer controls: `提示：答案係兩個字。`.
 - [ ] Enter a wrong chapter 1 answer (example: `出口`) and submit; chapter 1 retry message appears.
 - [ ] After wrong chapter 1 answer, answer row/input shows lightweight error visual state (danger border + subtle shake).
+- [ ] After wrong chapter 1 answer, answer input has `aria-invalid="true"` and `aria-describedby` points to feedback element id.
 - [ ] After wrong chapter 1 answer, player stays on chapter 1, `Next` remains hidden, answer input stays enabled, and wrong answer text is auto-focused + selected for quick overwrite.
 - [ ] Enter chapter 1 correct answer (`回答`) and submit; chapter 1 success message appears, `Next` becomes visible, and wrong-answer error visual state is cleared.
+- [ ] After chapter 1 success, answer input no longer has `aria-invalid="true"` (invalid state cleared).
 - [ ] After chapter 1 is solved, answer input and submit button are disabled while success feedback stays visible.
 - [ ] After chapter 1 is solved, a subtle solved/locked hint appears near answer controls.
 - [ ] Click `Next`; screen switches to chapter title `Chapter 2 — The Room That Asks Back` with chapter 2 prompt, and no residual wrong-answer error visual state.
+- [ ] On chapter 2 fresh state after `Next`, answer input has no residual `aria-invalid="true"`.
 - [ ] On chapter 2 initial state, answer label updates with current chapter context (`你的答案（The Room That Asks Back）` or equivalent derived from current chapter), and differs from chapter 1 label wording.
 - [ ] On chapter 2 initial state (unsolved), answer input and submit button (`提交答案`) are enabled again.
 - [ ] On chapter 2 initial state (unsolved), solved/locked hint is not shown, and helper hint appears: `提示：答案係兩個字。`.
@@ -24,6 +27,7 @@
 - [ ] After chapter 2 is solved (no third chapter), `Next` is hidden/disabled and state does not break.
 - [ ] After clicking `Next` into chapter 2, chapter progress updates to `Chapter 2 / 2` (or equivalent).
 - [ ] Click `Restart` while on unsolved chapter 2; app returns to chapter 1 initial state with empty input, no feedback, unsolved state, hidden `Next`, progress reset to `Chapter 1 / 2`, and no residual wrong-answer error visual state.
+- [ ] After `Restart`, chapter 1 fresh input has no residual `aria-invalid="true"`.
 - [ ] After this restart reset, answer label returns to chapter 1 context wording (`你的答案（The Hall That Remembers）` or equivalent chapter-derived wording).
 - [ ] Solve chapter 1 and chapter 2 again, then click `Restart`; app still resets to chapter 1 initial state and clears progress.
 - [ ] Browser console shows `[false-exit] playable loop ready` and no errors.
@@ -142,4 +146,13 @@
 - [ ] Chapter 2: submit wrong answer `出口`; retry feedback appears and error visual state appears again without breaking existing wrong-answer behavior.
 - [ ] Chapter 2: overwrite with correct answer `問題` and submit; success feedback appears and error visual state is cleared.
 - [ ] Click `Restart`; app returns to chapter 1 initial state with no residual error visual state.
+
+## IPG-019 focused smoke（wrong-answer accessible invalid state）
+
+- [ ] Initial unsolved load: answer input links to feedback via `aria-describedby`, and input does not expose `aria-invalid="true"`.
+- [ ] Chapter 1: submit wrong answer `出口`; retry feedback appears, answer input exposes `aria-invalid="true"`, and `aria-describedby` still points to the feedback element.
+- [ ] Chapter 1: overwrite with correct answer `回答` and submit; success feedback appears and `aria-invalid="true"` is removed.
+- [ ] Click `Next` to chapter 2; fresh unsolved chapter 2 input still links to feedback, with no residual `aria-invalid="true"`.
+- [ ] Chapter 2: submit wrong answer `出口`; retry feedback appears and `aria-invalid="true"` appears again.
+- [ ] Click `Restart`; app returns to chapter 1 initial state, feedback linkage still exists, and no residual `aria-invalid="true"` remains.
 

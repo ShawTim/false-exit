@@ -59,7 +59,9 @@ function renderGame(root, chapters) {
     const chapter = chapters[state.chapterIndex];
     const hasNextChapter = state.chapterIndex < chapters.length - 1;
     const answerLabel = `你的答案（${chapter.title}）`;
-    const answerErrorClass = state.status === 'error' && !state.solved ? ' answer-error' : '';
+    const feedbackId = 'answer-feedback';
+    const isAnswerInvalid = state.status === 'error' && !state.solved;
+    const answerErrorClass = isAnswerInvalid ? ' answer-error' : '';
 
     root.innerHTML = `
       <section class="card">
@@ -74,12 +76,12 @@ function renderGame(root, chapters) {
           <form id="answer-form" class="answer-form${state.solved ? ' solved-locked' : ''}">
             <label class="label" for="answer-input">${escapeHtml(answerLabel)}</label>
             <div class="answer-row${state.solved ? ' solved-locked' : ''}${answerErrorClass}">
-              <input id="answer-input" class="answer-input${answerErrorClass}" name="answer" type="text" autocomplete="off" required value="${escapeHtml(state.answer)}" ${state.solved ? 'disabled' : ''} />
+              <input id="answer-input" class="answer-input${answerErrorClass}" name="answer" type="text" autocomplete="off" required value="${escapeHtml(state.answer)}" aria-describedby="${feedbackId}"${isAnswerInvalid ? ' aria-invalid="true"' : ''} ${state.solved ? 'disabled' : ''} />
               <button type="submit" ${state.solved ? 'disabled' : ''}>提交答案</button>
             </div>
             ${state.solved ? '<p class="lock-hint" role="status">已完成本章，答案欄已鎖定。</p>' : '<p class="input-helper">提示：答案係兩個字。</p>'}
           </form>
-          <p id="feedback" class="feedback${state.status === 'idle' ? '' : ` ${state.status}`}" role="status">${escapeHtml(state.feedback)}</p>
+          <p id="${feedbackId}" class="feedback${state.status === 'idle' ? '' : ` ${state.status}`}" role="status">${escapeHtml(state.feedback)}</p>
           ${state.solved && !hasNextChapter ? '<p id="final-state" class="final-state" role="status">你已完成目前全部章節。暫時到此。</p>' : ''}
         </section>
 
@@ -92,7 +94,8 @@ function renderGame(root, chapters) {
 
     const form = root.querySelector('#answer-form');
     const input = root.querySelector('#answer-input');
-    const feedback = root.querySelector('#feedback');
+    const answerRow = root.querySelector('.answer-row');
+    const feedback = root.querySelector(`#${feedbackId}`);
     const nextButton = root.querySelector('#next-button');
     const restartButton = root.querySelector('#restart-button');
 
@@ -105,6 +108,15 @@ function renderGame(root, chapters) {
         state.status = 'idle';
         state.feedback = '';
         state.solved = false;
+
+        if (input) {
+          input.removeAttribute('aria-invalid');
+          input.classList.remove('answer-error');
+        }
+
+        if (answerRow) {
+          answerRow.classList.remove('answer-error');
+        }
 
         if (feedback) {
           feedback.textContent = '';
