@@ -349,6 +349,6 @@ Append one section per run.
 - Files changed: `assets/js/main.js`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
 - Validation: `node --check assets/js/main.js`；code inspection：wrong-answer（`state.status === 'error' && !state.solved`）時 input 會渲染 `aria-invalid="true"`，並固定以 `aria-describedby="answer-feedback"` 連去 feedback element；success / Next chapter / Restart 重新 render 為非 error 狀態時會移除 `aria-invalid`
 - Review result: Implemented
-- Commit: pending
-- Push: pending
-- Notes: 本輪未查 GitHub issue（無新增 gh command result）。
+- Commit: `4c7a728` — `feat: add accessible invalid state for wrong answers`
+- Push: failed（`git push` -> `fatal: The current branch main has no upstream branch.`；建議命令：`git push --set-upstream origin main`）
+- Notes: 本輪未查 GitHub issue（無新增 gh command result）；repo 仍有未追蹤 `package-lock.json`（未納入本輪）。
