@@ -1,10 +1,10 @@
-# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010 / IPG-011 / IPG-012 / IPG-013 / IPG-014 / IPG-015
+# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010 / IPG-011 / IPG-012 / IPG-013 / IPG-014 / IPG-015 / IPG-016 / IPG-017
 
 - [ ] Run `python3 -m http.server 8080` from repo root.
 - [ ] Open `http://localhost:8080/`.
 - [ ] Page shows `False Exit` and chapter title `Chapter 1 — The Hall That Remembers`.
 - [ ] Chapter card shows progress indicator `Chapter 1 / 2` (or equivalent chapter count wording).
-- [ ] Chapter 1 shows story text, puzzle prompt, answer input, submit button (`提交答案`), and `Restart` button.
+- [ ] Chapter 1 shows story text, puzzle prompt, answer input, contextual answer label (`你的答案（The Hall That Remembers）` or equivalent derived from current chapter), submit button (`提交答案`), and `Restart` button.
 - [ ] Before solving chapter 1, `Next` is hidden.
 - [ ] Chapter 1 unsolved: helper hint appears near answer controls: `提示：答案係兩個字。`.
 - [ ] Enter a wrong chapter 1 answer (example: `出口`) and submit; chapter 1 retry message appears.
@@ -13,6 +13,7 @@
 - [ ] After chapter 1 is solved, answer input and submit button are disabled while success feedback stays visible.
 - [ ] After chapter 1 is solved, a subtle solved/locked hint appears near answer controls.
 - [ ] Click `Next`; screen switches to chapter title `Chapter 2 — The Room That Asks Back` with chapter 2 prompt.
+- [ ] On chapter 2 initial state, answer label updates with current chapter context (`你的答案（The Room That Asks Back）` or equivalent derived from current chapter), and differs from chapter 1 label wording.
 - [ ] On chapter 2 initial state (unsolved), answer input and submit button (`提交答案`) are enabled again.
 - [ ] On chapter 2 initial state (unsolved), solved/locked hint is not shown, and helper hint appears: `提示：答案係兩個字。`.
 - [ ] On chapter 2, enter a wrong answer (example: `出口`) and submit; chapter 2 retry message appears, player stays on chapter 2, answer input stays enabled, and wrong answer text is auto-focused + selected for quick overwrite.
@@ -22,6 +23,7 @@
 - [ ] After chapter 2 is solved (no third chapter), `Next` is hidden/disabled and state does not break.
 - [ ] After clicking `Next` into chapter 2, chapter progress updates to `Chapter 2 / 2` (or equivalent).
 - [ ] Click `Restart` while on unsolved chapter 2; app returns to chapter 1 initial state with empty input, no feedback, unsolved state, hidden `Next`, and progress reset to `Chapter 1 / 2`.
+- [ ] After this restart reset, answer label returns to chapter 1 context wording (`你的答案（The Hall That Remembers）` or equivalent chapter-derived wording).
 - [ ] Solve chapter 1 and chapter 2 again, then click `Restart`; app still resets to chapter 1 initial state and clears progress.
 - [ ] Browser console shows `[false-exit] playable loop ready` and no errors.
 
@@ -111,4 +113,23 @@
 - [ ] Right after chapter 2 wrong submit, answer input is still enabled, auto-focused, and current wrong text is selected.
 - [ ] Chapter 2: type `問題` directly and submit; success feedback appears.
 - [ ] After chapter 2 solved, input/submit remain disabled, `Next` hidden/disabled, final-state copy + solved lock hint still render as before.
+
+## IPG-017 focused smoke（contextual answer label）
+
+- [ ] Initial load on chapter 1 shows contextual answer label derived from current chapter data, e.g. `你的答案（Chapter 1 — The Hall That Remembers）`.
+- [ ] Chapter 1: submit correct answer `回答`; success feedback appears and solved lock/`Next` behavior stays unchanged.
+- [ ] Click `Next` to chapter 2.
+- [ ] Chapter 2 shows a different contextual answer label derived from chapter 2 data, e.g. `你的答案（Chapter 2 — The Room That Asks Back）`.
+- [ ] Chapter 2: submit wrong answer `出口`; retry feedback appears, label stays on chapter 2 wording, and wrong-answer auto focus/select still works.
+- [ ] Click `Restart`; app returns to chapter 1 initial state.
+- [ ] After reset, contextual answer label returns to chapter 1 wording.
+
+## IPG-017 focused smoke（contextual answer label by current chapter）
+
+- [ ] Initial load on chapter 1 shows contextual answer label derived from current chapter data (example: `你的答案（The Hall That Remembers）`).
+- [ ] Chapter 1: submit correct answer `回答`; success feedback appears and `Next` becomes visible.
+- [ ] Click `Next` to chapter 2; answer label updates to chapter 2 context (example: `你的答案（The Room That Asks Back）`) and differs from chapter 1 label.
+- [ ] Chapter 2: submit wrong answer `出口`; retry feedback appears, input remains enabled with wrong-answer auto focus/select behavior unchanged.
+- [ ] Chapter 2: submit correct answer `問題`; success feedback appears, solved lock/final-state rules remain unchanged.
+- [ ] Click `Restart`; app resets to chapter 1 initial state and answer label resets to chapter 1 context wording.
 

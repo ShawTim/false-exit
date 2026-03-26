@@ -266,3 +266,24 @@ Append one section per run.
 - Commit: `e367214` — `docs: sync run log for quick retry change`（implementation commit: `b77c53c` — `feat: auto-select wrong answers for quick retry`）
 - Push: `origin/main` updated
 - Notes: GitHub CLI 真查：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-26 10:08 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 10:08 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-017 — contextual answer label 跟 current chapter 更新
+- Files changed: `assets/js/main.js`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`
+## 2026-03-26 10:08 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 10:08 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-017 — add current chapter prompt context to answer label
+- Files changed: `assets/js/main.js`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`；code-path 檢查：答案 label 由 `chapter.title` 動態渲染，chapter 1 -> chapter 2 會更新，`Restart` 後回 chapter 1 wording；submit / wrong-answer auto focus/select / solved lock / Next / final-state 流程保持不變
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: GitHub issue 查詢摘要（依兄提供）：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`。
