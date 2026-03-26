@@ -462,3 +462,25 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: 摘要：`0 open issues from ShawTim`；本輪嚴格保持 non-goals，無改 `assets/js/main.js` / `content/story/seed.json` / gameplay。
+
+## 2026-03-27 00:03 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-27 00:03 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-026 — 為 chapter 1 -> 10 加最小 script-level content lint（required fields + chapter count）
+- Files changed: `scripts/validate-story.mjs`, `README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node scripts/validate-story.mjs`（pass：`[content-lint] OK: 10 chapters validated`）
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: scope 嚴格限制於 content lint + docs/state/log；無改 gameplay、無改答案、無改 chapter 文案、無改 `assets/js/main.js`。
+
+## 2026-03-27 00:03 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-27 00:03 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-026 — 為 chapter 1 -> 10 加最小 script-level content lint（required fields + chapter count）
+- Files changed: `scripts/validate-story.mjs`, `README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`；人工 diff review 確認 README 已加入 lint 入口、`tests/smoke.md` 已納入 lint 驗收步驟，且本輪無改 gameplay / answer / `assets/js/main.js`
+- Review result: Accepted
+- Commit: pending
+- Push: pending
+- Notes: `package-lock.json` 仍為 untracked 雜項，未納入本輪。

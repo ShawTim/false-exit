@@ -7,10 +7,10 @@
 - Current product state: 10-chapter static playable flow（chapter 1 -> chapter 10 順序推進，Restart 可重置）
 
 ## Latest Accepted Change
-- IPG-024 — 新增 `docs/chapter-answer-reference.md`，並同步 README/BACKLOG/STATE/RUN_LOG 至目前 10-chapter static playable flow 現況（不改 gameplay/answer/seed/main.js）
+- IPG-026 — 新增最小 script-level content lint：`scripts/validate-story.mjs`，鎖定 `content/story/seed.json` 的 chapter count（必須 10）與每章 required fields 非空；並同步 README/tests/STATE/RUN_LOG（不改 gameplay/answer/chapter 文案）
 
 ## Current Focus
-- 維持細步文檔與驗收路徑同步，避免維護資訊落後於實作
+- 維持 10-chapter static playable flow 的結構穩定，已補最小可執行驗證（content lint）避免 seed 漏欄位/章數漂移
 - GitHub CLI 真查（本輪）：
   - `gh auth status` 成功（account: `vildanden-ai`；提示缺 `read:org` scope）
   - `gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`

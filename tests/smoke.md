@@ -1,6 +1,7 @@
 # Smoke Checklist — IPG-022
 
 - [ ] Run `python3 -m http.server 8080` from repo root.
+- [ ] In another shell, run `node scripts/validate-story.mjs` and confirm output contains `[content-lint] OK: 10 chapters validated`.
 - [ ] Open `http://localhost:8080/`.
 - [ ] Page shows `False Exit` and chapter title `Chapter 1 — The Hall That Remembers`.
 - [ ] Chapter card shows progress indicator `Chapter 1 / 10` (or equivalent chapter count wording).

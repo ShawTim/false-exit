@@ -24,3 +24,13 @@ python3 -m http.server 8080
 ```
 
 打開 `http://localhost:8080/`。
+
+## Content lint（seed 基本結構）
+
+```bash
+node scripts/validate-story.mjs
+```
+
+會檢查：
+- `content/story/seed.json` chapter count 必須係 `10`
+- 每個 chapter 必備且非空：`id`、`title`、`story[]`、`puzzle.prompt`、`puzzle.answer`、`puzzle.success`、`puzzle.retry`
