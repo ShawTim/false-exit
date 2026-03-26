@@ -34,3 +34,10 @@ node scripts/validate-story.mjs
 會檢查：
 - `content/story/seed.json` chapter count 必須係 `10`
 - 每個 chapter 必備且非空：`id`、`title`、`story[]`、`puzzle.prompt`、`puzzle.answer`、`puzzle.success`、`puzzle.retry`
+
+## Non-goals（現階段唔做）
+
+- 唔做無限 generator / procedural content system；而家只維持 **10 chapter static playable flow**。
+- 唔做 backend / database / account system；產品維持 static-first，可直接用靜態 hosting 發佈。
+- 唔加 framework（例如 React / Vue / Next.js）；現階段繼續用純 HTML / CSS / JS 小步推進。
+- 唔做大重構 / 方向改寫；每輪只收一個細改動，優先保持現有流程穩定。

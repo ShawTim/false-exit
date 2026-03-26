@@ -528,3 +528,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: GitHub issue command 真查：`gh issue view 4 --repo ShawTim/false-exit --json number,title,state,author,url` 返回 issue #4 OPEN（`第三關問題同答案好似無咩關係`，author: ShawTim）。
+
+## 2026-03-27 06:00 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-27 06:00 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-030 — README 加 Non-goals 段落
+- Files changed: `README.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`；人工 diff review 確認 README 已新增 `Non-goals`，且只限 docs/state/log 變更
+- Review result: Accepted（兄接管收尾；弟未交付前已停止）
+- Commit: pending
+- Push: pending
+- Notes: 本輪保持 docs-only 最小改動；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
