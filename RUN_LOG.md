@@ -288,6 +288,28 @@ Append one section per run.
 - Push: pending
 - Notes: GitHub issue 查詢摘要（依兄提供）：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`，即 `0 open issues from ShawTim`。
 
+## 2026-03-26 13:06 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 13:06 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-018 — wrong answer 視覺提示 polish
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`
+- Review result: Implemented after one rework round
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查失敗：`gh auth status` -> `You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）；實作加入 wrong-answer subtle shake + input danger border，並同步 focused smoke / state。
+
+## 2026-03-26 13:06 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-26 13:06 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-018 — wrong answer 視覺提示 polish
+- Files changed: `assets/js/main.js`, `assets/css/styles.css`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `node --check assets/js/main.js`; browser smoke on `http://127.0.0.1:8140/` — chapter 1 `出口` 錯答後 answer row/input 顯示 error visual state、feedback 保持 error、input 仍 enabled 並 auto focus/select；同題改答 `回答` 後 success + `Next` visible 且 error visual state 清走；`Next` 進 chapter 2 後無殘留 error class；`Restart` 後回 chapter 1 初始狀態且無殘留 error class
+- Review result: Accepted after lead final docs/log sync
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查失敗：`gh auth status` -> `You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）；按 contract 記錄實際錯誤後，仍完成一輪完整可驗收增量；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
 ## 2026-03-26 13:10 HKT — 無限任砌兄弟（弟）
 - Time: 2026-03-26 13:10 HKT
 - Run owner: 無限任砌兄弟（弟）
