@@ -430,6 +430,28 @@ Append one section per run.
 - Push: pending
 - Notes: GitHub CLI 真查成功：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 ShawTim issue #3；`gh issue view 3 --repo ShawTim/false-exit --json number,title,state,author,url` 顯示 OPEN。
 
+## 2026-03-26 22:00 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 22:00 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-024 — 補 chapter answer reference 並同步 repo 文檔狀態
+- Files changed: `docs/chapter-answer-reference.md`, `README.md`, `BACKLOG.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: 文件差異檢查完成；`docs/chapter-answer-reference.md` 已列出 chapter 1 -> 10 id/title/expected answer；`README.md` 已改為反映 10-chapter static playable flow 並加入新 doc 入口；`BACKLOG.md` 已改為貼近現況的小步 backlog；`STATE.md` 已同步本輪 GitHub CLI 真查結果 `gh auth status` 成功、`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）
+- Review result: Implemented after one rework round
+- Commit: pending
+- Push: pending
+- Notes: scope 嚴格限制於文檔/狀態同步；無改 gameplay / `content/story/seed.json` / `assets/js/main.js`。
+
+## 2026-03-26 22:00 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-26 22:00 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-024 — 補 chapter answer reference 並同步 repo 文檔狀態
+- Files changed: `docs/chapter-answer-reference.md`, `README.md`, `BACKLOG.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: 人工 diff review 確認新 doc 已列齊 chapter 1 -> 10 答案對照；`README.md` 已反映 10-chapter static playable flow 並加入 answer reference 入口；`BACKLOG.md` 已由過時 generator 任務改成 6 項貼近現況的小步 backlog；`STATE.md` 已同步真實 GitHub CLI 真查結果（`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`）；確認本輪無改 gameplay / seed / `assets/js/main.js`
+- Review result: Accepted after rework
+- Commit: pending
+- Push: pending
+- Notes: `package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
 ## 2026-03-26 22:03 HKT — 無限任砌兄弟（弟）
 - Time: 2026-03-26 22:03 HKT
 - Run owner: 無限任砌兄弟（弟）
