@@ -1,4 +1,4 @@
-# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010 / IPG-011 / IPG-012 / IPG-013 / IPG-014 / IPG-015 / IPG-016 / IPG-017 / IPG-018 / IPG-019
+# Smoke Checklist — IPG-001 / IPG-002 / IPG-003 / IPG-004 / IPG-005 / IPG-006 / IPG-009 / IPG-010 / IPG-011 / IPG-012 / IPG-013 / IPG-014 / IPG-015 / IPG-016 / IPG-017 / IPG-018 / IPG-019 / IPG-020
 
 - [ ] Run `python3 -m http.server 8080` from repo root.
 - [ ] Open `http://localhost:8080/`.
@@ -118,16 +118,6 @@
 - [ ] Right after chapter 2 wrong submit, answer input is still enabled, auto-focused, and current wrong text is selected.
 - [ ] Chapter 2: type `問題` directly and submit; success feedback appears.
 - [ ] After chapter 2 solved, input/submit remain disabled, `Next` hidden/disabled, final-state copy + solved lock hint still render as before.
-
-## IPG-017 focused smoke（contextual answer label）
-
-- [ ] Initial load on chapter 1 shows contextual answer label derived from current chapter data, e.g. `你的答案（Chapter 1 — The Hall That Remembers）`.
-- [ ] Chapter 1: submit correct answer `回答`; success feedback appears and solved lock/`Next` behavior stays unchanged.
-- [ ] Click `Next` to chapter 2.
-- [ ] Chapter 2 shows a different contextual answer label derived from chapter 2 data, e.g. `你的答案（Chapter 2 — The Room That Asks Back）`.
-- [ ] Chapter 2: submit wrong answer `出口`; retry feedback appears, label stays on chapter 2 wording, and wrong-answer auto focus/select still works.
-- [ ] Click `Restart`; app returns to chapter 1 initial state.
-- [ ] After reset, contextual answer label returns to chapter 1 wording.
 
 ## IPG-017 focused smoke（contextual answer label by current chapter）
 

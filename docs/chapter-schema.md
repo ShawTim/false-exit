@@ -1,8 +1,8 @@
-# Chapter Schema（IPG-003）
+# Chapter Schema（IPG-003 / IPG-020）
 
 呢份文件固定 **False Exit** 目前 chapter data 最小結構，對齊現有 `content/story/seed.json` 同現時前端實作（`assets/js/main.js`）。
 
-## 1) 最小 JSON 範例（與 `content/story/seed.json` 一致）
+## 1) 最小 JSON 範例（與現況 seed shape 對齊）
 
 ```json
 {
@@ -21,13 +21,20 @@
         "answer": "回答",
         "success": "牆面裂開一道窄門。你冇離開大樓，但你至少離開咗呢個謊言。",
         "retry": "唔啱。呢度唔獎勵亂猜。再望清楚條提示。"
-      },
-      "nextBeat": {
-        "title": "Next Beat — The Narrow Door",
-        "story": [
-          "門後唔係自由，而係一間冇窗嘅控制室。",
-          "桌上有張新紙條：『你學識咗回答。下一步，學識質疑問題本身。』"
-        ]
+      }
+    },
+    {
+      "id": "chapter-02",
+      "title": "Chapter 2 — The Room That Asks Back",
+      "story": [
+        "你行入控制室，四面鏡只反射問題，唔反射你。",
+        "桌上紙條寫住：『你學識回答。依家講出你應該先質疑乜。』"
+      ],
+      "puzzle": {
+        "prompt": "輸入紙條要求你質疑嗰樣嘢（兩個字）。",
+        "answer": "問題",
+        "success": "鏡面同時暗咗落去。房門未開，但警報停咗。",
+        "retry": "錯。你仲係答緊人哋設定好嘅路。"
       }
     }
   ]
@@ -48,7 +55,7 @@
 - `title`：`string`，**required**
 - `story`：`string[]`，**required**（至少 1 行）
 - `puzzle`：`object`，**required**
-- `nextBeat`：`object`，**optional**（未有下一拍可省略）
+- `nextBeat`：`object`，**optional**（存在時為額外敘事段，現況 seed 未使用）
 
 ### Puzzle（`chapter.puzzle`）
 
@@ -64,6 +71,7 @@
 
 ## 3) 與現時實作對齊備註
 
-- 前端目前只讀第一章：`data.chapters[0]`。
-- 若 `nextBeat` 不存在：答啱後唔會顯示 next beat 區塊。
-- 本文件只固定現時最小 shape，**唔涉及 gameplay 改動、backend、或多章流程設計**。
+- 前端按 `chapters` 順序播放 chapter flow（chapter 1 -> chapter 2）。
+- 解完非最終章會顯示 `Next` 進入下一章。
+- 最終章（目前 chapter 2）解完後無 next chapter 行為：`Next` hidden/disabled，並顯示 final-state copy。
+- 本文件只固定現時最小 shape，**唔涉及 gameplay 改動、backend、或新增 chapter**。

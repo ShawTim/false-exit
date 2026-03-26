@@ -352,3 +352,25 @@ Append one section per run.
 - Commit: `4c7a728` — `feat: add accessible invalid state for wrong answers`
 - Push: failed（`git push` -> `fatal: The current branch main has no upstream branch.`；建議命令：`git push --set-upstream origin main`）
 - Notes: 本輪未查 GitHub issue（無新增 gh command result）；repo 仍有未追蹤 `package-lock.json`（未納入本輪）。
+
+## 2026-03-26 14:00 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-26 14:00 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-020 — sync schema docs with current 2-chapter flow
+- Files changed: `docs/chapter-schema.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: doc review against current `content/story/seed.json` + `assets/js/main.js` — schema example now matches current 2-chapter seed shape; implementation notes no longer claim frontend reads only chapter 1; notes now reflect sequential chapter flow + final chapter hides/disables `Next`; smoke title includes `IPG-020`; duplicate `IPG-017` focused heading removed; confirmed no app logic / seed / css / html / js changes in this run
+- Review result: Accepted（弟完成主要文檔改動；兄補 state/log sync、final review、commit/push）
+- Commit: pending
+- Push: pending
+- Notes: GitHub CLI 真查失敗：`gh auth status` -> `You are not logged into any GitHub hosts. To log in, run: gh auth login`（exit 1）；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` -> `To get started with GitHub CLI, please run:  gh auth login`（exit 4）；按 contract 記錄實際錯誤後，今輪仍完成一個完整可驗收文檔同步；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-26 14:04 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-26 14:04 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-020 — sync chapter schema doc with current multi-chapter playable flow
+- Files changed: `docs/chapter-schema.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: 文件差異檢查完成：`docs/chapter-schema.md` 已對齊現況 2-chapter seed shape、移除「前端只讀第一章」描述，並改為 chapter 1 -> chapter 2 順序 flow + final chapter 無 next chapter 行為；`tests/smoke.md` 標題已加入 IPG-020，且清走重複 IPG-017 focused heading（保留單一版本）
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: 本輪只做文檔/狀態同步，無改 app logic / seed / css / html / js；GitHub CLI 真查結果見下輪更新。
