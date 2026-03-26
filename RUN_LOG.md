@@ -382,6 +382,17 @@ Append one section per run.
 - Files changed: `content/story/seed.json`, `tests/smoke.md`, `docs/chapter-schema.md`, `STATE.md`, `RUN_LOG.md`, `README.md`
 - Validation: `node --check assets/js/main.js`; `python3 -m json.tool content/story/seed.json`; node one-liner 檢查 chapter count=10 且每章具 required fields（`id/title/story/puzzle.prompt/answer/success/retry`）
 - Review result: Implemented
+- Commit: `ab7607a` — `feat: expand playable flow to 10 chapters`
+- Push: `origin/main` updated
+- Notes: GitHub CLI 真查成功：`gh issue view 1 --repo ShawTim/false-exit --json number,title,state,author,url` 返回 issue #1 `將關卡增加到至少十個`（OPEN, author ShawTim）。
+
+## 2026-03-26 16:29 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-26 16:29 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-021 — expand playable flow to at least 10 chapters
+- Files changed: `README.md`, `content/story/seed.json`, `docs/chapter-schema.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 ShawTim issue #1；`gh issue view 1 --repo ShawTim/false-exit --json number,title,state,author,url` 確認 issue 仍為 OPEN；`node --check assets/js/main.js`；`python3 -m json.tool content/story/seed.json`；node one-liner 檢查 `chapters.length === 10` 且 10 章全部具 required fields；人工 review 確認 chapter 1 -> chapter 10 順序 flow 文檔、schema、README、STATE 已同步，final chapter answer=`留下`
+- Review result: Accepted
 - Commit: pending
 - Push: pending
-- Notes: GitHub CLI 真查成功：`gh issue view 1 --repo ShawTim/false-exit --json number,title,state,author,url` 返回 issue #1 `將關卡增加到至少十個`（OPEN, author ShawTim）。
+- Notes: implementation 走 seed-first，無改 app logic / backend / framework / router / storage；worktree 尚有 unrelated `BACKLOG.md` 修改同 untracked `package-lock.json`，未納入本輪。
