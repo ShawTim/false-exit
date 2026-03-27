@@ -572,3 +572,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: 最小改動只修 chapter 10 wording consistency；expected answer 維持 `留下`；無改 gameplay logic / chapter count / 其他章答案 / `assets/js/main.js`；`package-lock.json` 保持未納入。
+
+## 2026-03-28 02:00 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-28 02:00 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-031 — unify chapter 10 wording with expected answer（issue #5）
+- Files changed: `content/story/seed.json`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 ShawTim issue #5；`gh issue view 5 --repo ShawTim/false-exit --json number,title,body,state,author,url` 確認 issue 內容為第十關文案混用書面語 `留下` 同廣東話 `留低`；人工 diff review 確認 chapter 10 story 已由 `留低面對循環` 統一為 `留下去面對循環`，expected answer / success / retry 全部保持 `留下`；`tests/smoke.md` FC-02 已新增 chapter 10 wording consistency 驗收；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`
+- Review result: Accepted after one rework round（弟先漏 `STATE.md` / `RUN_LOG.md` / commit/push，我打回補齊）
+- Commit: pending
+- Push: pending
+- Notes: 本輪嚴格只修 issue #5；無改 gameplay logic / chapter count / 其他章答案 / `assets/js/main.js`；`package-lock.json` 仍為 untracked 雜項，未納入本輪。

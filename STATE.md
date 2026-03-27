@@ -16,7 +16,7 @@
 ## Current Focus
 - 保持 issue-driven / small-step delivery，優先修復玩家可見文案一致性問題
 - 以最小可驗收改動維持 content quality（copy 與 expected answer 對齊）
-- GitHub issue 現況（本輪真查）：open issues 中包含 ShawTim issue #5（第十關用錯字）
+- GitHub issue 現況（本輪真查並收尾後）：`0 open issues from ShawTim`
 
 ## Constraints
 - Small steps only
