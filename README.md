@@ -9,11 +9,13 @@
 - `assets/js/main.js`：前端流程控制（chapter 1 -> 10 playable flow）
 - `content/story/seed.json`：章節內容與答案資料
 - `tests/smoke.md`：手動 smoke checklist
+- `docs/README.md`：docs 導覽入口（index）
 - `docs/chapter-schema.md`：chapter schema 說明
 - `docs/chapter-answer-reference.md`：chapter 1 -> 10 答案對照表（維護用 reference）
 
 ## Docs
 
+- Docs index：[`docs/README.md`](docs/README.md)
 - Chapter schema：[`docs/chapter-schema.md`](docs/chapter-schema.md)
 - Chapter answer reference：[`docs/chapter-answer-reference.md`](docs/chapter-answer-reference.md)
 

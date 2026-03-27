@@ -539,3 +539,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: 本輪保持 docs-only 最小改動；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-27 08:02 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-27 08:02 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-025 — docs 導覽索引一致化（README/docs 入口一致化）
+- Files changed: `README.md`, `docs/README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `grep -nE "Docs index|chapter-schema|chapter-answer-reference|docs/README.md" README.md docs/README.md tests/smoke.md`；確認 README `## Docs` 與 docs index 名稱/連結一致，smoke checklist 已加入 docs 入口一致性驗收項
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: docs-only change（無改 gameplay / seed / JS / CSS / HTML）；GitHub issue command result 摘要（沿用任務背景真查）：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）。
