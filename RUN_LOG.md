@@ -561,3 +561,14 @@ Append one section per run.
 - Commit: `27107c4` — `docs: add docs index and align README docs entry`
 - Push: `origin/main` updated
 - Notes: 本輪按 contract 先查 GitHub，再由兄派弟實作，最後由兄驗收收貨；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-28 02:03 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-28 02:03 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-031 — unify chapter 10 wording with expected answer（issue #5）
+- Files changed: `content/story/seed.json`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 ShawTim issue #5；`gh issue view 5 --repo ShawTim/false-exit --json number,title,body,author,url,state` 指出「答案與文案不一致，一為書面語一為廣東話」；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`；`grep -n "留低" content/story/seed.json` 無命中（chapter 10 玩家可見 copy 已統一為 `留下`）
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: 最小改動只修 chapter 10 wording consistency；expected answer 維持 `留下`；無改 gameplay logic / chapter count / 其他章答案 / `assets/js/main.js`；`package-lock.json` 保持未納入。

@@ -39,7 +39,7 @@
 - [ ] Chapter 7：先答錯（例如 `觀眾`）應顯示 retry；改答 `見證` 後 success + `Next` 出現。
 - [ ] Chapter 8：先答錯（例如 `出口`）應顯示 retry；改答 `假門` 後 success + `Next` 出現。
 - [ ] Chapter 9：先答錯（例如 `離開`）應顯示 retry；改答 `自由` 後 success + `Next` 出現。
-- [ ] Chapter 10：先答錯（例如 `離開`）應顯示 retry；改答 `留下` 後進入 final-state，`Next` 保持 hidden/disabled。
+- [ ] Chapter 10：先答錯（例如 `離開`）應顯示 retry；改答 `留下` 後進入 final-state，`Next` 保持 hidden/disabled，且 chapter 10 玩家可見文案（story/success/retry）統一使用 `留下`（不應出現 `留低`）。
 - [ ] 確認 chapter 4 -> 10 答案仍分別為：`噪音 / 盲點 / 代價 / 見證 / 假門 / 自由 / 留下`。
 
 ### FC-03 — Final chapter 完成態 + Restart 重置
