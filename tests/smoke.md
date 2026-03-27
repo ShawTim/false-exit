@@ -9,13 +9,19 @@
 
 ## 1) Main flow smoke（Chapter 1 -> 10）
 
+### Core expectations（每章都應成立）
+
 - [ ] Page shows `False Exit` and chapter title `Chapter 1 — The Hall That Remembers`.
 - [ ] Chapter card shows progress indicator `Chapter 1 / 10` (or equivalent chapter count wording).
-- [ ] Chapter 1 unsolved: `Next` is hidden, helper hint shows `提示：答案係兩個字。`, answer input + submit (`提交答案`) are enabled.
-- [ ] Chapter 1 wrong answer (`出口`) shows retry feedback + error visual state + `aria-invalid="true"`, and input stays enabled with auto focus/select.
-- [ ] Chapter 1 correct answer (`回答`) shows success, clears error/invalid state, disables input+submit, and reveals `Next`.
-- [ ] Click `Next`; app enters chapter 2 with updated title/progress and fresh unsolved state (no residual error/invalid state).
-- [ ] On chapter 2, wrong answer keeps chapter unsolved; correct answer (`問題`) can flip to success in same chapter.
+- [ ] Unsolved chapter state：`Next` hidden、helper hint visible、answer input + `提交答案` enabled.
+- [ ] Wrong answer state：顯示 retry feedback + error visual state + `aria-invalid="true"`，input 保持 enabled，並自動 focus/select。
+- [ ] Correct answer state：顯示 success、清除 error/invalid state、disable input + submit，並 reveal `Next`。
+- [ ] Click `Next` 後進入下一章，title/progress 更新，且新章節無殘留上一章 error/invalid state。
+
+### Ordered chapter path
+
+- [ ] Chapter 1：wrong answer `出口` -> retry；correct answer `回答` -> success。
+- [ ] Chapter 2：wrong answer keeps chapter unsolved；correct answer `問題` -> success。
 - [ ] Repeat solve + `Next` through remaining chapters until `Chapter 10 / 10`.
 - [ ] On chapter 10 correct answer (`留下`), final-state copy appears: `你已完成目前全部章節。暫時到此。`.
 - [ ] After chapter 10 solved, `Next` remains hidden/disabled; answer input + submit remain disabled; solved lock hint remains visible.

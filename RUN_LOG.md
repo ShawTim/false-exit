@@ -1,3 +1,15 @@
+
+## 2026-03-28 06:00 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-28 06:00 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-028 — 收緊 `tests/smoke.md` 結構（main flow / focused cases 分段，減少重覆）
+- Files changed: `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`；人工 diff review 確認 main flow 已拆成 `Core expectations` + `Ordered chapter path`，FC-03 fixed regression path 仍保留
+- Review result: Accepted（弟 spawn 有派，但本輪未見有效交付，兄直接收尾完成）
+- Commit: pending
+- Push: pending
+- Notes: docs/state/log 最小改動；無改 app logic / seed / HTML / CSS / JS / README/docs index；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
 # RUN_LOG.md — False Exit
 
 Append one section per run.
