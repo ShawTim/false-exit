@@ -8,10 +8,10 @@
 
 ## Latest Accepted Change
 - IPG-028 — 收緊 `tests/smoke.md` 結構（main flow / focused cases 分段，減少重覆）
-  - 將 main flow smoke 拆成 `Core expectations` + `Ordered chapter path`，保留 chapter 1 / 2 明確驗收點，同時減少每章重覆描述
-  - 保留 FC-01 / FC-02 / FC-03 focused regression cases；chapter 10 final-state + `Restart` reset 固定回歸路徑無被弱化
+  - 將 main flow smoke 收斂為 `Baseline expectations` + `Main progression（chapter 1 -> 10）`，用單一路徑答案序列減少逐章重覆敘述
+  - 保留 FC-01 / FC-02 / FC-03 focused regression cases；chapter 10 final-state + `Restart` reset 固定回歸路徑保持清晰、無被弱化
   - `STATE.md` / `RUN_LOG.md` 同步今輪狀態
-  - 最小改動：無改 app logic / seed / HTML / CSS / JS / README/docs index
+  - 最小改動：只改 docs/test 文檔，無改 app logic / seed / HTML / CSS / JS / README/docs index
 
 ## Current Focus
 - 保持 issue-driven / small-step delivery，將 smoke checklist 收緊成更易重覆執行嘅結構

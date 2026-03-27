@@ -606,3 +606,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: docs/state/log 最小改動；無改 app logic / seed / HTML / CSS / JS / README/docs index；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-28 06:01 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-28 06:01 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-028 — 收緊 tests/smoke.md 結構（主流程 / focused cases 分段，減少重覆）
+- Files changed: `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`；人工 diff 檢查確認 `tests/smoke.md` 已分成 main flow smoke + focused regression cases + mobile smoke，且 FC-03 固定回歸路徑（chapter 10 final-state + Restart reset）仍完整存在
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: docs-only 最小改動；無改 gameplay / app logic / seed / HTML / CSS / JS；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
