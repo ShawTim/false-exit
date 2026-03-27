@@ -7,15 +7,15 @@
 - Current product state: 10-chapter static playable flow（chapter 1 -> chapter 10 順序推進，Restart 可重置）
 
 ## Latest Accepted Change
-- IPG-031 — unify chapter 10 wording with expected answer（issue #5）
-  - `content/story/seed.json` chapter 10 story 將 `留低` 統一為 `留下`（文案改為「留下去面對循環」）
-  - 保持 chapter 10 expected answer `留下` 不變；`success` / `retry` 既有 `留下` 文案維持
-  - `tests/smoke.md` FC-02 補 chapter 10 wording consistency 驗收：story/success/retry 玩家可見文案不應再出現 `留低`
-  - 最小改動：無改 gameplay logic / chapter count / 其他章答案 / `assets/js/main.js`
+- IPG-027 — 補 focused smoke：chapter 10 final-state + Restart reset（固定回歸路徑）
+  - `tests/smoke.md` FC-03 收緊為固定回歸路徑：由 chapter 1 順序解到 chapter 10，驗證 final-state 出現、`Next` 在最終章維持 hidden/disabled、`Restart` 重置回 chapter 1 初始狀態
+  - 文案保持短、可逐步照做，直接對齊日後 regression smoke
+  - `STATE.md` / `RUN_LOG.md` 同步本輪狀態
+  - 最小改動：無改 app logic / seed / HTML / CSS / JS / README/docs index
 
 ## Current Focus
-- 保持 issue-driven / small-step delivery，優先修復玩家可見文案一致性問題
-- 以最小可驗收改動維持 content quality（copy 與 expected answer 對齊）
+- 保持 issue-driven / small-step delivery，補齊可重覆執行嘅固定 smoke regression path
+- 以最小可驗收改動維持 flow 穩定（特別係 chapter 10 final-state + Restart reset）
 - GitHub issue 現況（本輪真查並收尾後）：`0 open issues from ShawTim`
 
 ## Constraints

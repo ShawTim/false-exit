@@ -42,13 +42,13 @@
 - [ ] Chapter 10：先答錯（例如 `離開`）應顯示 retry；改答 `留下` 後進入 final-state，`Next` 保持 hidden/disabled，且 chapter 10 玩家可見文案（story/success/retry）統一使用 `留下`（不應出現 `留低`）。
 - [ ] 確認 chapter 4 -> 10 答案仍分別為：`噪音 / 盲點 / 代價 / 見證 / 假門 / 自由 / 留下`。
 
-### FC-03 — Final chapter 完成態 + Restart 重置
+### FC-03 — Fixed regression path：chapter 10 final-state + Restart reset
 
-- [ ] Sequentially solve chapter 1 -> chapter 9 with correct answers (`回答 / 問題 / 鏡像 / 噪音 / 盲點 / 代價 / 見證 / 假門 / 自由`) and press `Next` each time.
-- [ ] Confirm chapter progress reaches `Chapter 10 / 10`.
-- [ ] Chapter 10: submit correct answer `留下`; success feedback appears and final-state copy is visible.
-- [ ] After chapter 10 solved, `Next` stays hidden/disabled.
-- [ ] Click `Restart`; app resets to chapter 1 initial state (`Chapter 1 / 10`) with empty input, no feedback, hidden `Next`, and final-state copy hidden again.
+- [ ] 由 chapter 1 開始，按正確答案順序解到 chapter 10（`回答 / 問題 / 鏡像 / 噪音 / 盲點 / 代價 / 見證 / 假門 / 自由`，每章成功後按 `Next`）。
+- [ ] 確認進度到 `Chapter 10 / 10`。
+- [ ] Chapter 10 提交正解 `留下` 後，應見到 success feedback + final-state 文案 `你已完成目前全部章節。暫時到此。`。
+- [ ] Chapter 10 solved 後，`Next` 必須保持 hidden/disabled（不可再前進）。
+- [ ] 按 `Restart` 後，必須回到 chapter 1 初始狀態（`Chapter 1 / 10`、input 清空、無 feedback、`Next` hidden、final-state 文案消失）。
 
 ## 3) Mobile viewport smoke（320px–430px）
 

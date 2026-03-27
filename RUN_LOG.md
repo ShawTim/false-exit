@@ -583,3 +583,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: 本輪嚴格只修 issue #5；無改 gameplay logic / chapter count / 其他章答案 / `assets/js/main.js`；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-28 04:05 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-28 04:05 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-027 — 補 focused smoke：chapter 10 final-state + Restart reset（固定回歸路徑）
+- Files changed: `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；人工 diff 檢查 `tests/smoke.md` FC-03 已收緊為固定回歸路徑（chapter 1 -> 10 -> final-state -> `Next` hidden/disabled -> `Restart` reset chapter 1 初始狀態）
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: docs/state/log 最小改動；無改 app logic / seed / HTML / CSS / JS / README/docs index；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
