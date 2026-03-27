@@ -547,6 +547,17 @@ Append one section per run.
 - Files changed: `README.md`, `docs/README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
 - Validation: `grep -nE "Docs index|chapter-schema|chapter-answer-reference|docs/README.md" README.md docs/README.md tests/smoke.md`；確認 README `## Docs` 與 docs index 名稱/連結一致，smoke checklist 已加入 docs 入口一致性驗收項
 - Review result: Implemented
-- Commit: pending
-- Push: pending
+- Commit: `27107c4` — `docs: add docs index and align README docs entry`
+- Push: `origin/main` updated
 - Notes: docs-only change（無改 gameplay / seed / JS / CSS / HTML）；GitHub issue command result 摘要（沿用任務背景真查）：`gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）。
+
+## 2026-03-27 08:00 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-27 08:00 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-025 — docs 導覽索引一致化（README/docs 入口一致化）
+- Files changed: `README.md`, `docs/README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`grep -nE "Docs index|chapter-schema|chapter-answer-reference|docs/README.md" README.md docs/README.md tests/smoke.md` 命中 docs 入口一致；人工 review 確認只係 docs/state/log 最小改動，無 gameplay / seed / JS / CSS / HTML 變更
+- Review result: Accepted
+- Commit: `27107c4` — `docs: add docs index and align README docs entry`
+- Push: `origin/main` updated
+- Notes: 本輪按 contract 先查 GitHub，再由兄派弟實作，最後由兄驗收收貨；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
