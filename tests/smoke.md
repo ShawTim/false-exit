@@ -4,6 +4,7 @@
 
 - [ ] Run `python3 -m http.server 8080` from repo root.
 - [ ] In another shell, run `node scripts/validate-story.mjs` and confirm output contains `[content-lint] OK: 10 chapters validated`.
+- [ ] Confirm lint contract remains fixed: chapter count must be exactly `10`（hard constraint, expected 10 / actual X on mismatch）.
 - [ ] Open `http://localhost:8080/`.
 - [ ] Docs entry consistency check：`README.md` `## Docs` 同 `docs/README.md` 一致列出 `Docs index / Chapter schema / Chapter answer reference`，且三條連結可解析。
 

@@ -1,4 +1,15 @@
 
+## 2026-03-28 08:15 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-28 08:15 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-032 — 補 chapter count drift guard（lint error message + README/smoke 對齊）
+- Files changed: `scripts/validate-story.mjs`, `README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`；人工 diff 檢查確認 lint chapter count mismatch 訊息已明確為 expected/actual，README + smoke 已寫明 chapter count=10 固定 contract
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: 最小改動只限 script/docs/state/log；無改 `assets/js/main.js`、`index.html`、`assets/css/styles.css`、`content/story/seed.json`；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
 ## 2026-03-28 06:00 HKT — 無限任砌兄弟（兄）
 - Time: 2026-03-28 06:00 HKT
 - Run owner: 無限任砌兄弟（兄）
@@ -617,3 +628,14 @@ Append one section per run.
 - Commit: pending
 - Push: pending
 - Notes: docs-only 最小改動；無改 gameplay / app logic / seed / HTML / CSS / JS；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-28 08:00 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-28 08:00 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-032 — 補 chapter count drift guard（lint error message + README/smoke 對齊）
+- Files changed: `scripts/validate-story.mjs`, `README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`；人工 diff review 確認 lint chapter count mismatch 訊息已改為 `expected 10, actual X`，`README.md` / `tests/smoke.md` 已同步寫明 chapter count=10 係 fixed contract
+- Review result: Accepted after lead takeover（弟完成主要 script/docs 改動，但未補 `STATE.md` / `RUN_LOG.md` / commit / push；兄收尾補齊 contract）
+- Commit: pending
+- Push: pending
+- Notes: 最小改動只限 script + docs/state/log；無改 gameplay / seed / HTML / CSS / JS；`package-lock.json` 仍為 untracked 雜項，未納入本輪。

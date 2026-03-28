@@ -43,7 +43,7 @@ if (!Array.isArray(chapters)) {
   errors.push('[root] chapters must be an array');
 } else {
   if (chapters.length !== 10) {
-    errors.push(`[root] chapter count must be 10, got ${chapters.length}`);
+    errors.push(`[root] chapter count mismatch: expected 10, actual ${chapters.length}`);
   }
 
   chapters.forEach((chapter, index) => {

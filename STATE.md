@@ -7,15 +7,16 @@
 - Current product state: 10-chapter static playable flow（chapter 1 -> chapter 10 順序推進，Restart 可重置）
 
 ## Latest Accepted Change
-- IPG-028 — 收緊 `tests/smoke.md` 結構（main flow / focused cases 分段，減少重覆）
-  - 將 main flow smoke 收斂為 `Baseline expectations` + `Main progression（chapter 1 -> 10）`，用單一路徑答案序列減少逐章重覆敘述
-  - 保留 FC-01 / FC-02 / FC-03 focused regression cases；chapter 10 final-state + `Restart` reset 固定回歸路徑保持清晰、無被弱化
+- IPG-032 — 補 chapter count drift guard（lint error message + README/smoke 對齊）
+  - `scripts/validate-story.mjs` chapter count mismatch 訊息收緊為：`expected 10, actual X`，更直接指出 drift
+  - `README.md` 明確寫明 chapter count=10 係 hard constraint（固定 contract，唔可改成其他數）
+  - `tests/smoke.md` preflight 新增固定 contract 驗收項（chapter count 必須 exactly 10）
   - `STATE.md` / `RUN_LOG.md` 同步今輪狀態
-  - 最小改動：只改 docs/test 文檔，無改 app logic / seed / HTML / CSS / JS / README/docs index
+  - 最小改動：script + docs/state/log，小步完成；無改 gameplay / seed / HTML / CSS / JS
 
 ## Current Focus
-- 保持 issue-driven / small-step delivery，將 smoke checklist 收緊成更易重覆執行嘅結構
-- 以最小可驗收改動維持 flow 穩定（特別係 chapter 10 final-state + Restart reset 固定回歸路徑）
+- 保持 issue-driven / small-step delivery，繼續用 script/doc-level guard 防止內容 drift
+- 固定 chapter count=10 contract，避免維護時無聲偏移
 - GitHub issue 現況（本輪真查）：`0 open issues from ShawTim`
 
 ## Constraints
