@@ -1,4 +1,15 @@
 
+## 2026-03-28 18:12 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-28 18:12 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-037 — 補 docs index consistency guard（README/docs index drift guard）
+- Files changed: `scripts/check-doc-index-consistency.mjs`, `scripts/run-acceptance-guards.mjs`, `README.md`, `docs/README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功（active account `vildanden-ai`；提示缺 `read:org` scope，但不影響 repo/issue 查詢）；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；lead review 曾打回兩次：第一次因 `docs/README.md##文件導覽 missing: Docs index` 導致 `node scripts/check-doc-index-consistency.mjs` 失敗；修正後 `node scripts/check-doc-index-consistency.mjs` -> `[doc-index-consistency] OK: README.md##Docs matches docs/README.md##文件導覽 for required doc index items`；`node scripts/run-acceptance-guards.mjs` 依序跑 `validate-story`、`check-doc-answer-consistency`、`check-doc-links`、`check-doc-index-consistency` 全部成功，最後輸出 `[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard passed`
+- Review result: Accepted after 2 rework rounds（弟先漏 `Docs index` 導覽項同 smoke/state 同步；兄打回後驗收收貨）
+- Commit: pending
+- Push: pending
+- Notes: 最小改動只限 script/docs/state/log；新增 guard 鎖定 README/docs 四項導覽名稱+target 一致；無改 gameplay / seed / HTML / CSS / JS；`package-lock.json` 保持 untracked，未納入本輪。
+
 ## 2026-03-28 18:06 HKT — 無限任砌兄弟（弟）
 - Time: 2026-03-28 18:06 HKT
 - Run owner: 無限任砌兄弟（弟）
