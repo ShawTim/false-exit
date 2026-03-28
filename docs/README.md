@@ -8,6 +8,8 @@
   - 用途：定義 `content/story/seed.json` chapter data 最小結構、required/optional 欄位，同前端 flow 對齊備註。
 - Chapter answer reference：[`chapter-answer-reference.md`](chapter-answer-reference.md)
   - 用途：快速核對 chapter 1 -> 10 每章 expected answer（維護 reference）。
+- Smoke answer sequence reference：[`smoke-answer-sequence.md`](smoke-answer-sequence.md)
+  - 用途：固定 smoke（main flow）嘅 chapter 1 -> 10 答案序列對照（manual smoke / regression reference）。
 
 ## 對齊原則
 

@@ -6,7 +6,7 @@
 - [ ] In another shell, run `node scripts/validate-story.mjs` and confirm output contains `[content-lint] OK: 10 chapters validated`.
 - [ ] Confirm lint contract remains fixed: chapter count must be exactly `10`（hard constraint, expected 10 / actual X on mismatch）.
 - [ ] Open `http://localhost:8080/`.
-- [ ] Docs entry consistency check：`README.md` `## Docs` 同 `docs/README.md` 一致列出 `Docs index / Chapter schema / Chapter answer reference`，且三條連結可解析。
+- [ ] Docs entry consistency check：`README.md` `## Docs` 同 `docs/README.md` 一致列出 `Docs index / Chapter schema / Chapter answer reference / Smoke answer sequence reference`，且連結可解析。
 
 ## 1) Main flow smoke（single-pass baseline）
 
@@ -20,8 +20,8 @@
 
 ### 1.2 Main progression（chapter 1 -> 10）
 
-Use this answer sequence for the single pass:
-`回答 / 問題 / 鏡像 / 噪音 / 盲點 / 代價 / 見證 / 假門 / 自由 / 留下`
+Use this answer sequence reference for the single pass:
+[`docs/smoke-answer-sequence.md`](../docs/smoke-answer-sequence.md)
 
 - [ ] After each solved chapter, click `Next`; app enters next chapter with updated title/progress and fresh unsolved state（no residual error/invalid state）.
 - [ ] Reach `Chapter 10 / 10` and submit chapter 10 answer `留下`.

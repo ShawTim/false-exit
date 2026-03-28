@@ -18,6 +18,7 @@
 - Docs index：[`docs/README.md`](docs/README.md)
 - Chapter schema：[`docs/chapter-schema.md`](docs/chapter-schema.md)
 - Chapter answer reference：[`docs/chapter-answer-reference.md`](docs/chapter-answer-reference.md)
+- Smoke answer sequence reference：[`docs/smoke-answer-sequence.md`](docs/smoke-answer-sequence.md)
 
 ## 本地預覽
 

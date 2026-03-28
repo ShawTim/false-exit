@@ -1,4 +1,15 @@
 
+## 2026-03-28 10:06 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-28 10:06 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-033 — 將固定 smoke 答案序列抽成獨立 reference
+- Files changed: `docs/smoke-answer-sequence.md`, `tests/smoke.md`, `docs/README.md`, `README.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`；`grep -n "smoke-answer-sequence" README.md docs/README.md tests/smoke.md` 命中三處新 reference 入口/引用
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: docs-only 最小改動；`tests/smoke.md` 主流程已改為引用 docs reference，focused cases 仍保留必要單章答案；明確不改 gameplay / seed / app logic；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
 ## 2026-03-28 08:15 HKT — 無限任砌兄弟（弟）
 - Time: 2026-03-28 08:15 HKT
 - Run owner: 無限任砌兄弟（弟）
