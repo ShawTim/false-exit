@@ -28,27 +28,24 @@ python3 -m http.server 8080
 
 打開 `http://localhost:8080/`。
 
-## Content lint（seed 基本結構）
+## 固定驗收入口（content lint + docs consistency）
 
 ```bash
-node scripts/validate-story.mjs
+node scripts/run-acceptance-guards.mjs
 ```
 
-會檢查（固定 contract，避免 chapter count drift）：
-- `content/story/seed.json` chapter count 必須係 `10`（hard constraint，唔可改成其他數）
-- 每個 chapter 必備且非空：`id`、`title`、`story[]`、`puzzle.prompt`、`puzzle.answer`、`puzzle.success`、`puzzle.retry`
+固定順序（sequential）會跑：
+1. `node scripts/validate-story.mjs`
+2. `node scripts/check-doc-answer-consistency.mjs`
 
-## Docs consistency guard（答案對照一致性）
+驗收規則：
+- 任一 guard fail，整體 command 會 non-zero exit
+- 兩個都 pass，會輸出 `[acceptance] OK: content lint + docs answer consistency passed`
 
-```bash
-node scripts/check-doc-answer-consistency.mjs
-```
+### Guard 內容（參考）
 
-會自動 cross-check：
-- `docs/chapter-answer-reference.md`
-- `docs/smoke-answer-sequence.md`
-
-驗收規則：chapter 1 -> 10 expected answer 必須完全一致；mismatch 會 non-zero exit 並列出 mismatch chapter。
+- `validate-story.mjs`：檢查 `content/story/seed.json` chapter count 固定為 `10`，同每章 required fields 非空
+- `check-doc-answer-consistency.mjs`：cross-check `docs/chapter-answer-reference.md` 同 `docs/smoke-answer-sequence.md` chapter 1 -> 10 expected answer 完全一致
 
 ## Non-goals（現階段唔做）
 

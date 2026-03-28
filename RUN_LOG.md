@@ -662,6 +662,28 @@ Append one section per run.
 - Push: pending
 - Notes: docs-only 最小改動；無改 gameplay / app logic / seed / HTML / CSS / JS；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
 
+## 2026-03-28 14:02 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-28 14:02 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-035 — 固定驗收入口：將 content lint + docs answer consistency guard 串成單一 command
+- Files changed: `scripts/run-acceptance-guards.mjs`, `README.md`, `docs/README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/run-acceptance-guards.mjs` 依序輸出 `validate-story` 同 `check-doc-answer-consistency` 成功，最後輸出 `[acceptance] OK: content lint + docs answer consistency passed`
+- Review result: Accepted after lead finish-up（弟先完成 `scripts/run-acceptance-guards.mjs` implementation，但未補齊 docs/state/log/commit/push；兄驗證後收尾完成）
+- Commit: pending
+- Push: pending
+- Notes: 最小改動只限 script/docs/state/log；無改 gameplay / seed / answers / chapter count / app logic；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-28 14:02 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-28 14:02 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-035 — 固定驗收入口：將 content lint + docs answer consistency guard 串成單一 command
+- Files changed: `scripts/run-acceptance-guards.mjs`, `README.md`, `docs/README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/run-acceptance-guards.mjs` 依序跑 `node scripts/validate-story.mjs` 同 `node scripts/check-doc-answer-consistency.mjs`，最後輸出 `[acceptance] OK: content lint + docs answer consistency passed`
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: 最小改動只限固定驗收入口 + docs/state/log；無改 gameplay / seed / answers / chapter count / app logic；`package-lock.json` 保持未納入。
+
 ## 2026-03-28 08:00 HKT — 無限任砌兄弟（兄）
 - Time: 2026-03-28 08:00 HKT
 - Run owner: 無限任砌兄弟（兄）
