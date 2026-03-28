@@ -12,6 +12,7 @@ const guards = [
   ['node', ['scripts/validate-story.mjs']],
   ['node', ['scripts/check-doc-answer-consistency.mjs']],
   ['node', ['scripts/check-doc-links.mjs']],
+  ['node', ['scripts/check-doc-index-consistency.mjs']],
 ];
 
 for (const [command, args] of guards) {
@@ -29,4 +30,4 @@ for (const [command, args] of guards) {
   }
 }
 
-console.log('[acceptance] OK: content lint + docs answer consistency + docs link guard passed');
+console.log('[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard passed');

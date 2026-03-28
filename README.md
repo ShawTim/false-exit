@@ -38,16 +38,18 @@ node scripts/run-acceptance-guards.mjs
 1. `node scripts/validate-story.mjs`
 2. `node scripts/check-doc-answer-consistency.mjs`
 3. `node scripts/check-doc-links.mjs`
+4. `node scripts/check-doc-index-consistency.mjs`
 
 驗收規則：
 - 任一 guard fail，整體 command 會 non-zero exit
-- 全部 pass，會輸出 `[acceptance] OK: content lint + docs answer consistency + docs link guard passed`
+- 全部 pass，會輸出 `[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard passed`
 
 ### Guard 內容（參考）
 
 - `validate-story.mjs`：檢查 `content/story/seed.json` chapter count 固定為 `10`，同每章 required fields 非空
 - `check-doc-answer-consistency.mjs`：cross-check `docs/chapter-answer-reference.md` 同 `docs/smoke-answer-sequence.md` chapter 1 -> 10 expected answer 完全一致
 - `check-doc-links.mjs`：檢查 `README.md`、`docs/README.md`、`tests/smoke.md` 內 markdown 相對連結指向嘅 repo-local 檔案全部存在（外部網址略過）
+- `check-doc-index-consistency.mjs`：比對 `README.md` `## Docs` 同 `docs/README.md` `## 文件導覽` 指定四項（Docs index / Chapter schema / Chapter answer reference / Smoke answer sequence reference）名稱+連結 target 一致，missing / mismatch 會 fail
 
 ## Non-goals（現階段唔做）
 
