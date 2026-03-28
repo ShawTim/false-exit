@@ -93,6 +93,17 @@ Append one section per run.
 
 ---
 
+## 2026-03-28 20:00 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-28 20:00 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-038 — 補 smoke preflight structure guard（固定 smoke preflight checklist contract）
+- Files changed: `scripts/check-smoke-preflight-structure.mjs`, `scripts/run-acceptance-guards.mjs`, `README.md`, `docs/README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功（active account `vildanden-ai`；提示缺 `read:org` scope，但不影響 repo/issue 查詢）；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/check-smoke-preflight-structure.mjs` -> `[smoke-preflight-structure] OK: tests/smoke.md##0) Preflight contains all required checklist items`；`node scripts/run-acceptance-guards.mjs` 依序跑 `validate-story`、`check-doc-answer-consistency`、`check-doc-links`、`check-doc-index-consistency`、`check-smoke-preflight-structure` 全部成功，最後輸出 `[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard + smoke preflight structure guard passed`
+- Review result: Accepted after builder failure（弟連續兩次假交付，兄直接收尾完成）
+- Commit: pending
+- Push: pending
+- Notes: 最小改動只限 script/docs/state/log；新增 guard 鎖定 `tests/smoke.md` `## 0) Preflight` 六條固定 checklist；無改 gameplay / seed / HTML / CSS / JS；`package-lock.json` 保持 untracked，未納入本輪。
+
 ## Template
 - Time:
 - Run owner:

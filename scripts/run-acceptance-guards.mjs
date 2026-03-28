@@ -13,6 +13,7 @@ const guards = [
   ['node', ['scripts/check-doc-answer-consistency.mjs']],
   ['node', ['scripts/check-doc-links.mjs']],
   ['node', ['scripts/check-doc-index-consistency.mjs']],
+  ['node', ['scripts/check-smoke-preflight-structure.mjs']],
 ];
 
 for (const [command, args] of guards) {
@@ -30,4 +31,4 @@ for (const [command, args] of guards) {
   }
 }
 
-console.log('[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard passed');
+console.log('[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard + smoke preflight structure guard passed');

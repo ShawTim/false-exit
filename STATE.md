@@ -7,17 +7,17 @@
 - Current product state: 10-chapter static playable flow（chapter 1 -> chapter 10 順序推進，Restart 可重置）
 
 ## Latest Accepted Change
-- IPG-037 — 補 docs index consistency guard（README/docs wording drift 最小防線）
-  - 新增 `scripts/check-doc-index-consistency.mjs`，自動比對 `README.md` `## Docs` 同 `docs/README.md` `## 文件導覽` 指定四項（Docs index / Chapter schema / Chapter answer reference / Smoke answer sequence reference）名稱+link target 一致
-  - missing / mismatch 會 non-zero exit，錯誤訊息包含 section/item 或 `file:line` 位置，方便直接定位修正
-  - 更新 `scripts/run-acceptance-guards.mjs`，固定順序串接第四個 guard：`check-doc-index-consistency.mjs`
-  - acceptance 全部通過訊息更新為 `[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard passed`
-  - `README.md`、`docs/README.md`、`tests/smoke.md` 已同步反映新 guard；`docs/README.md` `## 文件導覽` 明確補回 `Docs index` 項目
+- IPG-038 — 補 smoke preflight structure guard（固定 smoke preflight checklist contract）
+  - 新增 `scripts/check-smoke-preflight-structure.mjs`，自動檢查 `tests/smoke.md` `## 0) Preflight` 固定六項 checklist 文字完全存在
+  - missing item 會 non-zero exit，錯誤訊息直接列出缺咗邊條 checklist，方便維護時即刻定位修正
+  - 更新 `scripts/run-acceptance-guards.mjs`，固定順序串接第五個 guard：`check-smoke-preflight-structure.mjs`
+  - acceptance 全部通過訊息更新為 `[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard + smoke preflight structure guard passed`
+  - `README.md`、`docs/README.md`、`tests/smoke.md` 已同步反映新 guard 同新 acceptance 訊息
   - 最小改動：script/docs/state/log-only；無改 HTML / CSS / JS / `content/story/seed.json`
 
 ## Current Focus
 - 保持 issue-driven / small-step delivery，用固定驗收入口減少維護者漏跑 guard
-- 維持 chapter count=10 hard constraint + docs answer consistency + docs local link existence + docs index wording/link consistency 四層 guard
+- 維持 chapter count=10 hard constraint + docs answer consistency + docs local link existence + docs index wording/link consistency + smoke preflight structure 五層 guard
 - GitHub issue 現況（本輪真查）：`0 open issues from ShawTim`
 
 ## Constraints
@@ -27,4 +27,4 @@
 - Non-goals for this run: no gameplay logic change；no chapter count change；no chapter answer changes；不處理 unrelated `package-lock.json`
 
 ## Next Suggested Step
-- 可考慮補最小 smoke checklist structure drift guard（例如固定 preflight checklist keys），延續 script/docs-only 小步收緊維護一致性
+- 可考慮補 focused regression case 結構 guard（例如固定 FC-01 / FC-02 / FC-03 heading），延續 script/docs-only 小步收緊維護一致性
