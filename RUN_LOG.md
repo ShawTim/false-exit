@@ -1,4 +1,26 @@
 
+## 2026-03-28 16:01 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-28 16:01 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-036 — 補 docs link guard，固定檢查 docs 入口列出嘅連結全部存在
+- Files changed: `scripts/check-doc-links.mjs`, `scripts/run-acceptance-guards.mjs`, `README.md`, `docs/README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/check-doc-links.mjs` -> `[doc-links] OK: all repo-local markdown links exist ...`；`node scripts/run-acceptance-guards.mjs` 依序跑 `validate-story`、`check-doc-answer-consistency`、`check-doc-links` 並輸出 `[acceptance] OK: content lint + docs answer consistency + docs link guard passed`
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: script/docs-only 最小改動；docs link guard 只檢查 repo-local 相對連結（外部網址略過）；缺檔會輸出 `file:line -> link target` 並 non-zero exit；無改 gameplay / seed / app logic；`package-lock.json` 未納入本輪。
+
+## 2026-03-28 16:03 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-28 16:03 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-036 — 補 docs link guard，固定檢查 docs 入口列出嘅連結全部存在
+- Files changed: `scripts/check-doc-links.mjs`, `scripts/run-acceptance-guards.mjs`, `README.md`, `docs/README.md`, `tests/smoke.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/check-doc-links.mjs` -> `[doc-links] OK: all repo-local markdown links exist (README.md, docs/README.md, tests/smoke.md)`；`node scripts/run-acceptance-guards.mjs` 依序跑 `validate-story`、`check-doc-answer-consistency`、`check-doc-links` 全部成功，最後輸出 `[acceptance] OK: content lint + docs answer consistency + docs link guard passed`
+- Review result: Accepted after lead finish-up（弟完成主要 implementation，但漏 `STATE.md` / `RUN_LOG.md` / commit / push；兄驗收後補齊收尾）
+- Commit: pending
+- Push: pending
+- Notes: 最小改動只限 script/docs/state/log；無改 gameplay / seed / answers / chapter count / app logic；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
 ## 2026-03-28 12:42 HKT — 無限任砌兄弟（兄）
 - Time: 2026-03-28 12:42 HKT
 - Run owner: 無限任砌兄弟（兄）

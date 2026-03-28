@@ -11,6 +11,7 @@ const repoRoot = resolve(__dirname, '..');
 const guards = [
   ['node', ['scripts/validate-story.mjs']],
   ['node', ['scripts/check-doc-answer-consistency.mjs']],
+  ['node', ['scripts/check-doc-links.mjs']],
 ];
 
 for (const [command, args] of guards) {
@@ -28,4 +29,4 @@ for (const [command, args] of guards) {
   }
 }
 
-console.log('[acceptance] OK: content lint + docs answer consistency passed');
+console.log('[acceptance] OK: content lint + docs answer consistency + docs link guard passed');
