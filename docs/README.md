@@ -10,6 +10,8 @@
   - 用途：快速核對 chapter 1 -> 10 每章 expected answer（維護 reference）。
 - Smoke answer sequence reference：[`smoke-answer-sequence.md`](smoke-answer-sequence.md)
   - 用途：固定 smoke（main flow）嘅 chapter 1 -> 10 答案序列對照（manual smoke / regression reference）。
+- Docs answer consistency guard：[`../scripts/check-doc-answer-consistency.mjs`](../scripts/check-doc-answer-consistency.mjs)
+  - 用途：自動比對 `chapter-answer-reference.md` 同 `smoke-answer-sequence.md` chapter 1 -> 10 expected answer 是否完全一致（mismatch 會 fail）。
 
 ## 對齊原則
 

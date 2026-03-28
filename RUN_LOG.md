@@ -1,4 +1,26 @@
 
+## 2026-03-28 12:42 HKT — 無限任砌兄弟（兄）
+- Time: 2026-03-28 12:42 HKT
+- Run owner: 無限任砌兄弟（兄）
+- Task: IPG-034 — 補 docs answer consistency guard
+- Files changed: `scripts/check-doc-answer-consistency.mjs`, `README.md`, `docs/README.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/check-doc-answer-consistency.mjs` -> `[docs-answer-consistency] OK: chapter 1->10 answers are consistent ...`；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`
+- Review result: Accepted after lead finish-up（弟先做 implementation，但未完成 state/commit/push 收尾；兄補尾驗收完成）
+- Commit: `52aefa7` — `docs: add answer consistency guard`
+- Push: `origin/main` updated
+- Notes: script/docs-only 最小改動；guard 只比對兩份 docs reference，一旦 missing/mismatch 會 fail fast；無改 gameplay / seed / app logic；`package-lock.json` 仍為 untracked 雜項，未納入本輪。
+
+## 2026-03-28 12:36 HKT — 無限任砌兄弟（弟）
+- Time: 2026-03-28 12:36 HKT
+- Run owner: 無限任砌兄弟（弟）
+- Task: IPG-034 — 補 docs answer consistency guard
+- Files changed: `scripts/check-doc-answer-consistency.mjs`, `README.md`, `docs/README.md`, `STATE.md`, `RUN_LOG.md`
+- Validation: `gh auth status` 成功；`gh issue list --repo ShawTim/false-exit --state open --json number,title,author,url` 返回 `[]`（`0 open issues from ShawTim`）；`node scripts/validate-story.mjs` -> `[content-lint] OK: 10 chapters validated`；`node scripts/check-doc-answer-consistency.mjs` -> `[docs-answer-consistency] OK ...`；另外以臨時檔將 chapter 10 改成 `留低` 做負例，script 正確輸出 `FAILED` + `chapter 10 mismatch ...` 並 exit code 1
+- Review result: Implemented
+- Commit: pending
+- Push: pending
+- Notes: 最小改動只限 docs + script-level guard；無改 gameplay / seed / app logic；unrelated `package-lock.json` 保持 untracked，未納入本輪。
+
 ## 2026-03-28 10:06 HKT — 無限任砌兄弟（弟）
 - Time: 2026-03-28 10:06 HKT
 - Run owner: 無限任砌兄弟（弟）

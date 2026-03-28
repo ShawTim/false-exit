@@ -38,6 +38,18 @@ node scripts/validate-story.mjs
 - `content/story/seed.json` chapter count 必須係 `10`（hard constraint，唔可改成其他數）
 - 每個 chapter 必備且非空：`id`、`title`、`story[]`、`puzzle.prompt`、`puzzle.answer`、`puzzle.success`、`puzzle.retry`
 
+## Docs consistency guard（答案對照一致性）
+
+```bash
+node scripts/check-doc-answer-consistency.mjs
+```
+
+會自動 cross-check：
+- `docs/chapter-answer-reference.md`
+- `docs/smoke-answer-sequence.md`
+
+驗收規則：chapter 1 -> 10 expected answer 必須完全一致；mismatch 會 non-zero exit 並列出 mismatch chapter。
+
 ## Non-goals（現階段唔做）
 
 - 唔做無限 generator / procedural content system；而家只維持 **10 chapter static playable flow**。
