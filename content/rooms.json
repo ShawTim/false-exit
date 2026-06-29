@@ -1,0 +1,50 @@
+{
+  "version": 2,
+  "world": "false-exit-3d",
+  "engine": "three.js (CDN, ES module)",
+  "perspective": "first-person",
+  "controls": { "desktop": "WASD + mouse look + E", "mobile": "virtual joystick + look drag + interact" },
+  "roomCount": 5,
+  "rooms": [
+    {
+      "id": "room-01",
+      "title": "迎賓室",
+      "type": "pickup",
+      "objective": "執起門禁卡，再開門",
+      "mechanic": "拾取門禁卡後開啟真門；綠色 EXIT 為假出口，會觸發迴圈。",
+      "teaches": "移動 / 視角 / 互動 / 拾取 / 假出口概念"
+    },
+    {
+      "id": "room-02",
+      "title": "鏡廊",
+      "type": "laser",
+      "objective": "用鏡面將光引到感應器",
+      "mechanic": "旋轉鏡面（每次 90°）反射激光到門上感應器，門即開。",
+      "teaches": "旋轉物件 + 光線反射"
+    },
+    {
+      "id": "room-03",
+      "title": "貨倉",
+      "type": "sokoban",
+      "objective": "將兩個箱推上壓板",
+      "mechanic": "推箱上壓板；推入死角可拉中央重置桿還原。",
+      "teaches": "推箱 + 壓板 + 重置"
+    },
+    {
+      "id": "room-04",
+      "title": "配電房",
+      "type": "circuit",
+      "objective": "按線索次序按下寶石",
+      "mechanic": "依牆上便條嘅顏色次序按亮四顆寶石；錯序自動重置。",
+      "teaches": "觀察 + 序列記憶"
+    },
+    {
+      "id": "room-05",
+      "title": "假出口",
+      "type": "finale",
+      "objective": "搵出真正嘅出口（唔發光嗰道）",
+      "mechanic": "三道門中，發光 EXIT 為假出口（迴圈）；唔發光嗰道先至係真出口通關。",
+      "teaches": "主題收結：真正嘅出口唔會自稱出口"
+    }
+  ]
+}

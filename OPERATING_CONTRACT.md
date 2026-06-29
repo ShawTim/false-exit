@@ -10,7 +10,7 @@
 - 未達標即打回，唔拖泥帶水。
 
 ## 產品邊界
-- 方向：web 無限解謎 game，帶少少連續劇情。
+- 方向：第一身 3D 環境解謎逃脫 game（three.js，static-first）。
 - 發佈：static page first；唔依賴 backend。
 - 優先次序：可玩性 > 可擴充內容結構 > 視覺 polish。
 

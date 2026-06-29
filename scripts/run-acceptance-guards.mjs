@@ -1,34 +1,20 @@
-#!/usr/bin/env node
+// Fixed acceptance entrypoint for the 3D build.
+// Runs content guards in a fixed order; any failure => non-zero exit.
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 
-import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+const here = dirname(fileURLToPath(import.meta.url));
+const guards = ["validate-rooms.mjs"];
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const repoRoot = resolve(__dirname, '..');
-
-const guards = [
-  ['node', ['scripts/validate-story.mjs']],
-  ['node', ['scripts/check-doc-answer-consistency.mjs']],
-  ['node', ['scripts/check-doc-links.mjs']],
-  ['node', ['scripts/check-doc-index-consistency.mjs']],
-  ['node', ['scripts/check-smoke-preflight-structure.mjs']],
-];
-
-for (const [command, args] of guards) {
-  const pretty = `${command} ${args.join(' ')}`;
-  console.log(`[acceptance] running: ${pretty}`);
-
-  const result = spawnSync(command, args, {
-    cwd: repoRoot,
-    stdio: 'inherit',
-  });
-
-  if (result.status !== 0) {
-    console.error(`[acceptance] FAILED at: ${pretty}`);
-    process.exit(result.status ?? 1);
-  }
+let failed = false;
+for (const g of guards) {
+  const res = spawnSync("node", [join(here, g)], { stdio: "inherit" });
+  if (res.status !== 0) failed = true;
 }
 
-console.log('[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard + smoke preflight structure guard passed');
+if (failed) {
+  console.error("[acceptance] FAIL: one or more guards failed");
+  process.exit(1);
+}
+console.log("[acceptance] OK: content lint (rooms.json) passed");

@@ -1,30 +1,24 @@
-# STATE.md — False Exit
+# STATE.md — False Exit 3D
 
 ## Current Status
-- Project initialized
-- Root path: `/home/openclaw/.openclaw/workspaces/gpt-bro/false-exit/`
-- GitHub repo: `https://github.com/ShawTim/false-exit/`
-- Current product state: 10-chapter static playable flow（chapter 1 -> chapter 10 順序推進，Restart 可重置）
+- Product state: 第一身 3D 環境解謎逃脫，5 間房完整可玩（desktop + mobile）。
+- Stack: 純前端 + three.js (CDN ES module via importmap)，無 build step。
+- Perspective: first-person（WASD + mouse / 搖桿 + 視角拖動）。
 
-## Latest Accepted Change
-- IPG-038 — 補 smoke preflight structure guard（固定 smoke preflight checklist contract）
-  - 新增 `scripts/check-smoke-preflight-structure.mjs`，自動檢查 `tests/smoke.md` `## 0) Preflight` 固定六項 checklist 文字完全存在
-  - missing item 會 non-zero exit，錯誤訊息直接列出缺咗邊條 checklist，方便維護時即刻定位修正
-  - 更新 `scripts/run-acceptance-guards.mjs`，固定順序串接第五個 guard：`check-smoke-preflight-structure.mjs`
-  - acceptance 全部通過訊息更新為 `[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard + smoke preflight structure guard passed`
-  - `README.md`、`docs/README.md`、`tests/smoke.md` 已同步反映新 guard 同新 acceptance 訊息
-  - 最小改動：script/docs/state/log-only；無改 HTML / CSS / JS / `content/story/seed.json`
-
-## Current Focus
-- 保持 issue-driven / small-step delivery，用固定驗收入口減少維護者漏跑 guard
-- 維持 chapter count=10 hard constraint + docs answer consistency + docs local link existence + docs index wording/link consistency + smoke preflight structure 五層 guard
-- GitHub issue 現況（本輪真查）：`0 open issues from ShawTim`
+## Latest Change
+- 由文字謎題版重製為 3D 版。
+  - 移除舊文字版（`assets/js/main.js`、`assets/css/styles.css`、`content/story/`、舊 docs/guards/smoke）。
+  - 新增 3D 引擎模組：`engine / input / player / interact / entities / world / game / hud / main`。
+  - 5 間房：迎賓室（拾取）/ 鏡廊（激光鏡）/ 貨倉（推箱壓板）/ 配電房（顏色序列）/ 假出口（唔發光嘅門通關）。
+  - mobile 雙拇指控制（左搖桿 + 右視角 + 互動掣）。
+  - 新 lint contract：`content/rooms.json`（5 間房）+ `scripts/validate-rooms.mjs`。
+  - 更新 README / PROJECT / docs / smoke。
 
 ## Constraints
-- Small steps only
-- No large refactors in one run
-- Keep product direction stable unless explicitly changed upstream
-- Non-goals for this run: no gameplay logic change；no chapter count change；no chapter answer changes；不處理 unrelated `package-lock.json`
+- static-first、無 framework、唔加 backend。
+- 每輪只做小步改動。
 
 ## Next Suggested Step
-- 可考慮補 focused regression case 結構 guard（例如固定 FC-01 / FC-02 / FC-03 heading），延續 script/docs-only 小步收緊維護一致性
+- 加音效 / 腳步聲 / 門聲。
+- 或：vendored 本地 three.js（離線可用）。
+- 或：加第 6+ 間房擴充內容。

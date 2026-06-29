@@ -2,18 +2,89 @@
 <html lang="zh-HK">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>False Exit</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>False Exit — 3D</title>
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./assets/css/styles.css" />
+    <meta name="theme-color" content="#070a12" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
   </head>
   <body>
-    <main class="app">
-      <p class="eyebrow">Phase 0 — prove the loop</p>
-      <h1>False Exit</h1>
-      <div id="game-root" aria-live="polite"></div>
-    </main>
+    <div id="game"></div>
 
-    <script src="./assets/js/main.js"></script>
+    <div id="hud" class="hidden">
+      <div id="crosshair"><span></span></div>
+      <div id="topbar">
+        <div id="room-name">—</div>
+        <div id="loop-count">迴圈 0</div>
+      </div>
+      <div id="objective" class="hidden"></div>
+      <div id="interact-prompt" class="hidden"></div>
+      <div id="toast" class="hidden"></div>
+    </div>
+
+    <div id="touch" class="hidden">
+      <div id="joystick">
+        <div id="stick"></div>
+      </div>
+      <div id="touch-actions">
+        <button id="btn-interact" class="tbtn" type="button">互動</button>
+      </div>
+    </div>
+
+    <div id="intro" class="overlay">
+      <div class="overlay-card">
+        <p class="eyebrow">第一身 3D 解謎</p>
+        <h1>False Exit</h1>
+        <p class="lede">
+          你喺一座不停兜路嘅設施入面醒返。<br />
+          每道發光嘅「EXIT」都係一個谎言。<br />
+          唔好信門牌。搵出真正嘅出路。
+        </p>
+        <ul class="keys" id="keys-desktop">
+          <li><b>W A S D</b> 行走</li>
+          <li><b>滑鼠</b> 視角</li>
+          <li><b>E</b> 互動</li>
+          <li><b>Esc</b> 暫停</li>
+        </ul>
+        <ul class="keys hidden" id="keys-mobile">
+          <li><b>左搖桿</b> 行走</li>
+          <li><b>右邊畫面</b> 視角</li>
+          <li><b>互動掣</b> 互動</li>
+        </ul>
+        <button id="btn-start" type="button">點擊開始</button>
+      </div>
+    </div>
+
+    <div id="pause" class="overlay hidden">
+      <div class="overlay-card">
+        <h2>暫停</h2>
+        <button id="btn-resume" type="button">繼續</button>
+        <button id="btn-restart-game" class="secondary" type="button">重新開始</button>
+      </div>
+    </div>
+
+    <div id="fade" class="hidden"></div>
+
+    <div id="ending" class="overlay hidden">
+      <div class="overlay-card">
+        <h1 id="ending-title"></h1>
+        <p id="ending-text"></p>
+        <p id="ending-stats"></p>
+        <button id="btn-replay" type="button">再玩一次</button>
+      </div>
+    </div>
+
+    <script type="module" src="./assets/js/main.js"></script>
   </body>
 </html>

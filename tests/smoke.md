@@ -1,67 +1,55 @@
-# Smoke Checklist — IPG-028
+# Smoke Checklist — False Exit 3D
 
 ## 0) Preflight
 
 - [ ] Run `python3 -m http.server 8080` from repo root.
-- [ ] In another shell, run fixed acceptance entrypoint: `node scripts/run-acceptance-guards.mjs`.
-- [ ] Confirm acceptance output includes `[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard + smoke preflight structure guard passed`.
-- [ ] Confirm lint contract remains fixed: chapter count must be exactly `10`（hard constraint, expected 10 / actual X on mismatch）.
-- [ ] Open `http://localhost:8080/`.
-- [ ] Docs entry consistency check：`README.md` `## Docs` 同 `docs/README.md` 一致列出 `Docs index / Chapter schema / Chapter answer reference / Smoke answer sequence reference`，且連結可解析。
+- [ ] Run `node scripts/run-acceptance-guards.mjs`; confirm output `[acceptance] OK: content lint (rooms.json) passed`.
+- [ ] Open `http://localhost:8080/` on a desktop browser (Chrome/Firefox/Safari).
+- [ ] Intro overlay shows title `False Exit` + control hints + `點擊開始`.
+- [ ] Browser console shows no errors; three.js loads from CDN.
 
-## 1) Main flow smoke（single-pass baseline）
+## 1) Desktop main flow
 
-### 1.1 Baseline expectations
+### 1.1 Controls & tutorial (Room 1 — 迎賓室)
 
-- [ ] Page shows `False Exit` and chapter title `Chapter 1 — The Hall That Remembers`.
-- [ ] Chapter card shows progress indicator `Chapter 1 / 10` (or equivalent chapter count wording).
-- [ ] Chapter 1 unsolved: `Next` is hidden, helper hint shows `提示：答案係兩個字。`, answer input + submit (`提交答案`) are enabled.
-- [ ] Chapter 1 wrong answer (`出口`) shows retry feedback + error visual state + `aria-invalid="true"`, and input stays enabled with auto focus/select.
-- [ ] Chapter 1 correct answer (`回答`) shows success, clears error/invalid state, disables input+submit, and reveals `Next`.
+- [ ] Click `點擊開始` → pointer locks, HUD appears, room name `第 1 間　迎賓室`, objective `執起門禁卡，再開門`.
+- [ ] WASD moves; mouse looks; Esc unlocks pointer and shows pause overlay; `繼續` re-locks.
+- [ ] Walk to the glowing card on the pedestal; crosshair highlights it, prompt `E 執起門禁卡` shows.
+- [ ] Press E → card disappears, toast `你執到一張門禁卡。`, objective updates to `用門禁卡開門`.
+- [ ] Face the (locked) door; press E → toast `門鎖住了。你需要一張卡。` (before pickup) / opens (after pickup).
+- [ ] Walk into the green EXIT door on the side; press E → fade, `迴圈 1`, toast `綠色嘅『EXIT』將你送返起點。`, respawn at start.
 
-### 1.2 Main progression（chapter 1 -> 10）
+### 1.2 Room 2 — 鏡廊 (laser)
 
-Use this answer sequence reference for the single pass:
-[`docs/smoke-answer-sequence.md`](../docs/smoke-answer-sequence.md)
+- [ ] Reach room 2; a red beam emits; rotating a mirror (E) changes the beam path.
+- [ ] Rotating both mirrors so the beam hits the receptor turns it green and opens the door.
+- [ ] Stepping through the open door fades to room 3.
 
-- [ ] After each solved chapter, click `Next`; app enters next chapter with updated title/progress and fresh unsolved state（no residual error/invalid state）.
-- [ ] Reach `Chapter 10 / 10` and submit chapter 10 answer `留下`.
-- [ ] Final-state copy appears: `你已完成目前全部章節。暫時到此。`.
-- [ ] After chapter 10 solved, `Next` remains hidden/disabled; answer input + submit remain disabled; solved lock hint remains visible.
-- [ ] Browser console shows `[false-exit] playable loop ready` and no errors.
+### 1.3 Room 3 — 貨倉 (push boxes)
 
-## 2) Focused regression cases
+- [ ] Push each crate onto a pressure plate (plate turns green when occupied).
+- [ ] Both plates covered → door opens. Box stuck in corner → pull the central reset lever.
 
-### FC-01 — Chapter 3 clue-answer link（先錯後啱再進 chapter 4）
+### 1.4 Room 4 — 配電房 (circuit)
 
-- [ ] 先解 chapter 1 `回答`、chapter 2 `問題`，進入 chapter 3。
-- [ ] Chapter 3：先答相關但錯嘅詞（例如 `回音`）應顯示 retry，章節保持 unsolved。
-- [ ] Chapter 3：改答 `鏡像` 後應顯示 success、輸入鎖定、`Next` 出現。
-- [ ] 撳 `Next` 後可正常進入 chapter 4，progress 變為 `Chapter 4 / 10`。
+- [ ] Read the clue note to learn the gem press order.
+- [ ] Press gems in the wrong order → toast `次序錯。` + reset.
+- [ ] Press in the correct order → all green, door opens.
 
-### FC-02 — Chapter 4 -> 10 focused correctness（題意 + 答案 + wording）
+### 1.5 Room 5 — 假出口 (finale)
 
-- [ ] 先解 chapter 1 `回答`、chapter 2 `問題`、chapter 3 `鏡像`，確保可正常進入 chapter 4。
-- [ ] 依序驗 chapter 4 -> 10：每章先錯答一次應顯示 retry，再答正解應 success + `Next`（chapter 10 除外）。
-  - chapter 4: `噪音`
-  - chapter 5: `盲點`
-  - chapter 6: `代價`
-  - chapter 7: `見證`
-  - chapter 8: `假門`
-  - chapter 9: `自由`
-  - chapter 10: `留下`
-- [ ] Chapter 10 完成後仍為 final-state（`Next` hidden/disabled），且 chapter 10 玩家可見文案（story/success/retry）統一使用 `留下`（不應出現 `留低`）。
+- [ ] Three doors on the far wall; two glow green `EXIT`, one is dim.
+- [ ] Use a glowing door → `迴圈 +1`, respawn in finale, clue text updates with count.
+- [ ] Use the dim (non-glowing) door → ending screen.
 
-### FC-03 — Fixed regression path：chapter 10 final-state + Restart reset
+## 2) Ending
 
-- [ ] 由 chapter 1 開始，按正確答案順序解到 chapter 10（`回答 / 問題 / 鏡像 / 噪音 / 盲點 / 代價 / 見證 / 假門 / 自由`，每章成功後按 `Next`）。
-- [ ] 確認進度到 `Chapter 10 / 10`。
-- [ ] Chapter 10 提交正解 `留下` 後，應見到 success feedback + final-state 文案 `你已完成目前全部章節。暫時到此。`。
-- [ ] Chapter 10 solved 後，`Next` 必須保持 hidden/disabled（不可再前進）。
-- [ ] 按 `Restart` 後，必須回到 chapter 1 初始狀態（`Chapter 1 / 10`、input 清空、無 feedback、`Next` hidden、final-state 文案消失）。
+- [ ] Ending overlay shows title + narrative text + `假出口嘗試：N　|　通關房間：5`.
+- [ ] `再玩一次` returns to room 1 with loop count reset to 0.
 
-## 3) Mobile viewport smoke（320px–430px）
+## 3) Mobile (touch device, coarse pointer)
 
-- [ ] Page has no horizontal scrollbar; chapter card/title/story/question wrap normally.
-- [ ] Answer input + `提交答案` are full-width and tappable (>=44px target height), no overlap/clip.
-- [ ] Controls stack vertically (`Next`, `Restart`) and remain easy to tap without squeeze.
+- [ ] Intro shows touch hints (左搖桿 / 右邊畫面 / 互動掣); `#touch` controls appear after start.
+- [ ] Left joystick moves; dragging right side of screen looks; `互動` button interacts.
+- [ ] No page scroll / pinch-zoom; viewport stays fixed.
+- [ ] Each room completable via touch only.

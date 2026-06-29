@@ -1,24 +1,41 @@
-# False Exit
+# False Exit — 3D
 
-目前狀態：呢個 repo 係 **10 chapter static playable flow**（chapter 1 -> chapter 10 順序推進），用純前端（HTML/CSS/JS + seed JSON）運作。
+第一身 3D 解謎逃脫 game，用純前端 + three.js（CDN ES module）運作，可直接用靜態 hosting 發佈。
+
+你喺一座「每道發光嘅 EXIT 都係谎言」嘅設施入面醒返。五間房，每間一個環境謎題；最終你要搵出嗰道**唔發光**嘅門，先至真正離開循環。
 
 ## 目錄
 
-- `index.html`：入口頁
-- `assets/css/styles.css`：樣式（含 mobile responsive）
-- `assets/js/main.js`：前端流程控制（chapter 1 -> 10 playable flow）
-- `content/story/seed.json`：章節內容與答案資料
+- `index.html`：入口（importmap + three.js + UI overlay）
+- `assets/css/style.css`：全屏 canvas、HUD、mobile 搖桿 / 視角 / 互動掣、過場與結局
+- `assets/js/`
+  - `main.js`：bootstrap，接駁各模組
+  - `engine.js`：renderer / scene / camera / 動畫迴圈 + 冷調燈光與霧
+  - `input.js`：鍵盤 + 桌面 pointer lock 視角 + 手機觸控（搖桿 / 視角 / 互動）統一輸入
+  - `player.js`：第一身控撞器 + AABB 碰撞（含推箱）
+  - `interact.js`：中央射線互動 + 高亮 + 提示
+  - `entities.js`：門 / 拾取 / 擎 / 鏡 + 激光 / 壓板 + 推箱 / 配電 / 線索 可重用組件
+  - `world.js`：5 間房低面數建模 + 房間 builder + 燈光 + 假出口 / 真門 / 線索
+  - `game.js`：狀態機（intro / playing / transition / ending）、房間順序、迴圈計、結局
+  - `hud.js`：HUD DOM 控制器
+- `content/rooms.json`：5 間房靜態資料（lint contract）
+- `scripts/`：content lint guard
 - `tests/smoke.md`：手動 smoke checklist
-- `docs/README.md`：docs 導覽入口（index）
-- `docs/chapter-schema.md`：chapter schema 說明
-- `docs/chapter-answer-reference.md`：chapter 1 -> 10 答案對照表（維護用 reference）
 
-## Docs
+## 玩法
 
-- Docs index：[`docs/README.md`](docs/README.md)
-- Chapter schema：[`docs/chapter-schema.md`](docs/chapter-schema.md)
-- Chapter answer reference：[`docs/chapter-answer-reference.md`](docs/chapter-answer-reference.md)
-- Smoke answer sequence reference：[`docs/smoke-answer-sequence.md`](docs/smoke-answer-sequence.md)
+| 平台 | 操作 |
+| --- | --- |
+| 桌面 | `WASD` 行走、滑鼠視角、`E` 互動、`Esc` 暫停 |
+| 手機 | 左搖桿行走、右邊畫面拖動視角、`互動` 掣互動 |
+
+## 房間一覽
+
+1. **迎賓室** — 執門禁卡開門（綠色 EXIT 係假出口）
+2. **鏡廊** — 旋轉鏡面將激光引到感應器
+3. **貨倉** — 推箱上壓板（有重置桿）
+4. **配電房** — 按線索顏色次序按亮寶石
+5. **假出口** — 三道門，揀嗰道唔發光嘅先至通關
 
 ## 本地預覽
 
@@ -26,36 +43,23 @@
 python3 -m http.server 8080
 ```
 
-打開 `http://localhost:8080/`。
+打開 `http://localhost:8080/`（需聯網載入 three.js CDN）。
 
-## 固定驗收入口（content lint + docs consistency）
+## 固定驗收入口
 
 ```bash
 node scripts/run-acceptance-guards.mjs
 ```
 
-固定順序（sequential）會跑：
-1. `node scripts/validate-story.mjs`
-2. `node scripts/check-doc-answer-consistency.mjs`
-3. `node scripts/check-doc-links.mjs`
-4. `node scripts/check-doc-index-consistency.mjs`
-5. `node scripts/check-smoke-preflight-structure.mjs`
+跑 `validate-rooms.mjs`：檢查 `content/rooms.json` 固定為 5 間房 + required fields 非空。全部 pass 會輸出 `[acceptance] OK: content lint (rooms.json) passed`。
 
-驗收規則：
-- 任一 guard fail，整體 command 會 non-zero exit
-- 全部 pass，會輸出 `[acceptance] OK: content lint + docs answer consistency + docs link guard + docs index consistency guard + smoke preflight structure guard passed`
+## Docs
 
-### Guard 內容（參考）
+- Docs index：[`docs/README.md`](docs/README.md)
 
-- `validate-story.mjs`：檢查 `content/story/seed.json` chapter count 固定為 `10`，同每章 required fields 非空
-- `check-doc-answer-consistency.mjs`：cross-check `docs/chapter-answer-reference.md` 同 `docs/smoke-answer-sequence.md` chapter 1 -> 10 expected answer 完全一致
-- `check-doc-links.mjs`：檢查 `README.md`、`docs/README.md`、`tests/smoke.md` 內 markdown 相對連結指向嘅 repo-local 檔案全部存在（外部網址略過）
-- `check-doc-index-consistency.mjs`：比對 `README.md` `## Docs` 同 `docs/README.md` `## 文件導覽` 指定四項（Docs index / Chapter schema / Chapter answer reference / Smoke answer sequence reference）名稱+連結 target 一致，missing / mismatch 會 fail
-- `check-smoke-preflight-structure.mjs`：檢查 `tests/smoke.md` `## 0) Preflight` 固定六項 checklist 文字完全存在，避免 smoke preflight contract drift
+## 設計原則
 
-## Non-goals（現階段唔做）
-
-- 唔做無限 generator / procedural content system；而家只維持 **10 chapter static playable flow**。
-- 唔做 backend / database / account system；產品維持 static-first，可直接用靜態 hosting 發佈。
-- 唔加 framework（例如 React / Vue / Next.js）；現階段繼續用純 HTML / CSS / JS 小步推進。
-- 唔做大重構 / 方向改寫；每輪只收一個細改動，優先保持現有流程穩定。
+- **static-first**：純前端，可 GitHub Pages / Netlify 直接發佈。
+- **無 framework**：唔用 React / Vue；three.js 經 importmap CDN 載入。
+- **content-driven**：房間資料集中喺 `content/rooms.json` + `world.js`。
+- **桌面 + 手機並重**：統一輸入層同時支援鍵盤滑鼠同觸控。
