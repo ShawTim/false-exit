@@ -1,0 +1,20 @@
+{
+  "models": {
+    "chair": "models/chair_A_wood.gltf",
+    "table": "models/table_medium.gltf",
+    "crate": "models/cabinet_small.gltf",
+    "plant": "models/cactus_small_A.gltf",
+    "painting": "models/pictureframe_large_A.gltf",
+    "bookshelf": "models/cabinet_medium_decorated.gltf",
+    "lampStanding": "models/lamp_standing.gltf",
+    "lampTable": "models/lamp_table.gltf",
+    "couch": "models/couch.gltf",
+    "armchair": "models/armchair.gltf",
+    "books": "models/book_set.gltf",
+    "rug": "models/rug_rectangle_A.gltf",
+    "paintingStand": "models/pictureframe_standing_A.gltf",
+    "pillow": "models/pillow_A.gltf",
+    "bed": "models/bed_single_A.gltf",
+    "cabinet": "models/cabinet_medium.gltf"
+  }
+}

@@ -40,6 +40,12 @@ export function createInput({ domElement, joystickEl, stickEl, interactEl, mobil
     state.look.dy += e.movementY * MOUSE_SENS;
   }
 
+  function onMouseDown(e) {
+    // clicking while already locked = interact (the lock-acquiring click is ignored
+    // because pointerLocked is still false at that moment)
+    if (pointerLocked) state.interactQueued = true;
+  }
+
   function onLockChange() {
     pointerLocked = document.pointerLockElement === domElement;
     lockChangeCbs.forEach((cb) => cb(pointerLocked));
@@ -155,6 +161,10 @@ export function createInput({ domElement, joystickEl, stickEl, interactEl, mobil
     return v;
   }
 
+  function queueInteract() {
+    state.interactQueued = true;
+  }
+
   function consumePause() {
     const v = state.paused;
     state.paused = false;
@@ -165,6 +175,7 @@ export function createInput({ domElement, joystickEl, stickEl, interactEl, mobil
     window.removeEventListener("keydown", onKeyDown);
     window.removeEventListener("keyup", onKeyUp);
     document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mousedown", onMouseDown);
     document.removeEventListener("pointerlockchange", onLockChange);
     window.removeEventListener("touchstart", onTouchStart, { passive: false });
     window.removeEventListener("touchmove", onTouchMove, { passive: false });
@@ -178,6 +189,7 @@ export function createInput({ domElement, joystickEl, stickEl, interactEl, mobil
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("keyup", onKeyUp);
   document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mousedown", onMouseDown);
   document.addEventListener("pointerlockchange", onLockChange);
   if (mobile) {
     window.addEventListener("touchstart", onTouchStart, { passive: false });
@@ -193,6 +205,7 @@ export function createInput({ domElement, joystickEl, stickEl, interactEl, mobil
     update,
     drainLook,
     consumeInteract,
+    queueInteract,
     consumePause,
     requestLock,
     onLock,

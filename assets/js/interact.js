@@ -18,26 +18,33 @@ export function createInteractor({ camera }) {
     if (!obj) return;
     obj.traverse((child) => {
       if (!child.isMesh) return;
-      const mat = child.material;
-      if (!mat || !mat.emissive) return;
+      const mats = Array.isArray(child.material) ? child.material : [child.material];
       if (on) {
-        if (!child.userData._hl) {
-          child.userData._hl = {
-            color: mat.emissive.getHex(),
-            intensity: mat.emissiveIntensity ?? 0,
-          };
+        if (!child.userData._hlOrig) {
+          child.userData._hlOrig = child.material;
+          // clone so each instance is independent (GLTF clones share materials)
+          const cloned = Array.isArray(child.material)
+            ? child.material.map(cloneMatHL)
+            : cloneMatHL(child.material);
+          child.material = cloned;
         }
-        mat.emissive.setHex(HL_COLOR);
-        if ("emissiveIntensity" in mat) mat.emissiveIntensity = 1.6;
       } else {
-        const hl = child.userData._hl;
-        if (hl) {
-          mat.emissive.setHex(hl.color);
-          if ("emissiveIntensity" in mat) mat.emissiveIntensity = hl.intensity;
-          delete child.userData._hl;
+        if (child.userData._hlOrig !== undefined) {
+          child.material = child.userData._hlOrig;
+          delete child.userData._hlOrig;
         }
       }
     });
+  }
+
+  function cloneMatHL(mat) {
+    const m = mat.clone();
+    if (m.emissive) {
+      m.emissive = m.emissive.clone();
+      m.emissive.setHex(HL_COLOR);
+    }
+    if ("emissiveIntensity" in m) m.emissiveIntensity = 1.6;
+    return m;
   }
 
   function findRoot(obj) {

@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { buildRoom, ROOM_COUNT, ROOM_TITLES, disposeObject } from "./world.js";
+import { preloadModels } from "./models.js";
 
 export function createGame({ engine, player, interactor, input, hud, mobile }) {
   const { scene, camera } = engine;
@@ -22,6 +23,7 @@ export function createGame({ engine, player, interactor, input, hud, mobile }) {
     colliders,
     interactables,
     updatables,
+    mobile,
     get loopCount() { return loopCount; },
     getPlayer: () => player,
     setObjective: (t) => hud.setObjective(t),
@@ -31,6 +33,9 @@ export function createGame({ engine, player, interactor, input, hud, mobile }) {
     onLoop: (msg) => onLoop(msg),
     onWin: () => onWin(),
   };
+
+  // background-preload models (empty models/ => resolves fast, fallbacks used)
+  preloadModels();
 
   function clearRoom() {
     interactor.clear();
@@ -45,6 +50,12 @@ export function createGame({ engine, player, interactor, input, hud, mobile }) {
     clearRoom();
     roomIndex = index;
     const desc = buildRoom(index, ctx);
+    // enable shadow casting/receiving on everything in the room (desktop only)
+    if (!mobile) {
+      roomRoot.traverse((o) => {
+        if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; }
+      });
+    }
     scene.updateMatrixWorld(true);
     player.reset(new THREE.Vector3(desc.spawn.x, 0, desc.spawn.z), desc.spawn.yaw);
     hud.setRoomName(`第 ${index + 1} 間　${ROOM_TITLES[index]}`);

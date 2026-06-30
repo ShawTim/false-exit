@@ -10,7 +10,7 @@ const mobile = window.matchMedia("(pointer: coarse)").matches;
 function init() {
   const container = document.getElementById("game");
 
-  const engine = createEngine({ container });
+  const engine = createEngine({ container, mobile });
   const hud = createHUD({ mobile });
 
   const input = createInput({
@@ -32,9 +32,11 @@ function init() {
   document.getElementById("btn-restart-game").addEventListener("click", () => game.restart());
   document.getElementById("btn-replay").addEventListener("click", () => game.playAgain());
 
-  // desktop: click canvas to re-lock pointer while playing
+  // desktop: click canvas — if locked, interact; if not, acquire lock
   engine.renderer.domElement.addEventListener("click", () => {
-    if (!mobile && game.state === "playing" && !input.isLocked()) input.requestLock();
+    if (mobile || game.state !== "playing" || hud.isClueOpen()) return;
+    if (input.isLocked()) input.queueInteract();
+    else input.requestLock();
   });
 
   // desktop: pointer unlock while playing => pause (but not when a clue is open)

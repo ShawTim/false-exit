@@ -14,21 +14,39 @@ import {
   createCircuit,
   flicker,
 } from "./entities.js";
+import { makeNormalMap, makeRoughnessMap } from "./textures.js";
+import { prop } from "./models.js";
 
 const WIDTH = 15;
 const DEPTH = 13;
 const HEIGHT = 4.6;
 const DOOR_W = 2.0;
 
-const FLOOR_MAT = new THREE.MeshStandardMaterial({ color: 0x46506a, roughness: 0.85 });
+const _floorN = makeNormalMap({ size: 256, scale: 10, strength: 1.1, octaves: 2, seed: 3 });
+_floorN.repeat.set(3, 3);
+const _wallN = makeNormalMap({ size: 256, scale: 14, strength: 0.8, octaves: 2, seed: 11 });
+_wallN.repeat.set(2, 1.2);
+const _floorR = makeRoughnessMap({ size: 128, scale: 8, seed: 5 });
+_floorR.repeat.set(3, 3);
+
+const FLOOR_MAT = new THREE.MeshStandardMaterial({
+  color: 0x46506a, roughness: 0.6, metalness: 0.12,
+  normalMap: _floorN, normalScale: new THREE.Vector2(0.6, 0.6),
+  roughnessMap: _floorR,
+});
 const CEIL_MAT = new THREE.MeshStandardMaterial({ color: 0x2c3548, roughness: 1 });
-const WALL_MAT = new THREE.MeshStandardMaterial({ color: 0x556480, roughness: 0.75 });
+const WALL_MAT = new THREE.MeshStandardMaterial({
+  color: 0x556480, roughness: 0.75,
+  normalMap: _wallN, normalScale: new THREE.Vector2(0.4, 0.4),
+});
 const TRIM_MAT = new THREE.MeshStandardMaterial({ color: 0x2a3548, roughness: 0.7 });
 
 /* ---------------- helpers ---------------- */
 function addWall(ctx, x, z, w, d, h = HEIGHT, mat = WALL_MAT, yBase = 0) {
   const mesh = box(w, h, d, mat);
   mesh.position.set(x, yBase + h / 2, z);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
   ctx.root.add(mesh);
   ctx.colliders.push({ minX: x - w / 2, maxX: x + w / 2, minZ: z - d / 2, maxZ: z + d / 2 });
   return mesh;
@@ -38,10 +56,12 @@ function addShell(ctx, { frontGaps = [0] } = {}) {
   // floor + ceiling
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(WIDTH, DEPTH), FLOOR_MAT);
   floor.rotation.x = -Math.PI / 2;
+  floor.receiveShadow = true;
   ctx.root.add(floor);
   const ceil = new THREE.Mesh(new THREE.PlaneGeometry(WIDTH, DEPTH), CEIL_MAT);
   ceil.rotation.x = Math.PI / 2;
   ceil.position.y = HEIGHT;
+  ceil.receiveShadow = true;
   ctx.root.add(ceil);
 
   // grid overlay
@@ -58,8 +78,7 @@ function addShell(ctx, { frontGaps = [0] } = {}) {
   // side walls
   addWall(ctx, -halfW, 0, t, DEPTH);
   addWall(ctx, halfW, 0, t, DEPTH);
-  // front wall (-Z) with gaps (each gap centered at given x, width DOOR_W)
-  // build solid spans between gaps
+  // front wall (-Z) with gaps
   const gaps = [-halfW, ...frontGaps.sort((a, b) => a - b).flatMap((g) => [g - DOOR_W / 2, g + DOOR_W / 2]), halfW];
   for (let i = 0; i < gaps.length; i += 2) {
     const x0 = gaps[i];
@@ -68,27 +87,79 @@ function addShell(ctx, { frontGaps = [0] } = {}) {
     if (w <= 0.01) continue;
     addWall(ctx, (x0 + x1) / 2, -halfD, w, t);
   }
-  // lintels above each gap
   for (const gx of frontGaps) {
     const lintel = box(DOOR_W, HEIGHT - 3.1, t, TRIM_MAT);
     lintel.position.set(gx, 3.1 + (HEIGHT - 3.1) / 2, -halfD);
+    lintel.castShadow = true;
+    lintel.receiveShadow = true;
     ctx.root.add(lintel);
   }
 }
 
-function addLight(ctx, color, intensity, x, y, z, range = 8) {
+function addLight(ctx, color, intensity, x, y, z, range = 8, shadow = false) {
   const p = new THREE.PointLight(color, intensity, range);
   p.position.set(x, y, z);
+  if (shadow && !ctx.mobile) {
+    p.castShadow = true;
+    p.shadow.mapSize.set(1024, 1024);
+    p.shadow.camera.near = 0.4;
+    p.shadow.camera.far = 26;
+    p.shadow.bias = -0.0009;
+    p.shadow.radius = 3;
+  }
   ctx.root.add(p);
   return p;
 }
 
 function addAmbient(ctx) {
-  const a = new THREE.AmbientLight(0xb8c8e8, 2.4);
+  const a = new THREE.AmbientLight(0xb8c8e8, 1.0);
   ctx.root.add(a);
-  const hemi = new THREE.HemisphereLight(0xc8d8f0, 0x404a60, 2.2);
+  const hemi = new THREE.HemisphereLight(0xc8d8f0, 0x404a60, 0.9);
   ctx.root.add(hemi);
 }
+
+// atmospheric dust motes drifting in the room volume
+function addDust(ctx, count) {
+  const n = ctx.mobile ? Math.min(count, 120) : count;
+  const positions = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * (WIDTH - 1);
+    positions[i * 3 + 1] = Math.random() * (HEIGHT - 0.3) + 0.2;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * (DEPTH - 1);
+  }
+  const geom = new THREE.BufferGeometry();
+  geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  const mat = new THREE.PointsMaterial({
+    color: 0xbfd8ff,
+    size: 0.025,
+    transparent: true,
+    opacity: 0.5,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    sizeAttenuation: true,
+  });
+  const points = new THREE.Points(geom, mat);
+  ctx.root.add(points);
+  const vels = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    vels[i * 3] = (Math.random() - 0.5) * 0.02;
+    vels[i * 3 + 1] = Math.random() * 0.03 + 0.005;
+    vels[i * 3 + 2] = (Math.random() - 0.5) * 0.02;
+  }
+  ctx.updatables.push((dt) => {
+    const arr = geom.attributes.position.array;
+    for (let i = 0; i < n; i++) {
+      arr[i * 3] += vels[i * 3] * dt;
+      arr[i * 3 + 1] += vels[i * 3 + 1] * dt;
+      arr[i * 3 + 2] += vels[i * 3 + 2] * dt;
+      if (arr[i * 3 + 1] > HEIGHT - 0.2) arr[i * 3 + 1] = 0.2;
+      if (Math.abs(arr[i * 3]) > (WIDTH - 1) / 2) vels[i * 3] *= -1;
+      if (Math.abs(arr[i * 3 + 2]) > (DEPTH - 1) / 2) vels[i * 3 + 2] *= -1;
+    }
+    geom.attributes.position.needsUpdate = true;
+  });
+}
+
 
 function clueNote(ctx, { x, z, rot, title, text }) {
   const c = createClue({ position: new THREE.Vector3(x, 1.1, z), rotation: rot, title, text });
@@ -127,6 +198,7 @@ function exitZoneMet(player, atX = 0) {
 
 function disposeObject(obj) {
   obj.traverse((child) => {
+    if (child.userData && child.userData._shared) return; // shared cached-model resources
     if (child.geometry) child.geometry.dispose();
     if (child.material) {
       const mats = Array.isArray(child.material) ? child.material : [child.material];
@@ -454,11 +526,111 @@ function makeRope() {
   return g;
 }
 
-function decoy(ctx, { group, position, rotation = 0, footprint, label, flavor }) {
+/* ---- procedural fallbacks for new model types ---- */
+function makeCouch() {
+  const g = new THREE.Group();
+  const m = new THREE.MeshStandardMaterial({ color: 0x4a5a6a, roughness: 0.85 });
+  const base = box(1.5, 0.5, 0.8, m);
+  base.position.y = 0.25;
+  g.add(base);
+  const back = box(1.5, 0.6, 0.2, m);
+  back.position.set(0, 0.55, -0.3);
+  g.add(back);
+  for (const sx of [-0.45, 0.45]) {
+    const arm = box(0.2, 0.5, 0.8, m);
+    arm.position.set(sx, 0.35, 0);
+    g.add(arm);
+  }
+  return g;
+}
+function makeArmchair() {
+  const g = new THREE.Group();
+  const m = new THREE.MeshStandardMaterial({ color: 0x5a4a3a, roughness: 0.85 });
+  const base = box(0.9, 0.5, 0.8, m);
+  base.position.y = 0.25;
+  g.add(base);
+  const back = box(0.9, 0.6, 0.2, m);
+  back.position.set(0, 0.55, -0.3);
+  g.add(back);
+  for (const sx of [-0.45, 0.45]) {
+    const arm = box(0.15, 0.45, 0.8, m);
+    arm.position.set(sx, 0.32, 0);
+    g.add(arm);
+  }
+  return g;
+}
+function makeBooks() {
+  const g = new THREE.Group();
+  const cols = [0x884422, 0x224488, 0x448844, 0x884488, 0x888844];
+  for (let i = 0; i < 5; i++) {
+    const bk = box(0.1, 0.28 + Math.random() * 0.06, 0.2,
+      new THREE.MeshStandardMaterial({ color: cols[i % cols.length], roughness: 0.8 }));
+    bk.position.set(-0.22 + i * 0.1, 0.14, 0);
+    g.add(bk);
+  }
+  return g;
+}
+function makeRug() {
+  const g = new THREE.Group();
+  const rug = box(2.8, 0.02, 1.8, new THREE.MeshStandardMaterial({ color: 0x3a2a3a, roughness: 0.95 }));
+  rug.position.y = 0.01;
+  g.add(rug);
+  const border = box(2.6, 0.025, 1.6, new THREE.MeshStandardMaterial({ color: 0x5a4a5a, roughness: 0.9 }));
+  border.position.y = 0.015;
+  g.add(border);
+  return g;
+}
+function makeLampStanding() {
+  const g = new THREE.Group();
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.25, 0.06, 12), M.darkMetal());
+  base.position.y = 0.03;
+  g.add(base);
+  const pole = box(0.04, 2.0, 0.04, M.darkMetal());
+  pole.position.y = 1.0;
+  g.add(pole);
+  const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.25, 0.3, 12), M.amber());
+  shade.position.y = 2.15;
+  g.add(shade);
+  return g;
+}
+function makeLampTable() {
+  const g = new THREE.Group();
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.15, 0.04, 10), M.darkMetal());
+  base.position.y = 0.02;
+  g.add(base);
+  const pole = box(0.03, 0.6, 0.03, M.darkMetal());
+  pole.position.y = 0.3;
+  g.add(pole);
+  const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.18, 0.16, 10), M.amber());
+  shade.position.y = 0.65;
+  g.add(shade);
+  return g;
+}
+function makePaintingStand() {
+  const g = new THREE.Group();
+  const m = new THREE.MeshStandardMaterial({ color: 0x4a3a2a, roughness: 0.85 });
+  for (const sx of [-0.15, 0.15]) {
+    const leg = box(0.03, 1.4, 0.03, m);
+    leg.position.set(sx, 0.7, 0);
+    leg.rotation.z = sx > 0 ? 0.1 : -0.1;
+    g.add(leg);
+  }
+  const canvas = box(0.4, 0.5, 0.02, M.note());
+  canvas.position.y = 0.9;
+  g.add(canvas);
+  return g;
+}
+
+function decoy(ctx, { group, model, position, rotation = 0, footprint, label, flavor }) {
+  // if a model is registered & cached, prefer it over the procedural fallback
+  const visual = model ? prop(model, () => group) : group;
+  visual.traverse((o) => {
+    if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; }
+  });
   const p = position instanceof THREE.Vector3 ? position : new THREE.Vector3(position.x, position.y || 0, position.z);
-  group.position.copy(p);
-  group.rotation.y = rotation;
-  ctx.root.add(group);
+  visual.position.copy(p);
+  visual.rotation.y = rotation;
+  ctx.root.add(visual);
   if (footprint) {
     ctx.colliders.push({
       minX: p.x - footprint.w / 2, maxX: p.x + footprint.w / 2,
@@ -466,26 +638,128 @@ function decoy(ctx, { group, position, rotation = 0, footprint, label, flavor })
     });
   }
   const lines = Array.isArray(flavor) ? flavor : [flavor];
-  makeInteractable(group, {
+  makeInteractable(visual, {
     prompt: label,
     onInteract: () => ctx.toast(lines[Math.floor(Math.random() * lines.length)]),
   });
-  ctx.interactables.push(group);
+  ctx.interactables.push(visual);
+}
+
+/* ==================================================================
+ * ARCHITECTURAL DETAIL — adds richness to every room shell
+ * ================================================================== */
+function detailArchitecture(ctx) {
+  const halfW = WIDTH / 2;
+  const halfD = DEPTH / 2;
+
+  // baseboards along all walls
+  const bb = box(0.06, 0.18, 1, new THREE.MeshStandardMaterial({ color: 0x1a2030, roughness: 0.7 }));
+  const bbMat = bb.material;
+  function baseboard(x, z, w, d) {
+    const m = box(w, 0.18, d, bbMat);
+    m.position.set(x, 0.09, z);
+    m.receiveShadow = true;
+    ctx.root.add(m);
+  }
+  baseboard(0, halfD - 0.03, WIDTH, 0.06);
+  baseboard(0, -halfD + 0.03, WIDTH, 0.06);
+  baseboard(-halfW + 0.03, 0, 0.06, DEPTH);
+  baseboard(halfW - 0.03, 0, 0.06, DEPTH);
+
+  // wall trim / wainscoting cap line (mid-height horizontal bands)
+  const trimMat = new THREE.MeshStandardMaterial({ color: 0x3a4458, roughness: 0.6 });
+  function trim(x, z, w, d) {
+    const m = box(w, 0.05, d, trimMat);
+    m.position.set(x, 1.1, z);
+    m.receiveShadow = true;
+    ctx.root.add(m);
+  }
+  trim(0, halfD - 0.04, WIDTH, 0.04);
+  trim(0, -halfD + 0.04, WIDTH, 0.04);
+  trim(-halfW + 0.04, 0, 0.04, DEPTH);
+  trim(halfW - 0.04, 0, 0.04, DEPTH);
+
+  // crown molding near ceiling
+  function crown(x, z, w, d) {
+    const m = box(w, 0.12, d, trimMat);
+    m.position.set(x, HEIGHT - 0.18, z);
+    m.receiveShadow = true;
+    ctx.root.add(m);
+  }
+  crown(0, halfD - 0.06, WIDTH, 0.06);
+  crown(0, -halfD + 0.06, WIDTH, 0.06);
+  crown(-halfW + 0.06, 0, 0.06, DEPTH);
+  crown(halfW - 0.06, 0, 0.06, DEPTH);
+
+  // floor border inlay
+  const inlayMat = new THREE.MeshStandardMaterial({ color: 0x2a3548, roughness: 0.5, metalness: 0.3 });
+  const inlay = new THREE.Mesh(new THREE.RingGeometry(0, 0.001, 4), inlayMat); // placeholder
+  // 4 border strips
+  const bw = 0.08;
+  function floorBorder(x, z, w, d) {
+    const m = box(w, 0.02, d, inlayMat);
+    m.position.set(x, 0.03, z);
+    m.receiveShadow = true;
+    ctx.root.add(m);
+  }
+  floorBorder(0, halfD - 0.4, WIDTH - 1, bw);
+  floorBorder(0, -halfD + 0.4, WIDTH - 1, bw);
+  floorBorder(-halfW + 0.4, 0, bw, DEPTH - 1);
+  floorBorder(halfW - 0.4, 0, bw, DEPTH - 1);
+
+  // ceiling light fixtures (hanging) at a few points
+  const fixMat = new THREE.MeshStandardMaterial({ color: 0x2a3040, metalness: 0.6, roughness: 0.4 });
+  const shadeMat = new THREE.MeshStandardMaterial({ color: 0x4a4030, emissive: 0x3a2a10, emissiveIntensity: 0.4 });
+  for (const [fx, fz] of [[-3.5, 2.5], [3.5, 2.5], [-3.5, -3], [3.5, -3]]) {
+    const rod = box(0.04, 0.5, 0.04, fixMat);
+    rod.position.set(fx, HEIGHT - 0.25, fz);
+    ctx.root.add(rod);
+    const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.28, 0.18, 12), shadeMat);
+    shade.position.set(fx, HEIGHT - 0.55, fz);
+    shade.castShadow = true;
+    ctx.root.add(shade);
+  }
+
+  // corner pillars (decorative, thin)
+  const pillarMat = new THREE.MeshStandardMaterial({ color: 0x333c4e, roughness: 0.65 });
+  for (const [px, pz] of [[-halfW + 0.3, halfD - 0.3], [halfW - 0.3, halfD - 0.3], [-halfW + 0.3, -halfD + 0.3], [halfW - 0.3, -halfD + 0.3]]) {
+    const p = box(0.3, HEIGHT, 0.3, pillarMat);
+    p.position.set(px, HEIGHT / 2, pz);
+    p.castShadow = true;
+    p.receiveShadow = true;
+    ctx.root.add(p);
+  }
+
+  // air vents high on walls
+  const ventMat = new THREE.MeshStandardMaterial({ color: 0x1a1e28, metalness: 0.7, roughness: 0.3 });
+  for (const [vx, vz, vr] of [[-halfW + 0.06, 0, 0], [halfW - 0.06, -2, Math.PI], [-2, halfD - 0.06, Math.PI / 2]]) {
+    const v = box(0.5, 0.3, 0.03, ventMat);
+    v.position.set(vx, HEIGHT - 0.9, vz);
+    v.rotation.y = vr;
+    ctx.root.add(v);
+    // slats
+    for (let i = 0; i < 4; i++) {
+      const slat = box(0.42, 0.03, 0.01, ventMat);
+      slat.position.set(vx, HEIGHT - 1.0 + i * 0.07, vz);
+      slat.rotation.y = vr;
+      ctx.root.add(slat);
+    }
+  }
 }
 
 function placeRoom1Decoys(ctx) {
   // wall paintings (no collider)
-  decoy(ctx, { group: makePainting(0x2a4a6a), position: { x: -WIDTH / 2 + 0.1, y: 2.3, z: 0.5 }, rotation: Math.PI / 2, label: "細看油畫", flavor: [
+  decoy(ctx, { group: makePainting(0x2a4a6a), model: "painting", position: { x: -WIDTH / 2 + 0.1, y: 2.3, z: 0.5 }, rotation: Math.PI / 2, label: "細看油畫", flavor: [
     "畫入面係一道門。望得耐，好似識呼吸。",
     "畫框後面有空位，但乜都冇。",
     "顏料未乾。畫咗好耐，但永遠未乾。",
   ] });
-  decoy(ctx, { group: makePainting(0x5a3a2a), position: { x: WIDTH / 2 - 0.1, y: 2.3, z: -4.8 }, rotation: -Math.PI / 2, label: "細看油畫", flavor: [
+  decoy(ctx, { group: makePainting(0x5a3a2a), model: "painting", position: { x: WIDTH / 2 - 0.1, y: 2.3, z: -4.8 }, rotation: -Math.PI / 2, label: "細看油畫", flavor: [
     "畫嘅係一個走廊。好似一直延伸落去。",
     "你覺得畫入面有嘢郁咗一下。",
     "簽名嗰欄，寫住你個名。但 你 冇畫過畫。",
   ] });
-  decoy(ctx, { group: makePainting(0x3a5a3a), position: { x: 2.6, y: 2.3, z: DEPTH / 2 - 0.1 }, rotation: 0, label: "細看油畫", flavor: [
+  decoy(ctx, { group: makePainting(0x3a5a3a), model: "painting", position: { x: 2.6, y: 2.3, z: DEPTH / 2 - 0.1 }, rotation: 0, label: "細看油畫", flavor: [
     "畫嘅係一個出口。但只係畫。",
     "色彩剝落。下面仲係畫。",
   ] });
@@ -496,33 +770,33 @@ function placeRoom1Decoys(ctx) {
     "坐落去，乜都唔會發生。",
     "椅腳刮花咗地板。",
   ] });
-  decoy(ctx, { group: makeChair(), position: { x: -5.0, y: 0, z: 3.6 }, rotation: 0.3, footprint: { w: 0.5, d: 0.5 }, label: "檢查座椅", flavor: [
+  decoy(ctx, { group: makeChair(), model: "chair", position: { x: -5.0, y: 0, z: 3.6 }, rotation: 0.3, footprint: { w: 0.5, d: 0.5 }, label: "檢查座椅", flavor: [
     "椅墊下面，乜都冇。",
     "坐過呢張椅嘅人，留低咗一個凹位。",
   ] });
-  decoy(ctx, { group: makeTable(), position: { x: -4.6, y: 0, z: 4.6 }, footprint: { w: 1.3, d: 0.75 }, label: "搜查桌面", flavor: [
+  decoy(ctx, { group: makeTable(), model: "table", position: { x: -4.6, y: 0, z: 4.6 }, footprint: { w: 1.3, d: 0.75 }, label: "搜查桌面", flavor: [
     "枱面有杯漬，但冇杯。",
     "抽屜鎖住咗。入面應該乜都冇。",
     "枱底下面，係更多枱底。",
   ] });
 
-  decoy(ctx, { group: makeCrate(0x7a5a32), position: { x: 4.6, y: 0, z: 3.8 }, footprint: { w: 0.8, d: 0.8 }, label: "撬開木箱", flavor: [
+  decoy(ctx, { group: makeCrate(0x7a5a32), model: "crate", position: { x: 4.6, y: 0, z: 3.8 }, footprint: { w: 0.8, d: 0.8 }, label: "撬開木箱", flavor: [
     "箱入面得一把鎖。鎖住咗乜？乜都冇。",
     "好重。推唔郁。",
     "掀開，入面係另一個空箱。",
   ] });
-  decoy(ctx, { group: makeCrate(0x5a4a3a), position: { x: 5.4, y: 0, z: 3.0 }, footprint: { w: 0.8, d: 0.8 }, label: "撬開木箱", flavor: [
+  decoy(ctx, { group: makeCrate(0x5a4a3a), model: "crate", position: { x: 5.4, y: 0, z: 3.0 }, footprint: { w: 0.8, d: 0.8 }, label: "撬開木箱", flavor: [
     "入面得一張紙屑：寫住「冇用」。",
     "空嘅。回音好大。",
   ] });
 
-  decoy(ctx, { group: makePlant(), position: { x: 6.2, y: 0, z: 4.8 }, footprint: { w: 0.5, d: 0.5 }, label: "查看盆栽", flavor: [
+  decoy(ctx, { group: makePlant(), model: "plant", position: { x: 6.2, y: 0, z: 4.8 }, footprint: { w: 0.5, d: 0.5 }, label: "查看盆栽", flavor: [
     "盆栽嘅葉係塑膠。",
     "泥土係畫上去嘅。",
     "澆水落去，水會漏穿個盆。",
   ] });
 
-  decoy(ctx, { group: makeShelf(), position: { x: -6.4, y: 0, z: -3.6 }, footprint: { w: 1.5, d: 0.42 }, label: "翻閱書架", flavor: [
+  decoy(ctx, { group: makeShelf(), model: "bookshelf", position: { x: -6.4, y: 0, z: -3.6 }, footprint: { w: 1.5, d: 0.42 }, label: "翻閱書架", flavor: [
     "書脊全部空白。",
     "抽一本出嚟，係黏死咗嘅。",
     "每本書嘅內容都一樣：空白。",
@@ -544,6 +818,48 @@ function placeRoom1Decoys(ctx) {
     "對講機冇聲。",
     "你講嘢，只有自己嘅回音。",
     "有人應咗一句，但答非所問。",
+  ] });
+
+  // ---- second wave: denser furniture ----
+  decoy(ctx, { group: makeCouch(), model: "couch", position: { x: 4.0, y: 0, z: -4.0 }, rotation: -Math.PI / 2, footprint: { w: 1.6, d: 3.0 }, label: "搜查梳化", flavor: [
+    "梳化係凍嘅。冇人坐過，但有摺痕。",
+    "罅隙入面得塵。同埋一張冇用嘅飛。",
+    "坐落去，好舒服。但冇嘢發生。",
+  ] });
+  decoy(ctx, { group: makeTable(), model: "table", position: { x: 5.5, y: 0, z: -1.5 }, footprint: { w: 2.0, d: 2.0 }, label: "搜查圓枱", flavor: [
+    "枱面有花瓶。花瓶入面冇花。",
+    "枱底有張椅，但拉唔出。",
+    "枱面平滑到可以照鏡。但照唔到你。",
+  ] });
+  decoy(ctx, { group: makeBooks(), model: "books", position: { x: -4.6, y: 0.75, z: 4.6 }, footprint: null, label: "翻閱書堆", flavor: [
+    "書堆每本都冇封面。",
+    "抽一本：每一頁都係「出去」。冇用。",
+    "書脊摸落去係暖嘅。",
+  ] });
+  decoy(ctx, { group: makeRug(), model: "rug", position: { x: 0, y: 0, z: 0 }, footprint: null, label: "查看地毯", flavor: [
+    "地毯下面，同地毯上面，一樣凍。",
+    "地毯嘅花紋，係一個迷宮。走唔到出嚟。",
+    "踩上去冇聲。呢度乜都冇聲。",
+  ] });
+  decoy(ctx, { group: makeLampStanding(), model: "lampStanding", position: { x: -5.5, y: 0, z: 5.2 }, footprint: { w: 0.4, d: 0.4 }, label: "查看座地燈", flavor: [
+    "座地燈冇插電，但燈泡係暖嘅。",
+    "燈罩上面有飛蛾嘅影，但冇飛蛾。",
+    "撳個掣。冇反應。",
+  ] });
+  decoy(ctx, { group: makeLampTable(), model: "lampTable", position: { x: -4.6, y: 0.75, z: 4.0 }, footprint: null, label: "查看枱燈", flavor: [
+    "枱燈嘅光，只係畫上去嘅。",
+    "燈罩入面，係另一個燈罩。",
+  ] });
+  decoy(ctx, { group: makePaintingStand(), model: "paintingStand", position: { x: 2.0, y: 0, z: 4.5 }, footprint: { w: 0.5, d: 0.4 }, label: "細看畫架", flavor: [
+    "畫架上面係空白畫布。但係濕嘅。",
+    "畫布背面寫住：『重複』。",
+  ] });
+  decoy(ctx, { group: makeVase(), position: { x: 5.5, y: 0, z: -1.5 }, footprint: null, label: "查看花瓶", flavor: [
+    "花瓶上面有裂紋，但唔會爛。",
+  ] });
+  decoy(ctx, { group: makeClock(), position: { x: 3.2, y: 3.0, z: DEPTH / 2 - 0.1 }, label: "睇另一個鐘", flavor: [
+    "呢個鐘得針，冇字。",
+    "兩根針重疊。永遠重疊。",
   ] });
 }
 
@@ -576,17 +892,47 @@ function placeRoom2Decoys(ctx) {
     "螢幕顯示『NO SIGNAL』。",
     "按咗所有掣，仲係 NO SIGNAL。",
   ] });
-  decoy(ctx, { group: makeShelf(), position: { x: 6.4, y: 0, z: -3 }, rotation: -Math.PI / 2, footprint: { w: 0.42, d: 1.5 }, label: "翻閱光學手冊", flavor: [
+  decoy(ctx, { group: makeShelf(), model: "bookshelf", position: { x: 6.4, y: 0, z: -3 }, rotation: -Math.PI / 2, footprint: { w: 0.42, d: 1.5 }, label: "翻閱光學手冊", flavor: [
     "手冊每一頁都係空白。",
     "其中一本寫住『光唔會呃人』，但下一頁撕走咗。",
   ] });
-  decoy(ctx, { group: makePainting(0x1a3a5a), position: { x: 0, y: 2.6, z: DEPTH / 2 - 0.1 }, label: "細看掛圖", flavor: [
+  decoy(ctx, { group: makePainting(0x1a3a5a), model: "painting", position: { x: 0, y: 2.6, z: DEPTH / 2 - 0.1 }, label: "細看掛圖", flavor: [
     "掛圖畫咗光線折射圖，但標錯咗角度。",
     "圖入面嘅光，唔遵守物理。",
   ] });
   decoy(ctx, { group: makeClock(), position: { x: 3.2, y: 3.2, z: -DEPTH / 2 + 0.1 }, rotation: Math.PI, label: "睇個鐘", flavor: [
     "個鐘倒轉行。",
     "3:33。永遠 3:33。",
+  ] });
+
+  // ---- second wave ----
+  decoy(ctx, { group: makeTable(), model: "table", position: { x: -5.5, y: 0, z: -4.5 }, footprint: { w: 2.0, d: 2.0 }, label: "搜查實驗枱", flavor: [
+    "枱面有焦痕，但冇火源。",
+    "抽屜入面得一塊碎鏡。照唔到你。",
+    "枱腳有刻痕：『第三次失敗』。",
+  ] });
+  decoy(ctx, { group: makeBooks(), model: "books", position: { x: -5.5, y: 0.75, z: -4.5 }, footprint: null, label: "翻閱筆記", flavor: [
+    "筆記記錄咗每次鏡面角度。但最後一頁撕走咗。",
+    "每頁都係同一句：『角度唔啱』。",
+  ] });
+  decoy(ctx, { group: makeLampStanding(), model: "lampStanding", position: { x: 5.5, y: 0, z: -5.5 }, footprint: { w: 0.4, d: 0.4 }, label: "查看座地燈", flavor: [
+    "座地燈嘅光，同激光一樣紅。但冇用。",
+    "燈罩入面有塊鏡碎片。",
+  ] });
+  decoy(ctx, { group: makeRug(), model: "rug", position: { x: 0, y: 0, z: 1 }, footprint: null, label: "查看地毯", flavor: [
+    "地毯下面有條裂縫，但乜都冇。",
+    "花紋係光線圖。全部指住錯嘅方向。",
+  ] });
+  decoy(ctx, { group: makeLens(), position: { x: 2.5, y: 0, z: 4.5 }, footprint: { w: 0.3, d: 0.2 }, label: "查看透鏡", flavor: [
+    "呢塊透鏡有刮痕。透過佢睇到重影。",
+    "摸落去係暖嘅。",
+  ] });
+  decoy(ctx, { group: makeInstrument(), position: { x: -2.5, y: 0, z: 4.5 }, footprint: { w: 0.5, d: 0.4 }, label: "查看儀器", flavor: [
+    "螢幕閃住『CALIBRATING』，永遠 CALIBRATING。",
+  ] });
+  decoy(ctx, { group: makeFakeMirrorPanel(), position: { x: -WIDTH / 2 + 0.15, y: 0, z: -5 }, rotation: Math.PI / 2, footprint: { w: 0.9, d: 0.3 }, label: "細看鏡面", flavor: [
+    "呢塊鏡反射唔到你。只反射牆。",
+    "鏡面有霧氣，但摸唔到。",
   ] });
 }
 
@@ -605,7 +951,7 @@ function placeRoom3Decoys(ctx) {
     "桶面貼住『出口鑰匙』，但入面乜都冇。",
     "又一個陷阱。",
   ] });
-  decoy(ctx, { group: makeCrate(0x666666), position: { x: 6.0, y: 0, z: -4.8 }, footprint: { w: 0.8, d: 0.8 }, label: "撬開固定箱", flavor: [
+  decoy(ctx, { group: makeCrate(0x666666), model: "crate", position: { x: 6.0, y: 0, z: -4.8 }, footprint: { w: 0.8, d: 0.8 }, label: "撬開固定箱", flavor: [
     "呢個箱釘死咗喺地下，推唔郁。",
     "撬開，入面係水泥。",
     "箱面刻住：『呢個唔係你需要嘅箱』。",
@@ -624,7 +970,7 @@ function placeRoom3Decoys(ctx) {
     "其中一張寫住『出口』，但釘死喺板度。",
     "標籤數目，同你嘅迴圈次數一樣。",
   ] });
-  decoy(ctx, { group: makeShelf(), position: { x: -WIDTH / 2 + 0.2, y: 0, z: -4.5 }, rotation: Math.PI / 2, footprint: { w: 0.42, d: 1.5 }, label: "翻閱倉存紀錄", flavor: [
+  decoy(ctx, { group: makeShelf(), model: "bookshelf", position: { x: -WIDTH / 2 + 0.2, y: 0, z: -4.5 }, rotation: Math.PI / 2, footprint: { w: 0.42, d: 1.5 }, label: "翻閱倉存紀錄", flavor: [
     "紀錄全部空白。",
     "每頁只寫住一個字：『重』。",
     "其中一本係存貨手冊，但所有內容被塗黑。",
@@ -636,6 +982,34 @@ function placeRoom3Decoys(ctx) {
   decoy(ctx, { group: makeWarningSign(0xffcc33), position: { x: 4.5, y: 0, z: 5.2 }, label: "查看警示牌", flavor: [
     "牌寫住『小心地滑』。地下乾到反光。",
     "另一面乜都冇寫。",
+  ] });
+
+  // ---- second wave ----
+  decoy(ctx, { group: makeBarrel(0x444444), position: { x: 6.2, y: 0, z: 4.0 }, footprint: { w: 0.6, d: 0.6 }, label: "查看油桶", flavor: [
+    "入面係水。但飲唔到——似幻覺。",
+  ] });
+  decoy(ctx, { group: makeCrate(0x4a3a2a), model: "crate", position: { x: -6.0, y: 0, z: -3.5 }, footprint: { w: 0.8, d: 0.8 }, label: "撬開固定箱", flavor: [
+    "入面係另一個箱嘅鎖。無限套娃。",
+  ] });
+  decoy(ctx, { group: makeMachine(), position: { x: 6.4, y: 0, z: -1 }, footprint: { w: 0.9, d: 0.7 }, label: "檢查機器", flavor: [
+    "呢部機噴氣。但噉出嚟嘅係暖嘅。",
+    "螢幕閃住『ERROR 404』。",
+  ] });
+  decoy(ctx, { group: makePallet(), position: { x: 5.8, y: 0, z: 4.6 }, footprint: { w: 1.1, d: 0.6 }, label: "查看貨板", flavor: [
+    "貨板上面有水漬。但冇落過雨。",
+  ] });
+  decoy(ctx, { group: makeLampStanding(), model: "lampStanding", position: { x: -5.5, y: 0, z: 5.5 }, footprint: { w: 0.4, d: 0.4 }, label: "查看座地燈", flavor: [
+    "座地燈閃下閃下，好似摩斯密碼。但你唔識解。",
+  ] });
+  decoy(ctx, { group: makeTable(), model: "table", position: { x: 2.5, y: 0, z: 5.0 }, footprint: { w: 2.0, d: 2.0 }, label: "搜查工作枱", flavor: [
+    "枱面有鉛筆痕，寫住『點解出唔到去』。",
+    "枱底有把爛咗嘅鎖。",
+  ] });
+  decoy(ctx, { group: makeBooks(), model: "books", position: { x: 2.5, y: 0.75, z: 5.0 }, footprint: null, label: "翻閱貨單", flavor: [
+    "每張貨單都係同一個號碼：你嘅迴圈數。",
+  ] });
+  decoy(ctx, { group: makeWarningSign(0xff3b3b), position: { x: -4.5, y: 0, z: 5.2 }, label: "查看警示牌", flavor: [
+    "牌寫住『禁止離開』。幾好笑。",
   ] });
 }
 
@@ -675,7 +1049,7 @@ function placeRoom4Decoys(ctx) {
     "數碼鐘閃住 00:00。",
     "計時倒轉，但跳到 99 就停。",
   ] });
-  decoy(ctx, { group: makeShelf(), position: { x: -6.4, y: 0, z: -1 }, rotation: Math.PI / 2, footprint: { w: 0.42, d: 1.5 }, label: "翻閱電工手冊", flavor: [
+  decoy(ctx, { group: makeShelf(), model: "bookshelf", position: { x: -6.4, y: 0, z: -1 }, rotation: Math.PI / 2, footprint: { w: 0.42, d: 1.5 }, label: "翻閱電工手冊", flavor: [
     "手冊講嘅顏色，同牆上嗰啲唔同。",
     "其中一頁寫住：『唔好信顏色，信次序』。",
     "每本都係過期十年嘅規範。",
@@ -683,6 +1057,32 @@ function placeRoom4Decoys(ctx) {
   decoy(ctx, { group: makeVase(), position: { x: 0, y: 0, z: 4 }, footprint: { w: 0.4, d: 0.4 }, label: "查看花瓶", flavor: [
     "花瓶入面有條保險絲。插咗落去，乜都冇發生。",
     "花瓶同電，無任何關係。",
+  ] });
+
+  // ---- second wave ----
+  decoy(ctx, { group: makeMachine(0x2a2a3a), position: { x: 5.5, y: 0, z: -2.5 }, footprint: { w: 0.9, d: 0.7 }, label: "檢查變壓器", flavor: [
+    "變壓器嗡嗡響。摸落去係震嘅。",
+    "上面貼住：『高壓——但唔係你需要嘅高壓』。",
+  ] });
+  decoy(ctx, { group: makeLampStanding(), model: "lampStanding", position: { x: -5.5, y: 0, z: -3.5 }, footprint: { w: 0.4, d: 0.4 }, label: "查看座地燈", flavor: [
+    "座地燈隨密碼閃。但你按錯佢就熄。",
+    "燈泡係黑色嘅，但仲係發光。",
+  ] });
+  decoy(ctx, { group: makeCrate(0x333344), model: "crate", position: { x: -5.0, y: 0, z: 4.5 }, footprint: { w: 0.8, d: 0.8 }, label: "撬開工具箱", flavor: [
+    "入面全部係燒斷咗嘅保險絲。",
+    "箱底有張電路圖，但係錯嘅。",
+  ] });
+  decoy(ctx, { group: makeSpool(), position: { x: -3.5, y: 0, z: 4.5 }, footprint: { w: 0.5, d: 0.3 }, label: "查看電線轆", flavor: [
+    "電線打咗個結。解唔開。",
+  ] });
+  decoy(ctx, { group: makeBooks(), model: "books", position: { x: -6.4, y: 0.75, z: -1 }, footprint: null, label: "翻閱規格書", flavor: [
+    "每頁都寫住『請參照第 __ 頁』。頁數係空嘅。",
+  ] });
+  decoy(ctx, { group: makeFuseBin(), position: { x: 3.5, y: 0, z: 4.5 }, footprint: { w: 0.4, d: 0.3 }, label: "查看保險絲盒", flavor: [
+    "入面得灰。",
+  ] });
+  decoy(ctx, { group: makeWarningSign(0x33ddff), position: { x: 0, y: 0, z: 5.2 }, label: "查看藍牌", flavor: [
+    "牌寫住『資訊』。下面乜都冇。",
   ] });
 }
 
@@ -721,24 +1121,62 @@ function placeRoom5Decoys(ctx) {
     "柱頂有個銅牌，寫住『出口』。空話。",
     "繩下面，乜都冇。",
   ] });
-  decoy(ctx, { group: makePlant(), position: { x: -6.4, y: 0, z: 5 }, footprint: { w: 0.5, d: 0.5 }, label: "查看盆栽", flavor: [
+  decoy(ctx, { group: makePlant(), model: "plant", position: { x: -6.4, y: 0, z: 5 }, footprint: { w: 0.5, d: 0.5 }, label: "查看盆栽", flavor: [
     "盆栽係假嘅。連個盆都係假嘅。",
     "葉上面有層蠟。",
   ] });
-  decoy(ctx, { group: makePlant(), position: { x: 6.4, y: 0, z: 5 }, footprint: { w: 0.5, d: 0.5 }, label: "查看盆栽", flavor: [
+  decoy(ctx, { group: makePlant(), model: "plant", position: { x: 6.4, y: 0, z: 5 }, footprint: { w: 0.5, d: 0.5 }, label: "查看盆栽", flavor: [
     "盆栽旁邊有塊牌：『出口方向』。指住天花板。",
   ] });
   decoy(ctx, { group: makeIntercom(), position: { x: -6.4, y: 1.5, z: -2 }, rotation: Math.PI / 2, label: "按對講機", flavor: [
     "對講機傳出一段廣播：『請向著光行。』呃你嘅。",
     "有人應：『你仲未走？』，跟住斷線。",
   ] });
-  decoy(ctx, { group: makeChair(), position: { x: -4.5, y: 0, z: 4.5 }, footprint: { w: 0.5, d: 0.5 }, label: "檢查座椅", flavor: [
+  decoy(ctx, { group: makeChair(), model: "chair", position: { x: -4.5, y: 0, z: 4.5 }, footprint: { w: 0.5, d: 0.5 }, label: "檢查座椅", flavor: [
     "等候區嘅椅。坐落去，乜都唔會發生。",
     "椅背刻住：『坐到出口出現為止』。出口唔會出現。",
   ] });
   decoy(ctx, { group: makeClock(), position: { x: 0, y: 3.6, z: DEPTH / 2 - 0.1 }, label: "睇大鐘", flavor: [
     "鐘面冇指針。得一個字：『等』。",
     "永遠都係等候時間。",
+  ] });
+
+  // ---- second wave: extra EXIT propaganda + furniture ----
+  decoy(ctx, { group: makeCouch(), model: "couch", position: { x: -4.0, y: 0, z: 2.0 }, footprint: { w: 1.6, d: 3.0 }, label: "搜查梳化", flavor: [
+    "梳化上面有條毯。毯下面乜都冇。",
+    "坐落去，你好想瞓。但瞓唔著。",
+  ] });
+  decoy(ctx, { group: makeTable(), model: "table", position: { x: 4.0, y: 0, z: 2.0 }, footprint: { w: 2.0, d: 2.0 }, label: "搜查茶几", flavor: [
+    "茶几上面有本雜誌。每一頁都係出口廣告。",
+    "枱面有刮痕：『我試過所有門』。",
+  ] });
+  decoy(ctx, { group: makeBooks(), model: "books", position: { x: 4.0, y: 0.75, z: 2.0 }, footprint: null, label: "翻閱雜誌", flavor: [
+    "雜誌封面寫住『逃離指南』。入面全部係白頁。",
+  ] });
+  decoy(ctx, { group: makeRug(), model: "rug", position: { x: 0, y: 0, z: 0 }, footprint: null, label: "查看地毯", flavor: [
+    "地毯嘅花紋係箭嘴。全部指住發光嘅門。",
+    "踩上去，有好似行緊嘅錯覺。",
+  ] });
+  decoy(ctx, { group: makeLampStanding(), model: "lampStanding", position: { x: 5.5, y: 0, z: -1.5 }, footprint: { w: 0.4, d: 0.4 }, label: "查看座地燈", flavor: [
+    "座地燈嘅光同 EXIT 門一樣綠。係呼應？定係嘲諷？",
+  ] });
+  decoy(ctx, { group: makeLampTable(), model: "lampTable", position: { x: 4.0, y: 0.75, z: 2.0 }, footprint: null, label: "查看枱燈", flavor: [
+    "枱燈一閃一閃。節奏同你嘅心跳一樣。",
+  ] });
+  decoy(ctx, { group: makeArmchair(), model: "armchair", position: { x: -4.5, y: 0, z: -1.5 }, rotation: Math.PI / 2, footprint: { w: 1.6, d: 1.8 }, label: "坐落單人椅", flavor: [
+    "好舒服。舒服到你唔想走。呢個可能就係陷阱。",
+    "扶手上面刻住：『留低啦』。",
+  ] });
+  decoy(ctx, { group: makeExitArrow(), position: { x: -4.5, y: 2.0, z: -DEPTH / 2 + 0.2 }, label: "望住箭嘴", flavor: [
+    "呢個箭嘴指住天花板。上面乜都冇。",
+    "所有箭嘴都指住發光嘅門。冇一個指住暗門。",
+  ] });
+  decoy(ctx, { group: makeBanner(), position: { x: 3.0, y: 3.6, z: -2.5 }, label: "細看細橫額", flavor: [
+    "細橫額寫住『即將到達出口』。你已經到過好多次。",
+  ] });
+  decoy(ctx, { group: makePaintingStand(), model: "paintingStand", position: { x: -2.0, y: 0, z: -3.0 }, footprint: { w: 0.5, d: 0.4 }, label: "細看畫架", flavor: [
+    "畫架上嘅畫，畫住三道門。兩道發光，一道唔發光。",
+    "畫布背面寫住：『你已經知道答案』。",
   ] });
 }
 
@@ -749,7 +1187,9 @@ function placeRoom5Decoys(ctx) {
 function buildRoom1(ctx) {
   addAmbient(ctx);
   addShell(ctx, { frontGaps: [0] });
-  addLight(ctx, 0xbfd8ff, 3.4, 0, HEIGHT - 0.5, 0, 34);
+  detailArchitecture(ctx);
+  addLight(ctx, 0xbfd8ff, 1.4, 0, HEIGHT - 0.5, 0, 34, true);
+  addDust(ctx, 360);
 
   let hasCard = false;
   let doorOpen = false;
@@ -834,7 +1274,9 @@ function buildRoom1(ctx) {
 function buildRoom2(ctx) {
   addAmbient(ctx);
   addShell(ctx, { frontGaps: [0] });
-  addLight(ctx, 0xbfd8ff, 3.2, 0, HEIGHT - 0.5, 0, 34);
+  detailArchitecture(ctx);
+  addLight(ctx, 0xbfd8ff, 1.3, 0, HEIGHT - 0.5, 0, 34, true);
+  addDust(ctx, 360);
 
   const exit = makeExitDoor(ctx, { atX: 0 });
   let opened = false;
@@ -899,7 +1341,9 @@ function buildRoom2(ctx) {
 function buildRoom3(ctx) {
   addAmbient(ctx);
   addShell(ctx, { frontGaps: [0] });
-  addLight(ctx, 0xbfd8ff, 3.2, 0, HEIGHT - 0.5, 0, 34);
+  detailArchitecture(ctx);
+  addLight(ctx, 0xbfd8ff, 1.3, 0, HEIGHT - 0.5, 0, 34, true);
+  addDust(ctx, 360);
 
   const exit = makeExitDoor(ctx, { atX: 0 });
   let opened = false;
@@ -992,7 +1436,9 @@ function buildRoom3(ctx) {
 function buildRoom4(ctx) {
   addAmbient(ctx);
   addShell(ctx, { frontGaps: [0] });
-  addLight(ctx, 0xbfd8ff, 3.2, 0, HEIGHT - 0.5, 0, 34);
+  detailArchitecture(ctx);
+  addLight(ctx, 0xbfd8ff, 1.3, 0, HEIGHT - 0.5, 0, 34, true);
+  addDust(ctx, 360);
 
   const exit = makeExitDoor(ctx, { atX: 0 });
   let opened = false;
@@ -1045,7 +1491,9 @@ function buildRoom4(ctx) {
 function buildRoom5(ctx) {
   addAmbient(ctx);
   addShell(ctx, { frontGaps: [-4.5, 0, 4.5] });
-  addLight(ctx, 0xbfd8ff, 3.4, 0, HEIGHT - 0.5, 0, 40);
+  detailArchitecture(ctx);
+  addLight(ctx, 0xbfd8ff, 1.4, 0, HEIGHT - 0.5, 0, 40, true);
+  addDust(ctx, 360);
 
   // TRUE door (left, dim, no EXIT sign)
   const trueDoor = createDoor({ width: DOOR_W - 0.2, height: 3.0, color: 0x2a3140, emissive: 0x000000 });

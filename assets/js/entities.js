@@ -227,10 +227,16 @@ export function createLaser({ emitterPos, emitterDir, receptorPos, mirrors = [],
   const matOff = M.dim();
   const matOn = M.greenLight();
 
-  const beamMat = new THREE.LineBasicMaterial({ color: 0xff4d4d });
-  const beamGeom = new THREE.BufferGeometry();
-  const beamLine = new THREE.Line(beamGeom, beamMat);
-  group.add(beamLine);
+  const beamMat = new THREE.MeshBasicMaterial({
+    color: 0xff5050,
+    transparent: true,
+    opacity: 0.9,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const beamMesh = new THREE.Mesh(new THREE.BufferGeometry(), beamMat);
+  beamMesh.frustumCulled = false;
+  group.add(beamMesh);
 
   const dir = emitterDir.clone().setY(0).normalize();
   const origin = emitterPos.clone();
@@ -281,7 +287,13 @@ export function createLaser({ emitterPos, emitterDir, receptorPos, mirrors = [],
       cur.copy(hit.point).addScaledVector(curDir, 0.002);
     }
 
-    beamGeom.setFromPoints(points);
+    // build a solid tube beam from the trace points
+    if (points.length >= 2) {
+      const curve = new THREE.CatmullRomCurve3(points, false, "catmullrom", 0.0);
+      const tube = new THREE.TubeGeometry(curve, Math.max(8, points.length * 6), 0.06, 8, false);
+      beamMesh.geometry.dispose();
+      beamMesh.geometry = tube;
+    }
     return hitReceptor;
   }
 
