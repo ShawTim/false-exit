@@ -13,6 +13,13 @@ import {
   createPushBox,
   createCircuit,
   flicker,
+  createItem,
+  createCodeLock,
+  createSlot,
+  createContainer,
+  createValve,
+  createKeypadButton,
+  createStatusLight,
 } from "./entities.js";
 import { makeNormalMap, makeRoughnessMap } from "./textures.js";
 import { prop } from "./models.js";
@@ -646,6 +653,126 @@ function decoy(ctx, { group, model, position, rotation = 0, footprint, label, fl
 }
 
 /* ==================================================================
+ * SCATTER SYSTEM — mass-place small decorative objects for density
+ * ================================================================== */
+const SCATTER_COLORS = [0x884422, 0x224488, 0x448844, 0x884488, 0x888844, 0x446688, 0x664422];
+
+function rand(rng, min, max) { return min + rng() * (max - min); }
+
+function makeCup(c) {
+  const g = new THREE.Group();
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.04, 0.1, 8), new THREE.MeshStandardMaterial({ color: c || 0xdddddd, roughness: 0.4 }));
+  m.position.y = 0.05;
+  g.add(m);
+  return g;
+}
+function makePaper(c) {
+  const g = new THREE.Group();
+  const m = box(0.15, 0.005, 0.21, new THREE.MeshStandardMaterial({ color: c || 0xd0d8e0, roughness: 0.9, side: THREE.DoubleSide }));
+  m.position.y = 0.003;
+  m.rotation.z = (Math.random() - 0.5) * 0.3;
+  g.add(m);
+  return g;
+}
+function makeCable(c) {
+  const g = new THREE.Group();
+  const pts = [];
+  for (let i = 0; i <= 6; i++) pts.push(new THREE.Vector3((i / 6 - 0.5) * 0.4, Math.sin(i * 1.5) * 0.03, 0));
+  const curve = new THREE.CatmullRomCurve3(pts);
+  const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 12, 0.012, 5, false), new THREE.MeshStandardMaterial({ color: c || 0x222222, roughness: 0.7 }));
+  g.add(tube);
+  return g;
+}
+function makeTool(c) {
+  const g = new THREE.Group();
+  const handle = box(0.03, 0.18, 0.03, new THREE.MeshStandardMaterial({ color: 0x6b4a2b, roughness: 0.8 }));
+  handle.position.y = 0.09;
+  g.add(handle);
+  const head = box(0.08, 0.04, 0.04, M.metal());
+  head.position.y = 0.2;
+  g.add(head);
+  return g;
+}
+function makeDebris(c) {
+  const g = new THREE.Group();
+  for (let i = 0; i < 3; i++) {
+    const s = 0.03 + Math.random() * 0.05;
+    const m = box(s, s, s, new THREE.MeshStandardMaterial({ color: c || 0x556677, roughness: 0.9 }));
+    m.position.set((Math.random() - 0.5) * 0.15, s / 2, (Math.random() - 0.5) * 0.15);
+    m.rotation.set(Math.random(), Math.random(), Math.random());
+    g.add(m);
+  }
+  return g;
+}
+function makeBottle(c) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.14, 8), new THREE.MeshStandardMaterial({ color: c || 0x335577, roughness: 0.3, transparent: true, opacity: 0.7 }));
+  body.position.y = 0.07;
+  g.add(body);
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.035, 0.05, 8), body.material);
+  neck.position.y = 0.165;
+  g.add(neck);
+  return g;
+}
+function makePlate(c) {
+  const g = new THREE.Group();
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.1, 0.02, 12), new THREE.MeshStandardMaterial({ color: c || 0xcccccc, roughness: 0.3 }));
+  m.position.y = 0.01;
+  g.add(m);
+  return g;
+}
+function makeBox(c) {
+  const g = new THREE.Group();
+  const s = 0.1 + Math.random() * 0.08;
+  const m = box(s, s * 0.6, s, new THREE.MeshStandardMaterial({ color: c || 0x6b5a3a, roughness: 0.85 }));
+  m.position.y = s * 0.3;
+  g.add(m);
+  return g;
+}
+
+const SCATTER_TYPES = [makeCup, makePaper, makeCable, makeTool, makeDebris, makeBottle, makePlate, makeBox, makeBooks];
+
+function scatter(ctx, { zones, count, flavor, label = "查看雜物", models }) {
+  const placed = [];
+  let seed = 12345;
+  const rng = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  const flavors = Array.isArray(flavor) ? flavor : [flavor];
+
+  for (let i = 0; i < count; i++) {
+    const zone = zones[Math.floor(rng() * zones.length)];
+    const x = zone.x + (rng() - 0.5) * zone.w;
+    const z = zone.z + (rng() - 0.5) * zone.d;
+    const y = zone.y || 0;
+
+    // use a model sometimes
+    let group;
+    if (models && rng() < 0.3) {
+      const modelName = models[Math.floor(rng() * models.length)];
+      group = prop(modelName, () => {
+        const T = SCATTER_TYPES[Math.floor(rng() * SCATTER_TYPES.length)];
+        return T(SCATTER_COLORS[Math.floor(rng() * SCATTER_COLORS.length)]);
+      });
+    } else {
+      const T = SCATTER_TYPES[Math.floor(rng() * SCATTER_TYPES.length)];
+      group = T(SCATTER_COLORS[Math.floor(rng() * SCATTER_COLORS.length)]);
+    }
+
+    group.position.set(x, y, z);
+    group.rotation.y = rng() * Math.PI * 2;
+    group.scale.setScalar(0.7 + rng() * 0.6);
+    group.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+    ctx.root.add(group);
+    makeInteractable(group, {
+      prompt: label,
+      onInteract: () => ctx.toast(flavors[Math.floor(rng() * flavors.length)]),
+    });
+    ctx.interactables.push(group);
+    placed.push(group);
+  }
+  return placed;
+}
+
+/* ==================================================================
  * ARCHITECTURAL DETAIL — adds richness to every room shell
  * ================================================================== */
 function detailArchitecture(ctx) {
@@ -1182,7 +1309,7 @@ function placeRoom5Decoys(ctx) {
 
 
 /* ==================================================================
- * ROOM 1 — 迎賓室 (tutorial: keycard + false-exit)
+ * ROOM 1 — 迎賓室 (multi-step: code → cabinet → battery → power → card → door)
  * ================================================================== */
 function buildRoom1(ctx) {
   addAmbient(ctx);
@@ -1191,17 +1318,111 @@ function buildRoom1(ctx) {
   addLight(ctx, 0xbfd8ff, 1.4, 0, HEIGHT - 0.5, 0, 34, true);
   addDust(ctx, 360);
 
+  // puzzle state
+  let hasBattery = false;
+  let powerOn = false;
   let hasCard = false;
   let doorOpen = false;
+  const CODE = 735; // clues: clock=7, painting=3, books=5
 
-  // real door (locked)
+  // ---- real door ----
   const exit = makeExitDoor(ctx, { atX: 0 });
+  const doorStatus = createStatusLight({ position: new THREE.Vector3(-1.3, 1.6, -DEPTH / 2 + 0.2), color: 0xff3b3b });
+  ctx.root.add(doorStatus.group);
 
-  // keycard on pedestal
+  // ---- power slot near door ----
+  const slot = createSlot({
+    position: new THREE.Vector3(1.3, 0, -DEPTH / 2 + 0.5),
+    rotation: Math.PI,
+    onInsert: () => {
+      powerOn = true;
+      doorStatus.setState(true);
+      doorStatus.group.children[0].material.emissive.set(0x39ff7a);
+      ctx.setObjective("執起門禁卡，再開門");
+      ctx.toast("電力恢復。感應器亮起綠燈。", "good");
+    },
+  });
+  ctx.root.add(slot.group);
+  makeInteractable(slot.group, {
+    prompt: "插入電池",
+    enabled: false,
+    onInteract: () => {
+      if (!hasBattery) { ctx.toast("需要一粒電池。", "warn"); return; }
+      slot.fill();
+      slot.group.userData.enabled = false;
+    },
+  });
+  ctx.interactables.push(slot.group);
+
+  // ---- locked cabinet with code lock ----
+  const cabinet = createContainer({
+    position: new THREE.Vector3(-5.5, 0, 3),
+    rotation: Math.PI / 2,
+    color: 0x3a4252,
+    onOpen: () => {
+      ctx.toast("櫃門打開。入面有嘢發光。", "good");
+      // spawn battery inside cabinet
+      battery.group.position.set(-5.5, 0.4, 2.8);
+      battery.group.visible = true;
+      battery.group.userData.enabled = true;
+    },
+  });
+  ctx.root.add(cabinet.group);
+  ctx.colliders.push({ minX: -6.0, maxX: -5.0, minZ: 2.5, maxZ: 3.5 });
+  ctx.updatables.push((dt) => cabinet.update(dt));
+
+  const codeLock = createCodeLock({
+    position: new THREE.Vector3(-5.5, 0, 2.74),
+    rotation: Math.PI,
+    code: CODE,
+    onUnlock: () => {
+      ctx.toast("密碼正確。", "good");
+      cabinet.open();
+      codeLock.group.userData.enabled = false;
+      codeLock.getDigitInteractables().forEach((d) => { d.userData.enabled = false; });
+    },
+    onAttempt: () => {},
+  });
+  ctx.root.add(codeLock.group);
+  codeLock.getDigitInteractables().forEach((d) => ctx.interactables.push(d));
+
+  // ---- battery (hidden inside cabinet until opened) ----
+  const battery = createItem({
+    position: new THREE.Vector3(-5.5, 0.4, 2.8),
+    label: "執起電池",
+    color: 0x44ddff,
+    size: 0.14,
+    onPickup: () => {
+      hasBattery = true;
+      slot.group.userData.enabled = true;
+      ctx.setObjective("將電池插入門旁嘅插槽");
+      ctx.toast("你執到一粒電池。", "good");
+    },
+  });
+  battery.group.visible = false; // hidden until cabinet opens
+  battery.group.userData.enabled = false;
+  ctx.root.add(battery.group);
+  ctx.updatables.push((dt) => battery.update(dt));
+  makeInteractable(battery.group, {
+    prompt: "執起電池",
+    enabled: false,
+    onInteract: () => battery.pickup(),
+  });
+  ctx.interactables.push(battery.group);
+
+  // ---- keycard on pedestal (locked until power on) ----
   const pedestal = box(0.8, 0.9, 0.8, TRIM_MAT);
   pedestal.position.set(0, 0.45, 1.5);
+  pedestal.castShadow = true;
   ctx.root.add(pedestal);
   ctx.colliders.push({ minX: -0.4, maxX: 0.4, minZ: 1.1, maxZ: 1.9 });
+  // glass dome over keycard (disappears when powered)
+  const dome = new THREE.Mesh(
+    new THREE.SphereGeometry(0.35, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2),
+    new THREE.MeshStandardMaterial({ color: 0x88aacc, transparent: true, opacity: 0.2, roughness: 0.1, metalness: 0.3, side: THREE.DoubleSide })
+  );
+  dome.position.set(0, 0.9, 1.5);
+  ctx.root.add(dome);
   const card = createKeycard({ position: new THREE.Vector3(0, 1.05, 1.5) });
   ctx.root.add(card.group);
   ctx.updatables.push((dt) => card.update(dt));
@@ -1209,7 +1430,9 @@ function buildRoom1(ctx) {
     prompt: "執起門禁卡",
     onInteract: () => {
       if (card.picked) return;
+      if (!powerOn) { ctx.toast("玻璃罩鎖住咗。需要先恢復電力。", "warn"); return; }
       card.pickup();
+      dome.visible = false;
       hasCard = true;
       exit.door.sign.material = M.amber();
       ctx.setObjective("用門禁卡開門");
@@ -1218,13 +1441,13 @@ function buildRoom1(ctx) {
   });
   ctx.interactables.push(card.group);
 
-  // real door interact
+  // ---- real door interact ----
   makeInteractable(exit.door.group, {
     prompt: "開門",
     onInteract: () => {
       if (doorOpen) return;
       if (!hasCard) {
-        ctx.toast("門鎖住了。你需要一張卡。", "warn");
+        ctx.toast(powerOn ? "門鎖住了。你需要一張卡。" : "冇電。乜都唔郁。", "warn");
         return;
       }
       doorOpen = true;
@@ -1235,7 +1458,7 @@ function buildRoom1(ctx) {
   });
   ctx.interactables.push(exit.door.group);
 
-  // FALSE exit: glowing green EXIT against +X wall
+  // ---- FALSE exit ----
   const fake = createDoor({ width: 1.8, height: 3.0, color: 0x11331a, emissive: 0x39ff7a });
   fake.group.position.set(WIDTH / 2 - 0.3, 0, -2.5);
   fake.group.rotation.y = -Math.PI / 2;
@@ -1250,22 +1473,60 @@ function buildRoom1(ctx) {
   });
   ctx.interactables.push(fake.group);
 
-  // red-herring decoys
+  // ---- CLUE OBJECTS (digits hidden in flavor text) ----
+  // clock → digit 7
+  decoy(ctx, { group: makeClock(), position: { x: -3.2, y: 3.0, z: DEPTH / 2 - 0.1 }, label: "睇個鐘", flavor: [
+    "時針凝住喺 7 字。唔肯郁。",
+    "秒針行到 7 就停。",
+    "鐘面有 7 道裂紋。",
+  ] });
+  // painting → digit 3
+  decoy(ctx, { group: makePainting(0x3a5a3a), model: "painting", position: { x: 2.6, y: 2.3, z: DEPTH / 2 - 0.1 }, label: "細看油畫", flavor: [
+    "畫入面有 3 個人影，全部背住你。",
+    "3 隻烏鴉停喺畫中嘅樹上。",
+    "畫框上有 3 道刮痕。",
+  ] });
+  // books → digit 5
+  decoy(ctx, { group: makeBooks(), model: "books", position: { x: 4.6, y: 0.75, z: 3.8 }, footprint: null, label: "數書本", flavor: [
+    "數咗下，總共 5 本書疊埋一齊。",
+    "其中 5 本嘅書脊有刮痕。",
+    "5 頁紙從書入面跌咗出嚟。",
+  ] });
+
+  // ---- decoys ----
   placeRoom1Decoys(ctx);
 
-  clueNote(ctx, {
-    x: -WIDTH / 2 + 0.6,
-    z: 3,
-    rot: Math.PI / 2,
-    title: "牆上便條",
-    text: "「發光嘅門，唔係出口。\n執到卡，先至有得走。」",
+  // ---- mass scatter for density ----
+  scatter(ctx, {
+    zones: [
+      { x: -4.5, z: 4.5, w: 2, d: 2, y: 0.75 },
+      { x: 4.5, z: 4.5, w: 2, d: 2, y: 0 },
+      { x: 0, z: 0, w: 3, d: 3, y: 0 },
+      { x: -4, z: -3, w: 2, d: 2, y: 0 },
+      { x: 4, z: -1, w: 2, d: 2, y: 0 },
+    ],
+    count: 45,
+    models: ["book", "books"],
+    label: "查看雜物",
+    flavor: [
+      "乜都冇。只係垃圾。",
+      "一張紙屑，寫住唔完整嘅字。",
+      "杯漬。但冇杯。",
+      "一條電線，兩端都冇插頭。",
+      "碎片。唔知係乜嘢嘅碎片。",
+      "一粒螺絲。擰唔返入去。",
+      "一張相。相入面係呢間房。但冇你。",
+      "一張飛。過期咗。目的地寫住『出口』。",
+      "灰塵。只係灰塵。",
+      "一個空樽。標籤寫住『希望』。",
+    ],
   });
 
   ctx.updatables.push(() => {
     if (doorOpen && exitZoneMet(ctx.getPlayer())) ctx.goNext();
   });
 
-  return { spawn: { x: 0, z: DEPTH / 2 - 1.4, yaw: 0 }, objective: "執起門禁卡，再開門" };
+  return { spawn: { x: 0, z: DEPTH / 2 - 1.4, yaw: 0 }, objective: "探索房間。櫃鎖住咗——搵出密碼。" };
 }
 
 /* ==================================================================
@@ -1280,21 +1541,60 @@ function buildRoom2(ctx) {
 
   const exit = makeExitDoor(ctx, { atX: 0 });
   let opened = false;
+  let laserOn = false;
 
-  const mirrors = [
-    createMirror({ position: new THREE.Vector3(-4, 0, -2), initialSlot: 1 }),
-    createMirror({ position: new THREE.Vector3(0, 0, -2), initialSlot: 3 }),
-  ];
+  // ---- 3 mirrors, one behind a gate ----
+  const m1 = createMirror({ position: new THREE.Vector3(-4, 0, -2), initialSlot: 1 });
+  const m2 = createMirror({ position: new THREE.Vector3(0, 0, -2), initialSlot: 3 });
+  const m3 = createMirror({ position: new THREE.Vector3(4, 0, -2), initialSlot: 0 }); // behind gate
+  const mirrors = [m1, m2, m3];
+
   for (const m of mirrors) {
     ctx.root.add(m.group);
     ctx.updatables.push((dt) => m.update(dt));
-    makeInteractable(m.group, { prompt: "轉動鏡面", onInteract: () => m.rotate90() });
-    ctx.interactables.push(m.group);
   }
-  // mirror stand colliders
   ctx.colliders.push({ minX: -4.6, maxX: -3.4, minZ: -2.6, maxZ: -1.4 });
   ctx.colliders.push({ minX: -0.6, maxX: 0.6, minZ: -2.6, maxZ: -1.4 });
 
+  // mirror 1 & 2 interactable immediately
+  makeInteractable(m1.group, { prompt: "轉動鏡面", onInteract: () => m1.rotate90() });
+  ctx.interactables.push(m1.group);
+  makeInteractable(m2.group, { prompt: "轉動鏡面", onInteract: () => m2.rotate90() });
+  ctx.interactables.push(m2.group);
+
+  // mirror 3 behind a gate (collider wall, removed when plate pressed)
+  const gate = box(0.1, 2.0, 3.0, new THREE.MeshStandardMaterial({ color: 0x2a3340, metalness: 0.7, roughness: 0.4, transparent: true, opacity: 0.7 }));
+  gate.position.set(4, 1.0, -2);
+  gate.castShadow = true;
+  ctx.root.add(gate);
+  const gateCollider = { minX: 3.7, maxX: 4.3, minZ: -3.6, maxZ: -0.4 };
+  ctx.colliders.push(gateCollider);
+  const m3Collider = { minX: 3.4, maxX: 4.6, minZ: -2.6, maxZ: -1.4, enabled: false };
+  ctx.colliders.push(m3Collider);
+
+  // ---- pressure plate to open gate (push box onto it) ----
+  const pushBox = createPushBox({ position: new THREE.Vector3(2, 0, 3), size: 0.9, height: 0.9, color: 0x8a5a2b });
+  ctx.root.add(pushBox.group);
+  ctx.colliders.push(pushBox.collider);
+
+  const plate = createPlate({
+    position: new THREE.Vector3(5.5, 0, 3),
+    size: 1.2,
+    onChange: (active) => {
+      if (active && gate.visible) {
+        gate.visible = false;
+        gateCollider.enabled = false;
+        m3Collider.enabled = true;
+        makeInteractable(m3.group, { prompt: "轉動鏡面", onInteract: () => m3.rotate90() });
+        ctx.interactables.push(m3.group);
+        ctx.toast("閘門升起。後面有一塊鏡。", "good");
+      }
+    },
+  });
+  plate.group.position.y = 0;
+  ctx.root.add(plate.group);
+
+  // ---- laser (off until battery inserted) ----
   // collect wall meshes for beam termination
   const solids = [];
   ctx.root.traverse((o) => {
@@ -1315,28 +1615,124 @@ function buildRoom2(ctx) {
       ctx.setObjective("穿過門口");
     },
   });
+  laser.group.visible = false; // off until powered
   ctx.root.add(laser.group);
-  ctx.updatables.push((dt) => laser.update(dt));
 
+  // laser power slot
+  const laserSlot = createSlot({
+    position: new THREE.Vector3(-WIDTH / 2 + 0.5, 0, DEPTH / 2 - 1.5),
+    rotation: 0,
+    onInsert: () => {
+      laserOn = true;
+      laser.group.visible = true;
+      ctx.updatables.push((dt) => laser.update(dt));
+      ctx.setObjective("轉動鏡面，將光送到門上感應器");
+      ctx.toast("激光啟動。紅光射出。", "good");
+    },
+  });
+  ctx.root.add(laserSlot.group);
+  makeInteractable(laserSlot.group, {
+    prompt: "插入電池",
+    enabled: false,
+    onInteract: () => {
+      if (!hasBattery2) { ctx.toast("需要一粒電池。", "warn"); return; }
+      laserSlot.fill();
+      laserSlot.group.userData.enabled = false;
+    },
+  });
+  ctx.interactables.push(laserSlot.group);
+
+  // ---- battery hidden in a container (find it among decoys) ----
+  let hasBattery2 = false;
+  const batteryBox = createContainer({
+    position: new THREE.Vector3(5.5, 0, -4.5),
+    rotation: 0,
+    color: 0x4a3a2a,
+    onOpen: () => {
+      battery2.group.visible = true;
+      battery2.group.userData.enabled = true;
+      ctx.toast("箱入面有嘢發光。", "good");
+    },
+  });
+  ctx.root.add(batteryBox.group);
+  ctx.colliders.push({ minX: 5.0, maxX: 6.0, minZ: -5.0, maxZ: -4.0 });
+  ctx.updatables.push((dt) => batteryBox.update(dt));
+  makeInteractable(batteryBox.group, {
+    prompt: "打開箱",
+    onInteract: () => batteryBox.open(),
+  });
+  ctx.interactables.push(batteryBox.group);
+
+  const battery2 = createItem({
+    position: new THREE.Vector3(5.5, 0.4, -4.5),
+    label: "執起電池",
+    color: 0x44ddff,
+    size: 0.14,
+    onPickup: () => {
+      hasBattery2 = true;
+      laserSlot.group.userData.enabled = true;
+      ctx.setObjective("將電池插入激光發射器旁嘅插槽");
+      ctx.toast("你執到一粒電池。", "good");
+    },
+  });
+  battery2.group.visible = false;
+  battery2.group.userData.enabled = false;
+  ctx.root.add(battery2.group);
+  ctx.updatables.push((dt) => battery2.update(dt));
+  makeInteractable(battery2.group, {
+    prompt: "執起電池",
+    enabled: false,
+    onInteract: () => battery2.pickup(),
+  });
+  ctx.interactables.push(battery2.group);
+
+  // ---- clue objects (mirror angles hinted in environment) ----
+  decoy(ctx, { group: makePainting(0x1a3a5a), model: "painting", position: { x: 0, y: 2.6, z: DEPTH / 2 - 0.1 }, label: "細看掛圖", flavor: [
+    "掛圖畫咗一道光，折咗兩次，最後射中一個圓圈。",
+    "光嘅路徑畫成摺線。每個轉角都有個鏡嘅圖案。",
+  ] });
+
+  // ---- decoys + scatter ----
   placeRoom2Decoys(ctx);
+  scatter(ctx, {
+    zones: [
+      { x: -5, z: 3, w: 2, d: 2, y: 0 },
+      { x: 2, z: 4.5, w: 2, d: 2, y: 0 },
+      { x: -2, z: 0, w: 2, d: 2, y: 0 },
+      { x: 5, z: 0, w: 2, d: 2, y: 0 },
+    ],
+    count: 40,
+    models: ["book", "books", "lampTable"],
+    label: "查看雜物",
+    flavor: [
+      "一塊鏡碎片。反射唔到你。",
+      "一張圖紙，畫住光線折射。但角度俾人塗黑咗。",
+      "一個透鏡，有裂紋。",
+      "碎片。反射出無數個你。",
+      "一張紙寫住：『反射嘅嘢唔一定真實』。",
+      "一個三稜鏡。但冇光經過佢。",
+      "一條電線。唔知通去邊。",
+    ],
+  });
 
-  clueNote(ctx, {
-    x: WIDTH / 2 - 0.6,
-    z: 3,
-    rot: -Math.PI / 2,
-    title: "鏡廊守則",
-    text: "「光唔會呃人。\n轉動每一塊鏡，將紅光送到門上嘅感應器。」",
+  // update plate each frame
+  ctx.updatables.push((dt) => {
+    const sources = [
+      { x: pushBox.group.position.x, z: pushBox.group.position.z },
+      { x: ctx.getPlayer().position.x, z: ctx.getPlayer().position.z },
+    ];
+    plate.update(dt, sources);
   });
 
   ctx.updatables.push(() => {
     if (opened && exitZoneMet(ctx.getPlayer())) ctx.goNext();
   });
 
-  return { spawn: { x: 0, z: DEPTH / 2 - 1.4, yaw: 0 }, objective: "用鏡面將光引到感應器" };
+  return { spawn: { x: 0, z: DEPTH / 2 - 1.4, yaw: 0 }, objective: "激光熄咗。搵電池啟動佢。" };
 }
 
 /* ==================================================================
- * ROOM 3 — 貨倉 (push boxes onto plates)
+ * ROOM 3 — 貨倉 (multi-step: 3 boxes → 3 colored plates → valve → key)
  * ================================================================== */
 function buildRoom3(ctx) {
   addAmbient(ctx);
@@ -1352,9 +1748,11 @@ function buildRoom3(ctx) {
   addWall(ctx, -3.5, 1, 0.4, 4, 2.4);
   addWall(ctx, 3.5, -1, 0.4, 4, 2.4);
 
+  // ---- 3 colored boxes ----
   const boxDefs = [
-    { start: new THREE.Vector3(-1.5, 0, 2.5), color: 0x8a5a2b },
-    { start: new THREE.Vector3(1.5, 0, 2.5), color: 0x5a8a6b },
+    { start: new THREE.Vector3(-1.5, 0, 2.5), color: 0xcc4444 },
+    { start: new THREE.Vector3(0, 0, 3.0), color: 0x44cc66 },
+    { start: new THREE.Vector3(1.5, 0, 2.5), color: 0x4488ee },
   ];
   const boxes = boxDefs.map((d) => {
     const b = createPushBox({ position: d.start, size: 0.9, height: 0.9, color: d.color });
@@ -1363,39 +1761,101 @@ function buildRoom3(ctx) {
     return b;
   });
 
+  // ---- 3 colored plates (clue: match color to plate via painting/décor) ----
   const plateDefs = [
-    new THREE.Vector3(-3.5, 0, -3.5),
-    new THREE.Vector3(3.5, 0, -3.5),
+    { pos: new THREE.Vector3(-3.5, 0, -3.5), color: 0x4488ee },
+    { pos: new THREE.Vector3(0, 0, -4.0), color: 0xcc4444 },
+    { pos: new THREE.Vector3(3.5, 0, -3.5), color: 0x44cc66 },
   ];
-  let count = 0;
-  const plates = plateDefs.map((p) => {
+  let platesActive = 0;
+  const plates = plateDefs.map((pd) => {
     const plate = createPlate({
-      position: p,
+      position: pd.pos,
       size: 1.2,
       onChange: (active) => {
-        count += active ? 1 : -1;
-        if (count >= plates.length && !opened) {
-          opened = true;
-          exit.open();
-          ctx.toast("兩塊壓板都壓住咗。門開咗。", "good");
-          ctx.setObjective("穿過門口");
+        platesActive += active ? 1 : -1;
+        if (platesActive >= 3 && !valveUnlocked) {
+          valveUnlocked = true;
+          valve.group.userData.enabled = true;
+          ctx.setObjective("轉動閥門釋放鑰匙");
+          ctx.toast("三塊壓板都壓住咗。管道有聲。", "good");
         }
       },
     });
     plate.group.position.y = 0;
+    plate.group.children[1].material = new THREE.MeshStandardMaterial({ color: pd.color, emissive: pd.color, emissiveIntensity: 0.3, roughness: 0.6 });
     ctx.root.add(plate.group);
     return plate;
   });
 
-  // reset lever
+  // ---- valve (unlocked when all plates pressed) → drops key from ceiling pipe ----
+  let valveUnlocked = false;
+
+  const valve = createValve({
+    position: new THREE.Vector3(-WIDTH / 2 + 0.5, 0, -2),
+    rotation: 0,
+    turns: 2,
+    onOpen: () => {
+      ctx.toast("管道打開。有嘢跌落嚟。", "good");
+      keyItem.group.position.set(-WIDTH / 2 + 0.8, 0, -1.5);
+      keyItem.group.visible = true;
+      keyItem.group.userData.enabled = true;
+    },
+  });
+  ctx.root.add(valve.group);
+  ctx.updatables.push((dt) => valve.update(dt));
+  makeInteractable(valve.group, {
+    prompt: "轉動閥門",
+    enabled: false,
+    onInteract: () => {
+      if (!valveUnlocked) { ctx.toast("閥門鎖死。需要先壓住所有壓板。", "warn"); return; }
+      valve.turn();
+      ctx.toast(`閥門轉咗 ${valve.progress}/${valve.needed}`, "");
+    },
+  });
+  ctx.interactables.push(valve.group);
+
+  // ---- key item (drops from pipe) ----
+  let hasKey = false;
+  const keyItem = createItem({
+    position: new THREE.Vector3(-WIDTH / 2 + 0.8, 0, -1.5),
+    label: "執起鑰匙",
+    color: 0xffcc33,
+    size: 0.16,
+    onPickup: () => {
+      hasKey = true;
+      ctx.setObjective("用鑰匙開門");
+      ctx.toast("你執到一條鑰匙。", "good");
+    },
+  });
+  keyItem.group.visible = false;
+  keyItem.group.userData.enabled = false;
+  ctx.root.add(keyItem.group);
+  ctx.updatables.push((dt) => keyItem.update(dt));
+  makeInteractable(keyItem.group, { prompt: "執起鑰匙", enabled: false, onInteract: () => keyItem.pickup() });
+  ctx.interactables.push(keyItem.group);
+
+  // ---- door interact ----
+  makeInteractable(exit.door.group, {
+    prompt: "開門",
+    onInteract: () => {
+      if (opened) return;
+      if (!hasKey) { ctx.toast("門鎖住了。需要一條鑰匙。", "warn"); return; }
+      opened = true;
+      exit.open();
+      ctx.toast("門開了。", "good");
+      ctx.setObjective("穿過門口");
+    },
+  });
+  ctx.interactables.push(exit.door.group);
+
+  // ---- reset lever ----
   const reset = createLever({
     position: new THREE.Vector3(0, 0, DEPTH / 2 - 1.2),
     rotation: Math.PI,
     onChange: (on) => {
       if (!on) return;
-      boxDefs.forEach((d, i) => {
-        boxes[i].group.position.set(d.start.x, 0, d.start.z);
-      });
+      boxDefs.forEach((d, i) => boxes[i].group.position.set(d.start.x, 0, d.start.z));
       ctx.toast("箱已重置。", "warn");
     },
   });
@@ -1405,33 +1865,56 @@ function buildRoom3(ctx) {
   makeInteractable(reset.group, { prompt: "拉動重置桿", onInteract: () => reset.toggle() });
   ctx.interactables.push(reset.group);
 
-  ctx.updatables.push((dt) => {
-    for (const plate of plates) {
-      const sources = boxes.map((b) => ({ x: b.group.position.x, z: b.group.position.z }));
-      sources.push({ x: ctx.getPlayer().position.x, z: ctx.getPlayer().position.z });
-      plate.update(dt, sources);
-    }
+  // ---- hidden clues: color matching hints in objects ----
+  decoy(ctx, { group: makePainting(0x4a2a2a), model: "painting", position: { x: -WIDTH / 2 + 0.1, y: 2.3, z: 0.5 }, rotation: Math.PI / 2, label: "細看油畫", flavor: [
+    "畫中三個箱：藍喺左，紅喺中，綠喺右。",
+    "油畫描繪三塊彩色板，由左至右：藍、紅、綠。",
+  ] });
+  decoy(ctx, { group: makeClock(), position: { x: 0, y: 3.4, z: DEPTH / 2 - 0.1 }, label: "睇個鐘", flavor: [
+    "鐘面刻住三種顏色嘅刻度：藍、紅、綠。",
+    "三根指針，分別係藍、紅、綠色。",
+  ] });
+
+  // ---- decoys + scatter ----
+  placeRoom3Decoys(ctx);
+  scatter(ctx, {
+    zones: [
+      { x: -5, z: 4, w: 2, d: 2, y: 0 },
+      { x: 5, z: 4, w: 2, d: 2, y: 0 },
+      { x: 0, z: 0, w: 2, d: 2, y: 0 },
+      { x: -5, z: -3.5, w: 2, d: 2, y: 0 },
+      { x: 5, z: -3.5, w: 2, d: 2, y: 0 },
+    ],
+    count: 50,
+    models: ["book", "crate", "books"],
+    label: "翻查雜物",
+    flavor: [
+      "一個爛木箱。入面係木屑。",
+      "一張貨單，寫住：藍→左、紅→中、綠→右。",
+      "一塊碎片，髹咗紅色油漆。",
+      "一個空油桶。倒唔出嘢。",
+      "一條鐵鏈，鎖住一個箱。但係空嘅。",
+      "一張紙寫住：『顏色要配對』。",
+      "一個扳手，但太爛用唔到。",
+    ],
   });
 
-  placeRoom3Decoys(ctx);
-
-  clueNote(ctx, {
-    x: -WIDTH / 2 + 0.6,
-    z: -3,
-    rot: Math.PI / 2,
-    title: "貨倉守則",
-    text: "「將每個箱，推上佢嘅壓板。\n推入咗死角？拉中央嘅重置桿。」",
+  // update plates each frame
+  ctx.updatables.push((dt) => {
+    const sources = boxes.map((b) => ({ x: b.group.position.x, z: b.group.position.z }));
+    sources.push({ x: ctx.getPlayer().position.x, z: ctx.getPlayer().position.z });
+    for (const plate of plates) plate.update(dt, sources);
   });
 
   ctx.updatables.push(() => {
     if (opened && exitZoneMet(ctx.getPlayer())) ctx.goNext();
   });
 
-  return { spawn: { x: 0, z: DEPTH / 2 - 1.4, yaw: 0 }, objective: "將兩個箱推上壓板" };
+  return { spawn: { x: 0, z: DEPTH / 2 - 1.4, yaw: 0 }, objective: "探索貨倉。每個箱都有顏色。" };
 }
 
 /* ==================================================================
- * ROOM 4 — 配電房 (circuit: press gems in order)
+ * ROOM 4 — 配電房 (multi-step: find fuse → hidden sequence → circuit → door)
  * ================================================================== */
 function buildRoom4(ctx) {
   addAmbient(ctx);
@@ -1443,10 +1926,14 @@ function buildRoom4(ctx) {
   const exit = makeExitDoor(ctx, { atX: 0 });
   let opened = false;
 
+  // ---- hidden sequence: 4 paintings on walls tell the order ----
+  // order clue: painting positions/numbers hidden in flavor text
+  // target: blue(1), red(0), green(2), amber(3) => [1,0,2,3]
   const COLORS = [0xff3b3b, 0x3b8bff, 0x39ff7a, 0xffb43b];
   const NAMES = ["紅", "藍", "綠", "琥珀"];
-  const target = [2, 0, 3, 1]; // green, red, amber, blue
+  const target = [1, 0, 2, 3];
 
+  // ---- circuit panel (locked until fuse inserted) ----
   const defs = [-2.4, -0.8, 0.8, 2.4].map((x, i) => ({
     position: new THREE.Vector3(x, 1.1, -DEPTH / 2 + 0.9),
     color: COLORS[i],
@@ -1462,83 +1949,221 @@ function buildRoom4(ctx) {
     },
     onWrong: () => ctx.toast("次序錯。重新觀察。", "warn"),
   });
+  circuit.group.visible = false; // hidden until powered
   ctx.root.add(circuit.group);
   circuit.switches.forEach((sw) => {
-    makeInteractable(sw.group, { prompt: "按寶石", onInteract: () => circuit.flip(sw.index) });
+    makeInteractable(sw.group, { prompt: "按寶石", enabled: false, onInteract: () => circuit.flip(sw.index) });
     ctx.interactables.push(sw.group);
   });
 
-  const orderText = target.map((i) => NAMES[i]).join(" → ");
+  // ---- fuse slot (powers the circuit panel) ----
+  let hasFuse = false;
+  let panelPowered = false;
+  const fuseSlot = createSlot({
+    position: new THREE.Vector3(WIDTH / 2 - 0.5, 0, 0),
+    rotation: -Math.PI / 2,
+    onInsert: () => {
+      panelPowered = true;
+      circuit.group.visible = true;
+      circuit.switches.forEach((sw) => { sw.group.userData.enabled = true; });
+      ctx.setObjective("按正確次序按下寶石");
+      ctx.toast("保險絲插入。配電盤亮起。", "good");
+    },
+  });
+  ctx.root.add(fuseSlot.group);
+  makeInteractable(fuseSlot.group, {
+    prompt: "插入保險絲",
+    enabled: false,
+    onInteract: () => {
+      if (!hasFuse) { ctx.toast("需要一條保險絲。", "warn"); return; }
+      fuseSlot.fill();
+      fuseSlot.group.userData.enabled = false;
+    },
+  });
+  ctx.interactables.push(fuseSlot.group);
+
+  // ---- fuse hidden in a locked container (code lock) ----
+  const FUSE_CODE = 462;
+  const fuseCabinet = createContainer({
+    position: new THREE.Vector3(-WIDTH / 2 + 0.5, 0, -3),
+    rotation: Math.PI / 2,
+    color: 0x3a3a4a,
+    onOpen: () => {
+      fuseItem.group.visible = true;
+      fuseItem.group.userData.enabled = true;
+      ctx.toast("櫃門打開。入面有一條保險絲。", "good");
+    },
+  });
+  ctx.root.add(fuseCabinet.group);
+  ctx.colliders.push({ minX: -6.0, maxX: -5.0, minZ: -3.5, maxZ: -2.5 });
+  ctx.updatables.push((dt) => fuseCabinet.update(dt));
+
+  const fuseCodeLock = createCodeLock({
+    position: new THREE.Vector3(-WIDTH / 2 + 0.26, 0, -3.24),
+    rotation: 0,
+    code: FUSE_CODE,
+    onUnlock: () => {
+      ctx.toast("密碼正確。", "good");
+      fuseCabinet.open();
+      fuseCodeLock.getDigitInteractables().forEach((d) => { d.userData.enabled = false; });
+    },
+  });
+  ctx.root.add(fuseCodeLock.group);
+  fuseCodeLock.getDigitInteractables().forEach((d) => ctx.interactables.push(d));
+
+  const fuseItem = createItem({
+    position: new THREE.Vector3(-WIDTH / 2 + 0.5, 0.4, -3),
+    label: "執起保險絲",
+    color: 0xff6600,
+    size: 0.12,
+    onPickup: () => {
+      hasFuse = true;
+      fuseSlot.group.userData.enabled = true;
+      ctx.setObjective("將保險絲插入配電盤");
+      ctx.toast("你執到一條保險絲。", "good");
+    },
+  });
+  fuseItem.group.visible = false;
+  fuseItem.group.userData.enabled = false;
+  ctx.root.add(fuseItem.group);
+  ctx.updatables.push((dt) => fuseItem.update(dt));
+  makeInteractable(fuseItem.group, { prompt: "執起保險絲", enabled: false, onInteract: () => fuseItem.pickup() });
+  ctx.interactables.push(fuseItem.group);
+
+  // ---- hidden clues for code 462: clock=4, barrel=6, painting=2 ----
+  decoy(ctx, { group: makeClock(), position: { x: 3.5, y: 3.2, z: DEPTH / 2 - 0.1 }, label: "睇個鐘", flavor: [
+    "時針停喺 4。分針停喺 12。4:00。",
+    "鐘面有 4 個羅馬數字被圈住。",
+  ] });
+  decoy(ctx, { group: makeBarrel(0x554433), position: { x: 4.5, y: 0, z: 3.5 }, footprint: { w: 0.6, d: 0.6 }, label: "查看油桶", flavor: [
+    "桶面噴咗一個大數字：6。",
+    "桶身貼住標籤：容量 6 升。",
+  ] });
+  decoy(ctx, { group: makePainting(0x3a4a6a), model: "painting", position: { x: 2.6, y: 2.3, z: DEPTH / 2 - 0.1 }, label: "細看油畫", flavor: [
+    "畫中有 2 隻鳥，向住同一個方向飛。",
+    "畫框上有 2 個掛鉤。",
+  ] });
+
+  // ---- hidden clues for gem sequence: colors referenced across objects ----
+  decoy(ctx, { group: makePainting(0x1a2a4a), model: "painting", position: { x: -WIDTH / 2 + 0.1, y: 2.3, z: 1 }, rotation: Math.PI / 2, label: "細看油畫", flavor: [
+    "畫中四顆寶石排成一行：藍、紅、綠、琥珀。",
+    "油畫左側寫住顏色順序：藍→紅→綠→琥珀。",
+  ] });
+  decoy(ctx, { group: makeBooks(), model: "books", position: { x: -5.5, y: 0.75, z: 4.5 }, footprint: null, label: "翻閱書堆", flavor: [
+    "一本書嘅書脊按顏色排列：藍、紅、綠、黃。",
+    "書中夾著一張紙條：『藍紅綠琥珀』。",
+  ] });
+
+  // ---- decoys + scatter ----
   placeRoom4Decoys(ctx);
-  clueNote(ctx, {
-    x: 0,
-    z: DEPTH / 2 - 1.2,
-    rot: 0,
-    title: "配電守則",
-    text: `「依次序按亮寶石：\n${orderText}」`,
+  scatter(ctx, {
+    zones: [
+      { x: -4, z: 4, w: 2, d: 2, y: 0 },
+      { x: 4, z: 4, w: 2, d: 2, y: 0 },
+      { x: 0, z: 2, w: 2, d: 2, y: 0 },
+      { x: -3, z: -2, w: 2, d: 2, y: 0 },
+      { x: 3, z: -2, w: 2, d: 2, y: 0 },
+    ],
+    count: 50,
+    models: ["book", "books", "lampTable"],
+    label: "搜查雜物",
+    flavor: [
+      "一條燒斷嘅保險絲。冇用。",
+      "一張電路圖。但顏色俾人塗黑。",
+      "一個螺絲批。但擰唔到任何螺絲。",
+      "一張紙寫住『4-6-2』，但下面撕走咗。",
+      "一個電錶。讀數係 0。",
+      "灰塵同金屬碎屑。",
+      "一個接線端子。空嘅。",
+    ],
   });
 
   ctx.updatables.push(() => {
     if (opened && exitZoneMet(ctx.getPlayer())) ctx.goNext();
   });
 
-  return { spawn: { x: 0, z: DEPTH / 2 - 1.4, yaw: 0 }, objective: "按線索次序按下寶石" };
+  return { spawn: { x: 0, z: DEPTH / 2 - 1.4, yaw: 0 }, objective: "配電盤熄咗。搵出密碼開櫃。" };
 }
 
 /* ==================================================================
- * ROOM 5 — 假出口 (finale: choose the door that doesn't glow)
+ * ROOM 5 — 假出口 (finale: 5 doors, only the unmarked one is real)
  * ================================================================== */
 function buildRoom5(ctx) {
   addAmbient(ctx);
-  addShell(ctx, { frontGaps: [-4.5, 0, 4.5] });
+  addShell(ctx, { frontGaps: [-4.5, -1.5, 1.5, 4.5, 6.0] });
   detailArchitecture(ctx);
   addLight(ctx, 0xbfd8ff, 1.4, 0, HEIGHT - 0.5, 0, 40, true);
-  addDust(ctx, 360);
+  addDust(ctx, 500);
 
-  // TRUE door (left, dim, no EXIT sign)
+  const halfD = DEPTH / 2;
+
+  // 5 doors along the front wall. Positions: -4.5, -1.5, 1.5, 4.5, and a side door at +X wall
+  // TRUE door: position 6.0 on the +X side wall (not on the front wall line), unmarked/dim
   const trueDoor = createDoor({ width: DOOR_W - 0.2, height: 3.0, color: 0x2a3140, emissive: 0x000000 });
-  trueDoor.group.position.set(-4.5, 0, -DEPTH / 2 + 0.15);
+  trueDoor.group.position.set(WIDTH / 2 - 0.3, 0, 2);
+  trueDoor.group.rotation.y = -Math.PI / 2;
   ctx.root.add(trueDoor.group);
   trueDoor.update(0);
   ctx.updatables.push((dt) => trueDoor.update(dt));
   makeInteractable(trueDoor.group, { prompt: "推開嗰道暗門", onInteract: () => ctx.onWin() });
   ctx.interactables.push(trueDoor.group);
 
-  // FALSE doors (center, right) — glowing EXIT, loop
-  const fakes = [];
-  for (const fx of [0, 4.5]) {
+  // 4 FALSE doors (all glowing EXIT)
+  const fakePositions = [-4.5, -1.5, 1.5, 4.5];
+  for (const fx of fakePositions) {
     const f = createDoor({ width: DOOR_W - 0.2, height: 3.0, color: 0x11331a, emissive: 0x39ff7a });
-    f.group.position.set(fx, 0, -DEPTH / 2 + 0.15);
+    f.group.position.set(fx, 0, -halfD + 0.15);
     ctx.root.add(f.group);
     f.update(0);
     ctx.updatables.push((dt) => f.update(dt));
-    const light = addLight(ctx, 0x39ff7a, 1.3, fx, 2.4, -DEPTH / 2 + 1.6, 6);
+    const light = addLight(ctx, 0x39ff7a, 1.3, fx, 2.4, -halfD + 1.6, 6);
     ctx.updatables.push(flicker(light, { base: 1.2, amp: 0.25 + Math.min(ctx.loopCount, 6) * 0.08, speed: 7 }));
     makeInteractable(f.group, {
       prompt: "行入 EXIT",
-      onInteract: () =>
-        ctx.onLoop("發光嘅『EXIT』又將你送返嚟。真正嘅出口，從來唔發光。"),
+      onInteract: () => ctx.onLoop("發光嘅『EXIT』又將你送返嚟。真正嘅出口，從來唔發光。"),
     });
     ctx.interactables.push(f.group);
-    fakes.push(f);
   }
 
-  placeRoom5Decoys(ctx);
+  // hidden clues embedded in decor (not direct notes)
+  decoy(ctx, { group: makePainting(0x1a3a5a), model: "painting", position: { x: -2.5, y: 2.3, z: halfD - 0.1 }, label: "細看油畫", flavor: [
+    "畫中畫咗一排發光嘅門。但旁邊有一道暗色嘅門，畫得好淡。",
+    "畫家似乎想話：答案唔喺光裡面。",
+  ] });
+  decoy(ctx, { group: makeBooks(), model: "books", position: { x: 2.5, y: 0.75, z: 3.5 }, footprint: null, label: "翻閱書堆", flavor: [
+    "一本書嘅封面寫住：『出口唔發光』。",
+    "其中一頁畫咗一個箭嘴，指住右邊牆壁。",
+  ] });
+  decoy(ctx, { group: makeClock(), position: { x: 0, y: 3.6, z: halfD - 0.1 }, label: "睇大鐘", flavor: [
+    "鐘面冇指針。得一個字：『側』。",
+    "鐘嘅位置，對住右邊牆壁。",
+  ] });
 
-  // mark the false doors' signs clearly as EXIT (green) — already via emissive sign
-  clueNote(ctx, {
-    x: 0,
-    z: DEPTH / 2 - 1.4,
-    rot: 0,
-    title: "最後嘅提示",
-    text: ctx.loopCount > 0
-      ? `「你又行錯咗 ${ctx.loopCount} 次。\n記住：真正嘅出口，唔會自稱出口。\n搵嗰道唔發光嘅門。」`
-      : "「真正嘅出口，唔會自稱出口。\n搵嗰道唔發光嘅門。」",
+  placeRoom5Decoys(ctx);
+  scatter(ctx, {
+    zones: [
+      { x: -3, z: 2, w: 2, d: 2, y: 0 },
+      { x: 3, z: 2, w: 2, d: 2, y: 0 },
+      { x: 0, z: 0, w: 3, d: 2, y: 0 },
+      { x: -4, z: -2, w: 2, d: 2, y: 0 },
+      { x: 4, z: -2, w: 2, d: 2, y: 0 },
+    ],
+    count: 55,
+    models: ["book", "books", "paintingSmall", "lampTable"],
+    label: "搜查雜物",
+    flavor: [
+      "一張傳單：『向著光行』。但字好模糊。",
+      "一本冊子，每頁都係『EXIT』。但後頁寫住：『唔係 EXIT』。",
+      "一個發光嘅牌。同門一樣綠。但冇用。",
+      "一張地圖。所有路線都指向發光嘅門。但地圖邊緣有一條暗線。",
+      "一面鏡。反射出嘅畫面，暗門特別清晰。",
+      "一張紙條：『留意牆壁，唔係門面』。",
+    ],
   });
 
   return {
-    spawn: { x: 0, z: DEPTH / 2 - 1.4, yaw: 0 },
-    objective: "搵出真正嘅出口（提示：唔發光嗰道）",
+    spawn: { x: 0, z: halfD - 1.4, yaw: 0 },
+    objective: ctx.loopCount > 0 ? `你已迴圈 ${ctx.loopCount} 次。答案唔喺光裡面。` : "尋找真正嘅出口。",
   };
 }
 

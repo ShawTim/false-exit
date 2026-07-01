@@ -487,3 +487,251 @@ export function flicker(light, { base = 0.4, amp = 0.25, speed = 8 } = {}) {
     light.intensity = base + Math.sin(t) * amp * 0.5 + Math.random() * amp * 0.5;
   };
 }
+
+/* ==================================================================
+ * MULTI-STEP PUZZLE ENTITIES
+ * ================================================================== */
+
+/* ---- Generic pickup item (battery, fuse, key, etc.) ---- */
+export function createItem({ position, label = "物品", color = 0xffcc44, size = 0.18, onPickup }) {
+  const group = new THREE.Group();
+  group.position.copy(position);
+  const mat = new THREE.MeshStandardMaterial({
+    color, emissive: color, emissiveIntensity: 0.8, roughness: 0.4,
+  });
+  const mesh = new THREE.Mesh(new THREE.OctahedronGeometry(size, 0), mat);
+  mesh.position.y = size + 0.02;
+  group.add(mesh);
+  const glow = new THREE.PointLight(color, 0.5, 2.5);
+  glow.position.y = size + 0.1;
+  group.add(glow);
+
+  let picked = false;
+  let bob = Math.random() * 6;
+  function update(dt) {
+    if (picked) return;
+    bob += dt;
+    group.position.y = position.y + Math.sin(bob * 2.5) * 0.05;
+    group.rotation.y += dt * 1.2;
+  }
+  function pickup() {
+    if (picked) return false;
+    picked = true;
+    group.visible = false;
+    if (onPickup) onPickup();
+    return true;
+  }
+  return { group, update, pickup, get picked() { return picked; } };
+}
+
+/* ---- Code lock: cycle digits to match code ---- */
+export function createCodeLock({ position, rotation = 0, code, length, onUnlock, onAttempt }) {
+  const len = length || (code ? String(code).length : 3);
+  const digits = String(code).padStart(len, "0").split("").map(Number);
+  const current = new Array(len).fill(0);
+
+  const group = new THREE.Group();
+  group.position.copy(position);
+  group.rotation.y = rotation;
+
+  // panel
+  const panel = box(0.1 + len * 0.36, 0.7, 0.12, M.darkMetal());
+  panel.position.y = 0.35;
+  group.add(panel);
+
+  const digitMeshes = [];
+  const digitGroups = [];
+  const digitMatOff = new THREE.MeshStandardMaterial({ color: 0x110000, emissive: 0x330000, emissiveIntensity: 0.5 });
+  const digitMatOn = new THREE.MeshStandardMaterial({ color: 0x002200, emissive: 0x39ff7a, emissiveIntensity: 1.5 });
+
+  for (let i = 0; i < len; i++) {
+    const dg = new THREE.Group();
+    dg.position.set(-((len - 1) * 0.36) / 2 + i * 0.36, 0.42, 0.08);
+    group.add(dg);
+    // digit display (small box that shows number via color count trick — use text canvas)
+    const display = makeDigitCanvas(0);
+    display.position.z = 0.02;
+    dg.add(display);
+    digitMeshes.push(display);
+    digitGroups.push(dg);
+  }
+
+  let unlocked = false;
+
+  function makeDigitCanvas(val) {
+    const canvas = document.createElement("canvas");
+    canvas.width = 64; canvas.height = 80;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#020a00";
+    ctx.fillRect(0, 0, 64, 80);
+    ctx.fillStyle = "#39ff7a";
+    ctx.font = "bold 56px monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(String(val), 32, 42);
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true });
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(0.28, 0.35), mat);
+    mesh._canvas = canvas;
+    mesh._ctx = ctx;
+    mesh._tex = tex;
+    return mesh;
+  }
+
+  function updateDigit(i) {
+    const m = digitMeshes[i];
+    m._ctx.fillStyle = "#020a00";
+    m._ctx.fillRect(0, 0, 64, 80);
+    m._ctx.fillStyle = unlocked ? "#39ff7a" : "#ffaa33";
+    m._ctx.fillText(String(current[i]), 32, 42);
+    m._tex.needsUpdate = true;
+  }
+
+  function cycleDigit(i) {
+    if (unlocked) return;
+    current[i] = (current[i] + 1) % 10;
+    updateDigit(i);
+    const ok = current.every((v, idx) => v === digits[idx]);
+    if (ok) {
+      unlocked = true;
+      digitMeshes.forEach((_, idx) => updateDigit(idx));
+      if (onUnlock) onUnlock();
+    } else {
+      if (onAttempt) onAttempt(current);
+    }
+  }
+
+  // each digit group is individually interactable
+  function getDigitInteractables() {
+    return digitGroups.map((dg, i) => {
+      makeInteractable(dg, {
+        prompt: `轉數字 ${i + 1}`,
+        onInteract: () => cycleDigit(i),
+      });
+      return dg;
+    });
+  }
+
+  function update() {}
+
+  return { group, cycleDigit, getDigitInteractables, get unlocked() { return unlocked; }, update };
+}
+
+/* ---- Fuse slot: accepts a fuse item ---- */
+export function createSlot({ position, rotation = 0, accepts, label = "插入", onInsert }) {
+  const group = new THREE.Group();
+  group.position.copy(position);
+  group.rotation.y = rotation;
+  const frame = box(0.28, 0.28, 0.14, M.darkMetal());
+  frame.position.y = 0.14;
+  group.add(frame);
+  const socket = box(0.16, 0.16, 0.08, M.dim());
+  socket.position.set(0, 0.14, 0.05);
+  group.add(socket);
+
+  let filled = false;
+  function fill() {
+    if (filled) return false;
+    filled = true;
+    socket.material = M.greenLight();
+    if (onInsert) onInsert();
+    return true;
+  }
+  return { group, fill, get filled() { return filled; } };
+}
+
+/* ---- Locked container: opens when unlocked, reveals contents ---- */
+export function createContainer({ position, rotation = 0, color = 0x3a4252, onOpen }) {
+  const group = new THREE.Group();
+  group.position.copy(position);
+  group.rotation.y = rotation;
+  const body = box(0.8, 0.7, 0.5, new THREE.MeshStandardMaterial({ color, roughness: 0.7, metalness: 0.3 }));
+  body.position.y = 0.35;
+  group.add(body);
+  const lid = box(0.82, 0.08, 0.52, new THREE.MeshStandardMaterial({ color: 0x2a3040, roughness: 0.6, metalness: 0.4 }));
+  lid.position.y = 0.74;
+  group.add(lid);
+
+  let opened = false;
+  let lidTarget = 0;
+  function open() {
+    if (opened) return;
+    opened = true;
+    lidTarget = 0.5;
+    if (onOpen) onOpen();
+  }
+  function update(dt) {
+    lid.position.y += (0.74 + lidTarget - lid.position.y) * Math.min(1, dt * 5);
+  }
+  return { group, open, update, get opened() { return opened; } };
+}
+
+/* ---- Valve: rotate to open/close a mechanism ---- */
+export function createValve({ position, rotation = 0, turns = 2, onOpen }) {
+  const group = new THREE.Group();
+  group.position.copy(position);
+  group.rotation.y = rotation;
+  const pipe = box(0.1, 0.4, 0.1, M.metal());
+  pipe.position.y = 0.2;
+  group.add(pipe);
+  const wheel = new THREE.Group();
+  wheel.position.y = 0.45;
+  group.add(wheel);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.04, 6, 12), M.metal());
+  wheel.add(ring);
+  for (let i = 0; i < 4; i++) {
+    const spoke = box(0.36, 0.04, 0.04, M.metal());
+    spoke.rotation.z = (i * Math.PI) / 2;
+    wheel.add(spoke);
+  }
+
+  let count = 0;
+  let angle = 0;
+  let targetAngle = 0;
+  let done = false;
+  function turn() {
+    if (done) return;
+    count++;
+    targetAngle -= Math.PI / 2;
+    if (count >= turns * 4) {
+      done = true;
+      if (onOpen) onOpen();
+    }
+  }
+  function update(dt) {
+    angle += (targetAngle - angle) * Math.min(1, dt * 8);
+    wheel.rotation.z = angle;
+  }
+  return { group, turn, update, get done() { return done; }, get progress() { return count; }, get needed() { return turns * 4; } };
+}
+
+/* ---- Keypad button (single press, for generic keypads) ---- */
+export function createKeypadButton({ position, label, onPress, color = 0x3a4458 }) {
+  const group = new THREE.Group();
+  group.position.copy(position);
+  const btn = box(0.14, 0.14, 0.05, new THREE.MeshStandardMaterial({ color, roughness: 0.5 }));
+  btn.position.y = 0.07;
+  group.add(btn);
+  let pressed = false;
+  function press() {
+    if (pressed) return;
+    pressed = true;
+    btn.material = M.greenLight();
+    if (onPress) onPress();
+  }
+  return { group, press, get pressed() { return pressed; } };
+}
+
+/* ---- Status light (visual indicator for puzzle state) ---- */
+export function createStatusLight({ position, color = 0xff0000 }) {
+  const group = new THREE.Group();
+  group.position.copy(position);
+  const mat = new THREE.MeshStandardMaterial({ color: 0x110000, emissive: color, emissiveIntensity: 1.2 });
+  const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 8), mat);
+  group.add(mesh);
+  function setState(on) {
+    mat.emissiveIntensity = on ? 1.5 : 0.2;
+  }
+  return { group, setState };
+}

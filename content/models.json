@@ -1,20 +1,31 @@
 {
   "models": {
     "chair": "models/chair_A_wood.gltf",
+    "chairStool": "models/chair_stool.gltf",
     "table": "models/table_medium.gltf",
+    "tableSmall": "models/table_small.gltf",
+    "tableLow": "models/table_low.gltf",
     "crate": "models/cabinet_small.gltf",
+    "crateDecorated": "models/cabinet_small_decorated.gltf",
     "plant": "models/cactus_small_A.gltf",
     "painting": "models/pictureframe_large_A.gltf",
+    "paintingMedium": "models/pictureframe_medium.gltf",
+    "paintingSmall": "models/pictureframe_small_A.gltf",
+    "paintingStand": "models/pictureframe_standing_A.gltf",
+    "paintingStandB": "models/pictureframe_standing_B.gltf",
     "bookshelf": "models/cabinet_medium_decorated.gltf",
+    "cabinet": "models/cabinet_medium.gltf",
+    "shelfSmall": "models/shelf_A_small.gltf",
+    "shelfSmallB": "models/shelf_B_small.gltf",
     "lampStanding": "models/lamp_standing.gltf",
     "lampTable": "models/lamp_table.gltf",
     "couch": "models/couch.gltf",
     "armchair": "models/armchair.gltf",
     "books": "models/book_set.gltf",
+    "book": "models/book_single.gltf",
     "rug": "models/rug_rectangle_A.gltf",
-    "paintingStand": "models/pictureframe_standing_A.gltf",
     "pillow": "models/pillow_A.gltf",
-    "bed": "models/bed_single_A.gltf",
-    "cabinet": "models/cabinet_medium.gltf"
+    "pillowB": "models/pillow_B.gltf",
+    "bed": "models/bed_single_A.gltf"
   }
 }
